@@ -39,12 +39,16 @@
         <version.maven.compiler.plugin>3.8.1</version.maven.compiler.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <metis.version>6</metis.version>
+        <!-- metis-framework 11 and metis.schema 9-SNAPSHOT uses JDK 17.
+        Moving forward we do need to upgrade to JDK 21 if we continue to use metis dependencies and want to upgrade them-->
+        <metis.version>11</metis.version>
+        <metis.schema.version>9-SNAPSHOT</metis.schema.version>
+
         <sonar.organization>europeana</sonar.organization>
         <apacheSolr.version>8.11.1</apacheSolr.version>
         <apacheLucene.version>8.11.1</apacheLucene.version>
-        <mongoDriver.version>4.0.2</mongoDriver.version>
-        <morphia.version>2.0.0</morphia.version>
+        <mongoDriver.version>4.7.2</mongoDriver.version>
+        <morphia.version>2.3.0</morphia.version>
 
         <commonsIO.version>2.4</commonsIO.version>
         <commonsLang3.version>3.12.0</commonsLang3.version>

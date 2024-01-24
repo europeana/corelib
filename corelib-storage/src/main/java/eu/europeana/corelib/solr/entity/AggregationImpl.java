@@ -5,13 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Field;
-import dev.morphia.annotations.Index;
-import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import java.util.ArrayList;
@@ -60,7 +58,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 //	@Transient
 	@Reference
-	private List<WebResourceImpl> webResources = new ArrayList<>();;
+	private List<WebResourceImpl> webResources = new ArrayList<>();
 
 //	@GraphProperty
 	private Boolean edmPreviewNoDistribute;
@@ -70,6 +68,11 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	@Transient
 	@JsonIgnore
 	private FullBean parentBean;
+
+	// EA-3652 we need to add quality annotations in the aggregation object.
+	// But the value doesn't exist in the Mongo. Hence the Transient annotation
+	@Transient
+	private List<QualityAnnotation> dqvHasQualityAnnotation;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -237,6 +240,14 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	@Override
 	public void setEdmIntermediateProvider(Map<String, List<String>> edmIntermediateProvider) {
 		this.edmIntermediateProvider = edmIntermediateProvider;
+	}
+
+	public List<QualityAnnotation> getDqvHasQualityAnnotation() {
+		return dqvHasQualityAnnotation;
+	}
+
+	public void setDqvHasQualityAnnotation(List<QualityAnnotation> dqvHasQualityAnnotation) {
+		this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
 	}
 
 	/**

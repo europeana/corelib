@@ -34,7 +34,7 @@
         <dependency>
             <groupId>eu.europeana.metis</groupId>
             <artifactId>metis-schema</artifactId>
-            <version>${metis.version}</version>
+            <version>${metis.schema.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europeana.metis</groupId>

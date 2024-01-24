@@ -37,7 +37,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
   private Map<String, List<String>> edmRights;
   private String edmPreview = "";
   private String edmLandingPage; // used to be loaded from UIM Mongo, but not anymore with Metis Mongo
-  private String[] dqvHasQualityAnnotation;
+ // private String[] dqvHasQualityAnnotation;
 
   @JsonIgnore
   private boolean edmLandingPageExternal = false; // does the edmLandingPage contain an alternative value set by an external source?
@@ -190,13 +190,13 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     this.edmPreview = edmPreview;
   }
 
-  @Override
-  public String[] getDqvHasQualityAnnotation() {
-    return dqvHasQualityAnnotation;
-  }
-
-  @Override
-  public void setDqvHasQualityAnnotation(String[] dqvHasQualityAnnotation) {
-    this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
-  }
+//  @Override
+//  public String[] getDqvHasQualityAnnotation() {
+//    return dqvHasQualityAnnotation;
+//  }
+//
+//  @Override
+//  public void setDqvHasQualityAnnotation(String[] dqvHasQualityAnnotation) {
+//    this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
+//  }
 }
