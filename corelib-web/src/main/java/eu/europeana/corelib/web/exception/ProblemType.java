@@ -43,6 +43,7 @@ public enum ProblemType {
     INVALID_URL(null,"Url is invalid", ProblemResponseAction.LOG_ERR),
     CONFIG_ERROR(null, "Invalid application config", ProblemResponseAction.LOG_ERR),
 
+    INVALID_AUTH_FOR_TRANSLATION(null, "Please provide authentication token for translation requests!!", ProblemResponseAction.LOG_ERR),
     TRANSLATION_API_URL_ERROR("null", "Translation API endpoint not configured.", ProblemResponseAction.LOG_ERR),
     TRANSLATION_SERVICE_DISABLED(null, "Sorry, there is no translation service available for this application", ProblemResponseAction.IGNORE),
     TRANSLATION_SERVICE_ERROR(null, "Error translating data", ProblemResponseAction.LOG_ERR),
