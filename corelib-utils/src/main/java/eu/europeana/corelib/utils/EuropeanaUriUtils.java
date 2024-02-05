@@ -18,7 +18,10 @@ public final class EuropeanaUriUtils {
 
     private static final Pattern RELATIVEURLPATTERN = Pattern.compile("^(?!www\\.|(?:http|ftp|session)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/)\\S+$");
     private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z+-.]*)://[^/$.?#].*$");
-//    private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^(https?|ftp|session)://[^\\s/$.?#].[^\\s]*$");
+
+    // EA-3703 urn pattern added. Should be treated differently
+    private static final Pattern URN_PATTERN = Pattern.compile("^urn:[a-z0-9][a-z0-9-]{0,31}:([a-z0-9()+,\\-.:=@;$_!*']|%[0-9a-f]{2})++$", Pattern.CASE_INSENSITIVE);
+
     private static final Set<String> schemes= new HashSet<>();
 
     static {
@@ -246,7 +249,7 @@ public final class EuropeanaUriUtils {
         schemes.add("tv");
         schemes.add("udp");
         schemes.add("unreal");
-        schemes.add("urn");
+        //schemes.add("urn"); EA-3703 urn will be treated separately
         schemes.add("ut2004");
         schemes.add("v-event");
         schemes.add("vemmi");
@@ -312,14 +315,14 @@ public final class EuropeanaUriUtils {
     }
 
     /**
-     * Check if the provided string is a valid (absolute or relative) URI
+     * Check if the provided string is a valid (absolute or relative or urn) URI
      *
      * @param str URI to check
      * @return true if the provided string is not empty and a valid URI, otherwise false
      */
     public static boolean isUri(String str) {
         if (StringUtils.isNotEmpty(str)) {
-            return (isAbsoluteUri(str) || isRelativeUri(str));
+            return (isAbsoluteUri(str) || isRelativeUri(str) || isUrn(str));
         }
         return false;
     }
@@ -347,6 +350,17 @@ public final class EuropeanaUriUtils {
      */
     public static boolean isRelativeUri(String uri) {
         Matcher m = RELATIVEURLPATTERN.matcher(uri);
+        return m.find();
+    }
+
+    /**
+     * Checks if a uri is a valid urn
+     * See - EA-3703
+     * @param uri
+     * @return
+     */
+    public static boolean isUrn(String uri) {
+        Matcher m = URN_PATTERN.matcher(uri);
         return m.find();
     }
 
