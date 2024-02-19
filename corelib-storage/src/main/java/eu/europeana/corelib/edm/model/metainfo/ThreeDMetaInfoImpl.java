@@ -23,6 +23,11 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
         this.fileSize = fileSize;
     }
 
+    public ThreeDMetaInfoImpl() {
+        this.mimeType = null;
+        this.fileSize = null;
+    }
+
     public String getMimeType() {
         return null;
     }
@@ -30,5 +35,13 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
 
     public Long getFileSize() {
         return null;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
     }
 }
