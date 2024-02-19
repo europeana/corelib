@@ -64,6 +64,16 @@ public class EuropeanaURIUtilsTest {
         assertTrue(EuropeanaUriUtils.isUri("http://www.budaivigado.hu/ftp/rmne//Mozgokep/Tanc/Magyarpalatka.1991.11.16/Magyarpalatkai_sűrű magyarMoldovan_Istvan91.mp4"));
         assertFalse(EuropeanaUriUtils.isUri("Europeana space test"));
         assertFalse(EuropeanaUriUtils.isAbsoluteUri("Europeana space test"));
+
+        // check urn values
+        assertTrue(EuropeanaUriUtils.isUri("urn:rijksmuseum:thesaurus:RM0001.THESAU.22403"));
+        // should be a absolute url or relative url
+        assertFalse(EuropeanaUriUtils.isAbsoluteUri("urn:rijksmuseum:thesaurus:RM0001.THESAU.22403"));
+        assertFalse(EuropeanaUriUtils.isRelativeUri("urn:rijksmuseum:thesaurus:RM0001.THESAU.22403"));
+
+        assertFalse(EuropeanaUriUtils.isUrn("Europeana space test"));
+        assertTrue(EuropeanaUriUtils.isUrn("urn:rijksmuseum:thesaurus:RM0001.THESAU.19"));
+
     }
 
     @Test
