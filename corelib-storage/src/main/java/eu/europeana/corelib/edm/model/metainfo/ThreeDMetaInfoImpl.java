@@ -29,12 +29,12 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
     }
 
     public String getMimeType() {
-        return null;
+        return mimeType;
     }
 
 
     public Long getFileSize() {
-        return null;
+        return fileSize;
     }
 
     public void setMimeType(String mimeType) {
