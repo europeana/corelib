@@ -42,7 +42,7 @@
         <!-- metis-framework 11 and metis.schema 9-SNAPSHOT uses JDK 17.
         Moving forward we do need to upgrade to JDK 21 if we continue to use metis dependencies and want to upgrade them-->
         <metis.version>11</metis.version>
-        <metis.schema.version>9-SNAPSHOT</metis.schema.version>
+        <metis.schema.version>9</metis.schema.version>
 
         <sonar.organization>europeana</sonar.organization>
         <apacheSolr.version>8.11.1</apacheSolr.version>
