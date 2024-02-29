@@ -83,7 +83,7 @@ public class EdmUtilsTest {
         ImageMetaInfoImpl imageInfo = new ImageMetaInfoImpl();
         imageInfo.setColorSpace(expected.xmlValue());
 
-        WebResourceMetaInfoImpl wrInfo = new WebResourceMetaInfoImpl("test color space", imageInfo, null, null, null);
+        WebResourceMetaInfoImpl wrInfo = new WebResourceMetaInfoImpl("test color space", imageInfo, null, null, null, null);
 
         WebResourceImpl webResource = new WebResourceImpl();
         webResource.setWebResourceMetaInfo(wrInfo);

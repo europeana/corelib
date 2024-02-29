@@ -215,7 +215,7 @@ public class MockBeanUtils {
         ImageMetaInfoImpl imi = new ImageMetaInfoImpl();
         imi.setMimeType(mimeType);
 
-        WebResourceMetaInfoImpl wrmi = new WebResourceMetaInfoImpl(null, imi, null, null, null);
+        WebResourceMetaInfoImpl wrmi = new WebResourceMetaInfoImpl(null, imi, null, null, null, null);
 
         WebResourceImpl wr = new WebResourceImpl();
         wr.setAbout(about);

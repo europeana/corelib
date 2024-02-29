@@ -34,21 +34,29 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
      */
     private TextMetaInfoImpl textMetaInfo;
 
+    /**
+     * A class which contains information about a 3D document
+     */
+    private ThreeDMetaInfoImpl threeDMetaInfo;
+
     public WebResourceMetaInfoImpl() {
         this.id = null;
         this.imageMetaInfo = null;
         this.audioMetaInfo = null;
         this.videoMetaInfo = null;
         this.textMetaInfo = null;
+        this.threeDMetaInfo = null;
     }
 
     public WebResourceMetaInfoImpl(final String recordID, final ImageMetaInfoImpl imageMetaInfo,
-                                   final AudioMetaInfoImpl audioMetaInfo, final VideoMetaInfoImpl videoMetaInfo, TextMetaInfoImpl textMetaInfo) {
+                                   final AudioMetaInfoImpl audioMetaInfo, final VideoMetaInfoImpl videoMetaInfo,
+                                   final TextMetaInfoImpl textMetaInfo, final ThreeDMetaInfoImpl threeDMetaInfo) {
         this.id = recordID;
         this.imageMetaInfo = imageMetaInfo;
         this.audioMetaInfo = audioMetaInfo;
         this.videoMetaInfo = videoMetaInfo;
         this.textMetaInfo = textMetaInfo;
+        this.threeDMetaInfo = threeDMetaInfo;
     }
 
     public String getId() {
@@ -71,6 +79,10 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
         return textMetaInfo;
     }
 
+    public ThreeDMetaInfoImpl getThreeDMetaInfo() {
+        return threeDMetaInfo;
+    }
+
     public void setImageMetaInfo(ImageMetaInfoImpl imageMetaInfo) {
         this.imageMetaInfo = imageMetaInfo;
     }
@@ -85,5 +97,9 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
 
     public void setTextMetaInfo(TextMetaInfoImpl textMetaInfo) {
         this.textMetaInfo = textMetaInfo;
+    }
+
+    public void setThreeDMetaInfo(ThreeDMetaInfoImpl threeDMetaInfo) {
+        this.threeDMetaInfo = threeDMetaInfo;
     }
 }
