@@ -145,7 +145,7 @@ public class RecordSearchServiceTest {
         testCount++;
         Query query = new Query("musi");
         query.setDefaultSolrFacets();
-        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query,true);
         Assert.assertNull(results.getSpellcheck());
     }
 
@@ -184,7 +184,7 @@ public class RecordSearchServiceTest {
         testCount++;
         Query query = new Query("*:*");
         query.setDefaultSolrFacets();
-        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query,true);
         assertFalse("No results given back... ", results.getResults().isEmpty());
 
         // TODO: wire up database providers
@@ -211,7 +211,7 @@ public class RecordSearchServiceTest {
         Query query = new Query("keyboard");
 
         query.setSort("score descending timestamp_created asc+timestamp_update,COMPLETENESS");
-        ResultSet<BriefBean> results = searchService.search(solrServer,BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer,BriefBean.class, query,true);
         assertNotNull(results);
         assertTrue(results.getResultSize() > 0);
     }
