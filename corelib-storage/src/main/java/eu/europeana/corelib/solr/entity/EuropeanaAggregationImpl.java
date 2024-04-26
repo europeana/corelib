@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Field;
-import dev.morphia.annotations.Index;
-import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Reference;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
@@ -37,7 +34,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
   private Map<String, List<String>> edmRights;
   private String edmPreview = "";
   private String edmLandingPage; // used to be loaded from UIM Mongo, but not anymore with Metis Mongo
- // private String[] dqvHasQualityAnnotation;
+  private String[] dqvHasQualityAnnotation;
 
   @JsonIgnore
   private boolean edmLandingPageExternal = false; // does the edmLandingPage contain an alternative value set by an external source?
@@ -190,13 +187,13 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     this.edmPreview = edmPreview;
   }
 
-//  @Override
-//  public String[] getDqvHasQualityAnnotation() {
-//    return dqvHasQualityAnnotation;
-//  }
-//
-//  @Override
-//  public void setDqvHasQualityAnnotation(String[] dqvHasQualityAnnotation) {
-//    this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
-//  }
+  @Override
+  public String[] getDqvHasQualityAnnotation() {
+    return dqvHasQualityAnnotation;
+  }
+
+  @Override
+  public void setDqvHasQualityAnnotation(String[] dqvHasQualityAnnotation) {
+    this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
+  }
 }
