@@ -336,21 +336,8 @@ public final class EdmUtils {
         completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
         aggregation.setCompleteness(completeness);
 
-        // MET-5556 and EA-3652 third tier calculation will be added here in the future. For now, we need to remove it
-
-//        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
-//            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
-//            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
-//                HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-//                if (preserveIdentifiers) {
-//                    hasQualityAnnotation.setResource(anno);
-//                } else {
-//                    hasQualityAnnotation.setResource(getBaseUrl(anno));
-//                }
-//                qualityAnnotations.add(hasQualityAnnotation);
-//            }
-//            aggregation.setHasQualityAnnotationList(qualityAnnotations);
-//        }
+        // EA-3809 and MET 5556 add QA in europeana aggregation
+        appendQualityAnnotationsToEuropeanaAggregation(aggregation, europeanaAggregation, fBean, preserveIdentifiers);
 
         Created created = new Created();
         created.setString(DateUtils.format(fBean.getTimestampCreated()));
@@ -363,6 +350,62 @@ public final class EdmUtils {
         List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
         rdf.setEuropeanaAggregationList(lst);
+    }
+
+    /**
+     * Add QA in europeana Aggregation if DqvHasQualityAnnotation is present
+     *
+     * DqvHasQualityAnnotation contains the references of the QA present in the bean
+     * match the dqvHasQualityAnnotation value with qualityAnnotation#about field
+     *
+     * @param aggregation Aggregation object for the response
+     * @param europeanaAggregation Europeana Aggreagation fetched from DB
+     * @param fBean fullbean
+     * @param preserveIdentifiers
+     */
+    private static void appendQualityAnnotationsToEuropeanaAggregation(EuropeanaAggregationType aggregation,
+                                                                       EuropeanaAggregation europeanaAggregation,
+                                                                       FullBeanImpl fBean,
+                                                                       boolean preserveIdentifiers) {
+        // if Europeana Aggregation doesn't have DqvHasQualityAnnotation no need to add QA
+        // OR if there are non QA present in the record
+        if (europeanaAggregation.getDqvHasQualityAnnotation() == null || fBean.getQualityAnnotations() == null) {
+            return;
+        }
+
+        List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> fBeanQA = fBean.getQualityAnnotations();
+        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
+            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
+
+            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
+                for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation qa : fBeanQA) {
+                    if (StringUtils.equals(anno, qa.getAbout())) {
+                        QualityAnnotation qualityAnnotation = new QualityAnnotation();
+
+                        Created created = new Created();
+                        created.setString(qa.getCreated());
+                        qualityAnnotation.setCreated(created);
+
+                        HasBody hasBody = new HasBody();
+                        hasBody.setResource(qa.getBody());
+                        qualityAnnotation.setHasBody(hasBody);
+
+                        // value of target - will the 'about' field of europeana aggregation ('http://data.europeana.eu/aggregation/europeana/RECORD_ID')
+                        String[] about = new String[] {europeanaAggregation.getAbout()};
+                        // this for cases we do not want to append or change the values with a base urls. Mostly used in re-indexing
+                        if (preserveIdentifiers) {
+                            addAsList(qualityAnnotation, HasTarget.class, about );
+                        } else {
+                            addAsList(qualityAnnotation, HasTarget.class, about, null, true);
+                        }
+                        HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
+                        hasQualityAnnotation.setQualityAnnotation(qualityAnnotation);
+                        qualityAnnotations.add(hasQualityAnnotation);
+                    }
+                }
+            }
+            aggregation.setHasQualityAnnotationList(qualityAnnotations);
+        }
     }
 
     private static Language1 convertMapToLanguage(Map<String, List<String>> edmLanguage) {
