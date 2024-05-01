@@ -3,12 +3,12 @@ package eu.europeana.corelib.solr.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Field;
-import dev.morphia.annotations.Index;
-import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.ValidateUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -37,7 +37,23 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
   private Map<String, List<String>> edmRights;
   private String edmPreview = "";
   private String edmLandingPage; // used to be loaded from UIM Mongo, but not anymore with Metis Mongo
- // private String[] dqvHasQualityAnnotation;
+
+  /**
+   *  dqvHasQualityAnnotation should be fetched from Mongo but not added like string[] in the json response
+   *  See - EA-3809 for the new structure of quality annotations
+   *  Also see below the field add List<QualityAnnotation> hasQualityAnnotation for the json response
+   */
+  @JsonIgnore
+  private String[] dqvHasQualityAnnotation;
+
+  /**
+   * EA-3809 we need to add List<QualityAnnotation> now based on the values present in dqvHasQualityAnnotation
+   * AS this value doesn't exist in the Mongo. Hence the Transient annotation. This field is only for json view purposes
+   * @See eu.europeana.api2.v2.model.json.view.FullView#getEuropeanaAggregation
+   */
+  @Transient
+  @JsonProperty("dqvHasQualityAnnotation")
+  private List<QualityAnnotation> hasQualityAnnotation;
 
   @JsonIgnore
   private boolean edmLandingPageExternal = false; // does the edmLandingPage contain an alternative value set by an external source?
@@ -190,13 +206,22 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     this.edmPreview = edmPreview;
   }
 
-//  @Override
-//  public String[] getDqvHasQualityAnnotation() {
-//    return dqvHasQualityAnnotation;
-//  }
-//
-//  @Override
-//  public void setDqvHasQualityAnnotation(String[] dqvHasQualityAnnotation) {
-//    this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
-//  }
+  @Override
+  public String[] getDqvHasQualityAnnotation() {
+    return dqvHasQualityAnnotation;
+  }
+
+  @Override
+  public void setDqvHasQualityAnnotation(String[] dqvHasQualityAnnotation) {
+    this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
+  }
+
+  // EA-3809 add list of QualityAnnotation
+  public List<QualityAnnotation> getHasQualityAnnotation() {
+    return hasQualityAnnotation;
+  }
+
+  public void setHasQualityAnnotation(List<QualityAnnotation> hasQualityAnnotation) {
+    this.hasQualityAnnotation = hasQualityAnnotation;
+  }
 }
