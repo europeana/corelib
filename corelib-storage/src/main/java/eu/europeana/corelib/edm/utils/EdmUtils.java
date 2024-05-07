@@ -1192,6 +1192,7 @@ public final class EdmUtils {
     private static String getBaseUrl(String url) {
         // Urls supplied by API2 always start with "/item" (see ItemFix.class) and the ones from OAI-PMH do not so
         // that's why we need to check
+        if (url == null)  return null;
         String u = url.toLowerCase(Locale.GERMAN);
         if (u.startsWith("/item") || u.startsWith("/aggregation") || u.startsWith("/proxy")) {
             return BASE_URL + url;
