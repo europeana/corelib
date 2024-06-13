@@ -40,6 +40,16 @@
             <groupId>eu.europeana.metis</groupId>
             <artifactId>metis-common-mongo</artifactId>
             <version>${metis.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-autoconfigure</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- OTHER -->

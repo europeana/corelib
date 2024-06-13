@@ -17,6 +17,13 @@
     <url>http://www.europeana.eu</url>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.bcel/bcel -->
+        <!-- Added just in case to fix CVE-2022-42920 in old bcel version in Metis schema -->
+        <dependency>
+            <groupId>org.apache.bcel</groupId>
+            <artifactId>bcel</artifactId>
+            <version>6.6.0</version>
+        </dependency>
         <dependency>
             <groupId>eu.europeana.metis</groupId>
             <artifactId>metis-schema</artifactId>

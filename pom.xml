@@ -45,8 +45,8 @@
         <metis.schema.version>9</metis.schema.version>
 
         <sonar.organization>europeana</sonar.organization>
-        <apacheSolr.version>8.11.1</apacheSolr.version>
-        <apacheLucene.version>8.11.1</apacheLucene.version>
+        <apacheSolr.version>8.11.3</apacheSolr.version>
+        <apacheLucene.version>8.11.3</apacheLucene.version>
         <mongoDriver.version>4.7.2</mongoDriver.version>
         <morphia.version>2.3.0</morphia.version>
 
@@ -165,31 +165,32 @@
         </repository>
     </repositories>
 
-    <!-- Disabled analysis because Jenkins build job has problems with the supression file -->
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            &lt;!&ndash; This will be active when running the verify or install goal-->
-<!--                 To skip (e.g. during debugging) use 'mvn clean package')&ndash;&gt;-->
-<!--            <plugin>-->
-<!--                <groupId>org.owasp</groupId>-->
-<!--                <artifactId>dependency-check-maven</artifactId>-->
-<!--                <version>6.5.0</version>-->
-<!--                <configuration>-->
-<!--                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>-->
-<!--                    <failBuildOnCVSS>8</failBuildOnCVSS>-->
-<!--                    <suppressionFiles>-->
-<!--                        <suppressionFile>owasp-suppress.xml</suppressionFile>-->
-<!--                    </suppressionFiles>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
+    <build>
+        <plugins>
+            <!-- This will be active when running the verify or install goal
+                 To skip (e.g. during debugging) use 'mvn clean package')-->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>9.2.0</version>
+                <configuration>
+                    <nvdApiKeyEnvironmentVariable>NVD_APIKEY</nvdApiKeyEnvironmentVariable>
+                    <knownExploitedUrl>https://artifactory.eanadev.org/artifactory/ext-release-local/gov/cisa/www/known_exploited_vulnerabilities.json</knownExploitedUrl>
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                    <failBuildOnCVSS>9</failBuildOnCVSS>
+                    <suppressionFiles>
+                        <suppressionFile>owasp-suppress-corelib.xml</suppressionFile>
+                    </suppressionFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
