@@ -28,10 +28,11 @@ public interface SearchService {
      * @param beanInterface  The required bean type, should be ApiBean or BriefBean
      * @param query          Model class containing the calculateTag specification.
      * @param debug			 includes the string representing the Solrquery in the ResultSet
+     * @param  divideQueryRefinements  control if  refinement array is processed and additional tag elements are appended  .
      * @return               The calculateTag results, including facets, breadcrumb and original query.
      * @throws EuropeanaException
      */
-    <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException;
+    <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query, boolean debug,boolean divideQueryRefinements) throws EuropeanaException;
     /**
      * Perform a calculateTag in SOLR based on the given query and return the results
      * in the format of the given class.
@@ -42,7 +43,7 @@ public interface SearchService {
      * @return               The calculateTag results, including facets, breadcrumb and original query.
      * @throws EuropeanaException
      */
-    <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query) throws EuropeanaException;
+    <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query,boolean divideQueryRefinements) throws EuropeanaException;
 
     /**
      * @param solrClient     The underlying Solr client to use for query

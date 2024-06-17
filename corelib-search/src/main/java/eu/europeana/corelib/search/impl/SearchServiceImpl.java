@@ -70,8 +70,8 @@ public class SearchServiceImpl implements SearchService {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query) throws EuropeanaException {
-        return search(solrClient, beanInterface, query, false);
+    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query,boolean divideRefinements) throws EuropeanaException {
+        return search(solrClient, beanInterface, query, false,divideRefinements);
     }
 
     /**
@@ -79,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient,  Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
+    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient,  Class<T> beanInterface, Query query, boolean debug,boolean divideRefinements ) throws EuropeanaException {
 
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrQueryException(ProblemType.SEARCH_PAGE_LIMIT_REACHED,
@@ -90,7 +90,7 @@ public class SearchServiceImpl implements SearchService {
                 .getImplementationClass(beanInterface);
 
         if (isValidBeanClass(beanClazz)) {
-            String[] refinements = query.getRefinements(true);
+            String[] refinements = query.getRefinements(divideRefinements);
 
             SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
 
