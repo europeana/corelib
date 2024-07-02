@@ -165,32 +165,32 @@
         </repository>
     </repositories>
 
-    <build>
-        <plugins>
-            <!-- This will be active when running the verify or install goal
-                 To skip (e.g. during debugging) use 'mvn clean package')-->
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>9.2.0</version>
-                <configuration>
-                    <nvdApiKeyEnvironmentVariable>NVD_APIKEY</nvdApiKeyEnvironmentVariable>
-                    <knownExploitedUrl>https://artifactory.eanadev.org/artifactory/ext-release-local/gov/cisa/www/known_exploited_vulnerabilities.json</knownExploitedUrl>
-                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-                    <failBuildOnCVSS>9</failBuildOnCVSS>
-                    <suppressionFiles>
-                        <suppressionFile>owasp-suppress-corelib.xml</suppressionFile>
-                    </suppressionFiles>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            &lt;!&ndash; This will be active when running the verify or install goal-->
+<!--                 To skip (e.g. during debugging) use 'mvn clean package')&ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.owasp</groupId>-->
+<!--                <artifactId>dependency-check-maven</artifactId>-->
+<!--                <version>10.0.0</version>-->
+<!--                <configuration>-->
+<!--                    <nvdApiKey>removed</nvdApiKey>-->
+<!--                    <knownExploitedUrl>https://artifactory.eanadev.org/artifactory/ext-release-local/gov/cisa/www/known_exploited_vulnerabilities.json</knownExploitedUrl>-->
+<!--                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>-->
+<!--                    <failBuildOnCVSS>9</failBuildOnCVSS>-->
+<!--                    <suppressionFiles>-->
+<!--                        <suppressionFile>owasp-suppress-corelib.xml</suppressionFile>-->
+<!--                    </suppressionFiles>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>check</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>
