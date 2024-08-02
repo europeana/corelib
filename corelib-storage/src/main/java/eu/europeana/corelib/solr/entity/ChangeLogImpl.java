@@ -8,9 +8,8 @@ import java.util.Date;
 public class ChangeLogImpl implements ChangeLog {
 
     private String type;
-    private String activityContext;
-    private String activityObject;
-    private Date activityEndTime;
+    private String context;
+    private Date endTime;
 
     @Override
     public String getType() {
@@ -23,32 +22,22 @@ public class ChangeLogImpl implements ChangeLog {
     }
 
     @Override
-    public String getActivityContext() {
-        return activityContext;
+    public String getContext() {
+        return context;
     }
 
     @Override
-    public void setActivityContext(String activityContext) {
-        this.activityContext = activityContext;
+    public void setContext(String context) {
+        this.context = context;
     }
 
     @Override
-    public String getActivityObject() {
-        return activityObject;
+    public Date getEndTime() {
+        return endTime;
     }
 
     @Override
-    public void setActivityObject(String activityObject) {
-        this.activityObject = activityObject;
-    }
-
-    @Override
-    public Date getActivityEndTime() {
-        return activityEndTime;
-    }
-
-    @Override
-    public void setActivityEndTime(Date activityEndTime) {
-        this.activityEndTime = activityEndTime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

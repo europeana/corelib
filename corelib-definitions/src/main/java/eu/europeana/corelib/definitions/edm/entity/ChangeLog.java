@@ -8,15 +8,11 @@ public interface ChangeLog{
 
     void setType(String type);
 
-    String getActivityContext();
+    String getContext();
 
-    void setActivityContext(String activityContext);
+    void setContext(String context);
 
-    String getActivityObject();
+    Date getEndTime();
 
-    void setActivityObject(String activityObject);
-
-    Date getActivityEndTime();
-
-    void setActivityEndTime(Date activityEndTime);
+    void setEndTime(Date endTime);
 }
