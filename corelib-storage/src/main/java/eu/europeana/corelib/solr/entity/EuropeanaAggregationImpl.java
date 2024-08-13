@@ -37,6 +37,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
   private Map<String, List<String>> edmRights;
   private String edmPreview = "";
   private String edmLandingPage; // used to be loaded from UIM Mongo, but not anymore with Metis Mongo
+  private List<ChangeLogImpl> changeLog = new ArrayList<>();
 
   /**
    *  dqvHasQualityAnnotation should be fetched from Mongo but not added like string[] in the json response
@@ -223,5 +224,13 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
 
   public void setHasQualityAnnotation(List<QualityAnnotation> hasQualityAnnotation) {
     this.hasQualityAnnotation = hasQualityAnnotation;
+  }
+
+  public List<ChangeLogImpl> getChangeLog() {
+    return changeLog;
+  }
+
+  public void setChangeLog(List<ChangeLogImpl> changeLog) {
+    this.changeLog = changeLog;
   }
 }
