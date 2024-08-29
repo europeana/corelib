@@ -227,10 +227,12 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     this.hasQualityAnnotation = hasQualityAnnotation;
   }
 
+  @Override
   public List<ChangeLog> getChangeLog() {
     return changeLog;
   }
 
+  @Override
   public void setChangeLog(List<ChangeLog> changeLog) {
     this.changeLog = changeLog;
   }
