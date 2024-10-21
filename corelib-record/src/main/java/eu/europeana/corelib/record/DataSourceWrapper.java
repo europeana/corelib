@@ -15,13 +15,16 @@ public class DataSourceWrapper {
 
     private RecordDaoInitializer recordDaoInitializer;
     private RedirectDaoInitializer redirectDaoInitializer;
+    private RecordDaoInitializer tombstoneDaoInitializer;
 
     public DataSourceWrapper() {
     }
 
-    public DataSourceWrapper(RecordDaoInitializer recordDaoInitializer, RedirectDaoInitializer redirectDaoInitializer) {
+    public DataSourceWrapper(RecordDaoInitializer recordDaoInitializer, RedirectDaoInitializer redirectDaoInitializer,
+                             RecordDaoInitializer tombstoneDaoInitializer) {
         this.recordDaoInitializer = recordDaoInitializer;
         this.redirectDaoInitializer = redirectDaoInitializer;
+        this.tombstoneDaoInitializer = tombstoneDaoInitializer;
     }
 
     public void setRecordDao(RecordDaoInitializer recordDaoInitializer) {
@@ -32,16 +35,24 @@ public class DataSourceWrapper {
         this.redirectDaoInitializer = redirectDb;
     }
 
+    public void setTombstoneDb(RecordDaoInitializer tombstoneDb) {
+        this.recordDaoInitializer = tombstoneDb;
+    }
+
     public Optional<RecordDao> getRecordDao() {
         return Optional.ofNullable(recordDaoInitializer.get());
     }
 
-    public Optional<RecordRedirectDao> getRedirectDb() {
+    public Optional<RecordRedirectDao> getRedirectDao() {
         return redirectDaoInitializer == null ? Optional.empty() : Optional.ofNullable(redirectDaoInitializer.get());
     }
 
+    public Optional<RecordDao> getTombstoneDao() {
+        return tombstoneDaoInitializer == null ? Optional.empty() : Optional.ofNullable(tombstoneDaoInitializer.get());
+    }
+
     public boolean isConfigured() {
-        return recordDaoInitializer != null || redirectDaoInitializer != null;
+        return recordDaoInitializer != null || redirectDaoInitializer != null || tombstoneDaoInitializer != null;
     }
 
 }

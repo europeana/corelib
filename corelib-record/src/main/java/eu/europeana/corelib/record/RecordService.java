@@ -1,10 +1,8 @@
 package eu.europeana.corelib.record;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.metis.mongo.dao.RecordDao;
-import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 
 /**
  * Retrieves CHO records from Mongo database.
@@ -20,37 +18,38 @@ public interface RecordService {
     /**
      * Retrieves a record including all it's {@link eu.europeana.corelib.definitions.edm.entity.WebResource}s
      *
-     *
-     * @param datasource Record server + Redirect DAO implementation to use for query
+     * @param dataSource the datasource (mongo config) to load data from
      * @param collectionId id of the collection to which this record belongs
      * @param recordId id of the record in a collection
      * @param urls Base urls to use in enriching bean
      * @return FullBean including WebResources
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean findById(DataSourceWrapper datasource, String collectionId, String recordId, BaseUrlWrapper urls) throws EuropeanaException;
+    FullBean findById(DataSourceWrapper dataSource, String collectionId, String recordId, BaseUrlWrapper urls) throws EuropeanaException;
 
     /**
      * Retrieves a record including all it's {@link eu.europeana.corelib.definitions.edm.entity.WebResource}s
      *
+     * @param dataSource the datasource (mongo config) to load data from
      * @param europeanaObjectId The unique europeana id
      * @param urls Base urls to use in enriching bean
      * @return FullBean including WebResources
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean findById(DataSourceWrapper datasource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException;
+    FullBean findById(DataSourceWrapper dataSource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException;
 
     /**
      * Retrieve a record object from the database (without {@link eu.europeana.corelib.definitions.edm.entity.WebResource}s
-     * Use {@link #enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)} to add the web resources meta info an attribution snippets
+     * Use {@link #enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)} to add the web resources meta info and attribution snippets
      *
-     * @param europeanaObjectId The unique europeana id
+     * @param dataSource the datasource (mongo config) to load data from
+     * @param europeanaObjectId the id of the record to retrieve
      * @param resolveId if true and the record was not found, then the resolve method is used to check if this record has
      *                  a newId, if false then no missing record id will be resolved
      * @return FullBean with basic record information
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean fetchFullBean(DataSourceWrapper datasource, String europeanaObjectId, boolean resolveId) throws EuropeanaException;
+    FullBean fetchFullBean(DataSourceWrapper dataSource, String europeanaObjectId, boolean resolveId) throws EuropeanaException;
 
     /**
      * This prepares a Fullbean retrieved from Mongo for use by Record API and other services
@@ -66,35 +65,21 @@ public interface RecordService {
      *     <li>providedCHO, aggregatedCHO and proxyFor values start with '/item'</li>
      * </ul>
      *
+     * @param recordDao the recordDao to load data from
      * @param fullBean the basic fullbean we should enrich for usage
+     * @param baseUrls urls from the configuration to use while enriching the fullbean
      * @return enriched full bean
      * @throws EuropeanaException when there is an error retrieving the data
      */
     FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper baseUrls) throws EuropeanaException;
 
     /**
-     * Checks if an europeanaObjectId is old and has a newId. Note that this new id may also be old so we check iteratively
-     * and return the newest id
-     *
-     * @param redirectDao
-     * @param europeanaObjectId the old record id
-     * @return a new record id, null if none was found
-     * @throws BadDataException if a circular id reference is found
-     * @deprecated (since April 2020)
+     * Retrieve a record object from the tombstone database (if available)
+     * @param dataSource the datasource (mongo config) to load data from
+     * @param europeanaObjectId the id of the record to retrieve
+     * @return tombstone fullbean if available, otherwise null
+     * @throws EuropeanaException if there is an error loading the tombstone record
      */
-    @Deprecated // will be deprecated when the new redirect database goes live
-    String resolveId(RecordRedirectDao redirectDao, String europeanaObjectId) throws BadDataException;
-
-    /**
-     *  Uses the provided collectionId and recordId to create an EuropeanaId and checks if that id is old and has a newId.
-     * Note that this new id may also be old so we check iteratively and return the newest id
-     * @param collectionId the collection Id
-     * @param recordId     the record Id
-     * @return a new record id, null if none was found
-     * @throws BadDataException if a circular id reference is found
-     * @deprecated (since April 2020)
-     */
-    @Deprecated // will be deprecated when the new redirect database goes live
-    String resolveId(RecordRedirectDao redirectDao, String collectionId, String recordId) throws BadDataException;
+    FullBean fetchTombstone(DataSourceWrapper dataSource, String europeanaObjectId) throws EuropeanaException;
 
 }

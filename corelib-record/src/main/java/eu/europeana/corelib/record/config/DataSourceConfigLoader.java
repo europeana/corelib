@@ -3,7 +3,6 @@ package eu.europeana.corelib.record.config;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Nonnull;
@@ -27,15 +26,17 @@ import static eu.europeana.corelib.utils.ConfigUtils.containsKeyPrefix;
  * mongo1.connectionUrl
  * mongo1.source1.record-dbname
  * mongo1.source1.redirect-dbname
+ * mongo1.source1.tombstone-dbname
  * <p>
  * mongo1.source2.record-dbname
  * mongo1.source2.redirect-dbname
  */
 @Configuration
 public class DataSourceConfigLoader {
-    private static final String CONNECTION_URL_PROP = "connectionUrl";
-    private static final String RECORD_DB_PROP = "record-dbname";
-    private static final String REDIRECT_DB_URL_PROP = "redirect-dbname";
+    private static final String PROPERTY_CONNECTION_URL = "connectionUrl";
+    private static final String PROPERTY_RECORD_DBNAME = "record-dbname";
+    private static final String PROPERTY_REDIRECT_DBNAME = "redirect-dbname";
+    private static final String PROPERTY_TOMBSTONE_DBNAME = "tombstone-dbname";
 
     private Properties properties;
 
@@ -56,7 +57,7 @@ public class DataSourceConfigLoader {
         while (containsKeyPrefix(properties, "mongo" + instanceNo)) {
             String basePath = "mongo" + instanceNo + SEPARATOR;
             MongoConfigProperty instance = new MongoConfigProperty();
-            instance.setConnectionUrl(properties.getProperty(basePath + CONNECTION_URL_PROP));
+            instance.setConnectionUrl(properties.getProperty(basePath + PROPERTY_CONNECTION_URL));
 
             int sourceNo = 1;
             while (containsKeyPrefix(properties, basePath + "source" + sourceNo)) {
@@ -65,8 +66,9 @@ public class DataSourceConfigLoader {
                 // null values fine here for db names, as getters return Optional<String>
                 DataSourceConfigProperty dsConfig = new DataSourceConfigProperty(
                         properties.getProperty(dsBasePath + "id"),
-                        properties.getProperty(dsBasePath + REDIRECT_DB_URL_PROP),
-                        properties.getProperty(dsBasePath + RECORD_DB_PROP)
+                        properties.getProperty(dsBasePath + PROPERTY_RECORD_DBNAME),
+                        properties.getProperty(dsBasePath + PROPERTY_REDIRECT_DBNAME),
+                        properties.getProperty(dsBasePath + PROPERTY_TOMBSTONE_DBNAME)
                 );
 
                 instance.addDataSource(dsConfig);
@@ -128,23 +130,34 @@ public class DataSourceConfigLoader {
     }
 
 
-    static class DataSourceConfigProperty {
+    static final class DataSourceConfigProperty {
         private final String id;
-        private final String redirectDbName;
         private final String recordDbName;
+        private final String redirectDbName;
+        private final String tombstoneDbName;
 
-        private DataSourceConfigProperty(@Nonnull String id, String redirectDbName, String recordDbName) {
+        private DataSourceConfigProperty(@Nonnull String id, String recordDbName, String redirectDbName, String tombstoneDbName) {
             if (StringUtils.isEmpty(id)) {
-                throw new IllegalArgumentException(String.format("Data source ID missing in properties. redirectDbName=%s, recordDbName=%s", redirectDbName, recordDbName));
+                throw new IllegalArgumentException(String.format("Data source ID missing in properties. recordDbName=%s, redirectDbName=%s, tombstoneDbName=%s",
+                        recordDbName, redirectDbName, tombstoneDbName));
             }
-
             this.id = id;
-            this.redirectDbName = redirectDbName;
             this.recordDbName = recordDbName;
+            this.redirectDbName = redirectDbName;
+            this.tombstoneDbName = tombstoneDbName;
         }
 
         public String getId() {
             return id;
+        }
+
+        /**
+         * Gets the configured Record DB name
+         *
+         * @return Optional containing configured value, or empty optional if value is empty.
+         */
+        public Optional<String> getRecordDbName() {
+            return Optional.ofNullable(recordDbName).filter(Predicate.not(StringUtils::isEmpty));
         }
 
         /**
@@ -157,20 +170,21 @@ public class DataSourceConfigLoader {
         }
 
         /**
-         * Gets the configured Record DB name
+         * Gets the configured Tombstone database name.
          *
          * @return Optional containing configured value, or empty optional if value is empty.
          */
-        public Optional<String> getRecordDbName() {
-            return Optional.ofNullable(recordDbName).filter(Predicate.not(StringUtils::isEmpty));
+        public Optional<String> getTombstoneDbName() {
+            return Optional.ofNullable(tombstoneDbName).filter(Predicate.not(StringUtils::isEmpty));
         }
 
 
         @Override
         public String toString() {
             return "DataSource{" +
-                    "redirectDbName=" + redirectDbName +
-                    ", recordDbName=" + recordDbName +
+                    "recordDbName=" + recordDbName +
+                    ", redirectDbName=" + redirectDbName +
+                    ", tombstoneDbName=" + tombstoneDbName +
                     '}';
         }
     }

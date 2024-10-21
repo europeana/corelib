@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -25,7 +24,6 @@ public class RecordServerConfig {
     private final Map<String, DataSourceWrapper> dataSourceById = new HashMap<>();
 
     private final DataSourceConfigLoader configLoader;
-    private String defaultDataSourceId;
 
     private final List<MongoClientInitializer> mongoConnections = new ArrayList<>();
 
@@ -33,42 +31,56 @@ public class RecordServerConfig {
         this.configLoader = configLoader;
     }
 
+    /**
+     * Note that we only read configurations and setup DataSources. No actual connections are created until the first
+     * request to a DataSource
+     */
     @PostConstruct
     private void setupDataSources() {
+        LOG.info("Loading mongo database configurations...");
         for (DataSourceConfigLoader.MongoConfigProperty instance : configLoader.getMongoInstances()) {
             MongoClientInitializer connection = new MongoClientInitializer(instance.getConnectionUrl());
             // keep track of connections, so they can be closed on exit
             mongoConnections.add(connection);
 
             for (DataSourceConfigLoader.DataSourceConfigProperty dsConfig : instance.getSources()) {
-                DataSourceWrapper dsWrapper = new DataSourceWrapper();
-                // create connection to Record db if configured
-                if (dsConfig.getRecordDbName().isPresent()) {
-                    dsWrapper.setRecordDao(new RecordDaoInitializer(connection, dsConfig.getRecordDbName().get()));
-                    LOG.info("Registered RecordDao for data source: {}, record-dbName={}",
-                            dsConfig.getId(), dsConfig.getRecordDbName().get());
-                } else {
-                    LOG.info("No record db configured for data source: {}", dsConfig.getId());
-                }
-
-                // create connection to Redirect db if configured
-                if (dsConfig.getRedirectDbName().isPresent()) {
-                    dsWrapper.setRedirectDb(new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get()));
-                    LOG.info("Registered RecordRedirectDao for data source: {}, redirect-dbName={}",
-                            dsConfig.getId(), dsConfig.getRedirectDbName().get());
-                } else {
-                    LOG.info("No redirect db configured for data source: {}", dsConfig.getId());
-                }
-
-                if (dsWrapper.isConfigured()) {
-                    dataSourceById.put(dsConfig.getId(), dsWrapper);
-
-                    // included specifically for UserServiceImpl (which is already deprecated)
-                    if (StringUtils.isEmpty(defaultDataSourceId)) {
-                        defaultDataSourceId = dsConfig.getId();
-                    }
-                }
+                setupDatabases(dsConfig, connection);
             }
+        }
+    }
+
+    private void setupDatabases(DataSourceConfigLoader.DataSourceConfigProperty dsConfig, MongoClientInitializer connection) {
+        DataSourceWrapper dsWrapper = new DataSourceWrapper();
+
+        // create connection to Record db if configured
+        if (dsConfig.getRecordDbName().isPresent()) {
+            dsWrapper.setRecordDao(new RecordDaoInitializer(connection, dsConfig.getRecordDbName().get()));
+            LOG.info("Registered RecordDao for data source: {}, record-dbName={}",
+                    dsConfig.getId(), dsConfig.getRecordDbName().get());
+        } else {
+            LOG.info("No record db configured for data source: {}", dsConfig.getId());
+        }
+
+        // create connection to Redirect db if configured
+        if (dsConfig.getRedirectDbName().isPresent()) {
+            dsWrapper.setRedirectDb(new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get()));
+            LOG.info("Registered RecordRedirectDao for data source: {}, redirect-dbName={}",
+                    dsConfig.getId(), dsConfig.getRedirectDbName().get());
+        } else {
+            LOG.info("No redirect db configured for data source: {}", dsConfig.getId());
+        }
+
+        // create connection to tombstone db if configured
+        if (dsConfig.getTombstoneDbName().isPresent()) {
+            dsWrapper.setTombstoneDb(new RecordDaoInitializer(connection, dsConfig.getTombstoneDbName().get()));
+            LOG.info("Registered RecordDao for data source: {}, tombstone-dbName={}",
+                    dsConfig.getId(), dsConfig.getTombstoneDbName().get());
+        } else {
+            LOG.info("No redirect db configured for data source: {}", dsConfig.getId());
+        }
+
+        if (dsWrapper.isConfigured()) {
+            dataSourceById.put(dsConfig.getId(), dsWrapper);
         }
     }
 
@@ -82,16 +94,6 @@ public class RecordServerConfig {
         return Optional.ofNullable(dataSourceById.get(id));
     }
 
-    /**
-     * Gets the default data sources. This will also be the first Record DB / Redirect DB pair in
-     * the app configuration
-     *
-     * @return Optional containing matching data sources.
-     * @deprecated use #getDataSourceById(String)
-     */
-    public Optional<DataSourceWrapper> getDefaultDataSource() {
-        return Optional.ofNullable(dataSourceById.get(defaultDataSourceId));
-    }
 
     /**
      * Invoked by Spring container on application exit.

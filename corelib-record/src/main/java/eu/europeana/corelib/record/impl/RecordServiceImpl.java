@@ -1,7 +1,6 @@
 package eu.europeana.corelib.record.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.utils.ProxyAggregationUtils;
 import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
@@ -70,35 +69,31 @@ public class RecordServiceImpl implements RecordService {
      */
     @Override
     public FullBean fetchFullBean(DataSourceWrapper datasource, String europeanaObjectId, boolean resolve) throws EuropeanaException {
-        long   startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
+
         if (datasource.getRecordDao().isEmpty()) {
-            LOG.warn("Could not fetch FullBean with europeanaObjectId {}. No record server configured", europeanaObjectId);
+            LOG.warn("Could not load FullBean {}. No record server configured", europeanaObjectId);
             return null;
         }
         RecordDao recordDao = datasource.getRecordDao().get();
+
+        // We try to load the record from the 'main' record database
         FullBean fullBean = recordDao.getFullBean(europeanaObjectId);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("RecordService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
+            LOG.debug("RecordService load FullBean {} took {} ms, result = {}",
+                    europeanaObjectId, (System.currentTimeMillis() - startTime), fullBean);
         }
 
+        // If not available, we check if there's a redirect and if we can load that record
         if (Objects.isNull(fullBean) && resolve) {
-            // object not found, check redirect database
             startTime = System.currentTimeMillis();
-            String newId = datasource.getRedirectDb().isPresent() ? resolveId(datasource.getRedirectDb().get(), europeanaObjectId) : null;
+            fullBean = fetchFromRedirectDb(datasource, europeanaObjectId, recordDao);
             if (LOG.isDebugEnabled()) {
-                LOG.debug("RecordService resolve newId took {} ms", (System.currentTimeMillis() - startTime));
-            }
-            if (StringUtils.isNotBlank(newId)){
-                startTime = System.currentTimeMillis();
-                fullBean = recordDao.getFullBean(newId);
-                if (fullBean == null) {
-                    LOG.debug("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
-                }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("RecordService fetch FullBean with new id took {} ms", (System.currentTimeMillis() - startTime));
-                }
+                LOG.debug("RecordService load redirected FullBean {} took {} ms, result = {}",
+                        europeanaObjectId, (System.currentTimeMillis() - startTime), fullBean);
             }
         }
+
         return fullBean;
     }
 
@@ -106,6 +101,8 @@ public class RecordServiceImpl implements RecordService {
      * @see RecordService#enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)
      */
     public FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper urls){
+        long startTime = System.currentTimeMillis();
+
         // 1. order the proxy and aggregation
         fullBean.setProxies(ProxyAggregationUtils.orderProxy(fullBean));
         fullBean.setAggregations(ProxyAggregationUtils.orderAggregation(fullBean));
@@ -125,16 +122,52 @@ public class RecordServiceImpl implements RecordService {
         // 6. generate proper edmLandingpage portal urls
         UrlConverter.setEdmLandingPage(fullBean, urls.getPortalBaseUrl());
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("RecordService enrich record took {} ms", (System.currentTimeMillis() - startTime));
+        }
         return fullBean;
     }
 
-
-
     /**
-     * @see RecordService#resolveId(RecordRedirectDao, String)
+     * @see RecordService#fetchTombstone(DataSourceWrapper, String)
      */
     @Override
-    public String resolveId(RecordRedirectDao redirectDao, String europeanaId) {
+    public FullBean fetchTombstone(DataSourceWrapper dataSource, String europeanaObjectId) throws EuropeanaException {
+        long startTime = System.currentTimeMillis();
+        FullBean result = null;
+        if (dataSource.getTombstoneDao().isPresent()) {
+            result = dataSource.getTombstoneDao().get().getFullBean(europeanaObjectId);
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("RecordService fetch tombstone {} took {} ms, result = {}", europeanaObjectId, (System.currentTimeMillis() - startTime), result);
+        }
+        return result;
+    }
+
+    private FullBean fetchFromRedirectDb(DataSourceWrapper datasource, String europeanaObjectId, RecordDao recordDao) throws EuropeanaException {
+        long startTime = System.currentTimeMillis();
+        FullBean result = null;
+        String newId = datasource.getRedirectDao().isPresent() ? resolveId(datasource.getRedirectDao().get(), europeanaObjectId) : null;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("RecordService resolve newId for record {} took {} ms, result = {}", europeanaObjectId, (System.currentTimeMillis() - startTime), newId);
+        }
+
+        if (StringUtils.isNotBlank(newId)){
+            startTime = System.currentTimeMillis();
+            result = recordDao.getFullBean(newId);
+            if (result == null) {
+                LOG.debug("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
+            }
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("RecordService fetch FullBean with new id {} took {} ms, result = {}", newId, (System.currentTimeMillis() - startTime), result);
+        }
+        return result;
+    }
+
+    private String resolveId(RecordRedirectDao redirectDao, String europeanaId) {
         List<RecordRedirect> redirects = redirectDao.getRecordRedirectsByOldId(europeanaId);
         if (redirects.isEmpty()){
             LOG.debug("RecordService no redirection was found for EuropeanaID {}", europeanaId);
@@ -142,14 +175,6 @@ public class RecordServiceImpl implements RecordService {
         } else {
             return redirects.get(0).getNewId();
         }
-    }
-
-    /**
-     * @see RecordService#resolveId(RecordRedirectDao redirectDao, String, String)
-     */
-    @Override
-    public String resolveId(RecordRedirectDao redirectDao, String collectionId, String recordId) throws BadDataException {
-        return resolveId(redirectDao, EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
     }
 
 }
