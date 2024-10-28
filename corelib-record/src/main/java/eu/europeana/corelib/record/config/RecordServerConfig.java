@@ -76,7 +76,7 @@ public class RecordServerConfig {
             LOG.info("Registered RecordDao for data source: {}, tombstone-dbName={}",
                     dsConfig.getId(), dsConfig.getTombstoneDbName().get());
         } else {
-            LOG.info("No redirect db configured for data source: {}", dsConfig.getId());
+            LOG.info("No tombstone db configured for data source: {}", dsConfig.getId());
         }
 
         if (dsWrapper.isConfigured()) {

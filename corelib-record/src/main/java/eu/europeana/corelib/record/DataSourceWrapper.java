@@ -36,7 +36,7 @@ public class DataSourceWrapper {
     }
 
     public void setTombstoneDb(RecordDaoInitializer tombstoneDb) {
-        this.recordDaoInitializer = tombstoneDb;
+        this.tombstoneDaoInitializer = tombstoneDb;
     }
 
     public Optional<RecordDao> getRecordDao() {
