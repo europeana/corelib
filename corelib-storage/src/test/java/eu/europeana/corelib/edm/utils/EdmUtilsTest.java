@@ -4,19 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import eu.europeana.metis.schema.jibx.RDF;
-import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
+
 import org.junit.Test;
 
 /**
@@ -29,40 +25,73 @@ import org.junit.Test;
 public class EdmUtilsTest {
 
 
-    // TODO at the moment there are many places in the code where we assume at least certain data is present
-    // 2019-03-11 below is a minimal fullbean that should work for conversion to RDF
-    private static FullBeanImpl minimalFullBean = getMinimalFullBeanMock();
-    static FullBeanImpl getMinimalFullBeanMock() {
+    private static FullBeanImpl minimalFullBean = getMinimalFullBean();
+
+    private static FullBeanImpl getMinimalFullBean() {
         FullBeanImpl bean = new FullBeanImpl();
 
-        bean.setProxies(new ArrayList<>());
-        ProxyImpl proxy = new ProxyImpl();
-        proxy.setAbout("/proxy/provider/1234/test_5678");
-        proxy.setProxyFor("/item/1234/test_5678");
-        proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
-        proxy.setProxyIn(new String [] {"/aggregation/provider/1234/test_5678"});
-        bean.getProxies().add(proxy);
-
-        bean.setProvidedCHOs(new ArrayList<>());
-        ProvidedCHOImpl providedCHO = new ProvidedCHOImpl();
-        providedCHO.setAbout("/item/1234/test_5678");
-        bean.getProvidedCHOs().add(providedCHO);
-
-        bean.setAggregations(new ArrayList<>());
-        AggregationImpl aggregation = new AggregationImpl();
-        aggregation.setAbout("/aggregation/provider/1234/test_5678");
-        bean.getAggregations().add(aggregation);
-
-        List<WebResourceImpl> webResources = new ArrayList<>();
-        aggregation.setWebResources(webResources);
-
+        // EdmUtils code assumes there is always a EuropeanaAggregation
+        // For marshalling to EDM, JIBX requires EuropeanaAggregation to have aggregatedCHO, edmCountry (with a proper
+        // supported country) and language (also with proper value)
         EuropeanaAggregationImpl europeanaAggregation = new EuropeanaAggregationImpl();
-        europeanaAggregation.setAbout("/aggregation/europeana/1234/test_5678");
+        europeanaAggregation.setAggregatedCHO("/item/1234/test_5678"); // required
+        europeanaAggregation.setEdmCountry(createSimpleHashMap("def", "Poland")); // required
+        europeanaAggregation.setEdmLanguage(createSimpleHashMap("def", "pl")); // required
         bean.setEuropeanaAggregation(europeanaAggregation);
 
-        bean.setEuropeanaCollectionName(new String[] { "1234_test"});
+        return bean;
+    }
+
+    private static FullBeanImpl getTombstoneFullBean() {
+        FullBeanImpl bean = getMinimalFullBean();
+
+        // A tombstone record typically has about, provider aggregation, europeana aggregation with changelog,
+        // europeanaCompleteness and provider proxy
+        String about = "/test/tombstone";
+        bean.setAbout(about);
+
+        ChangeLogImpl changeLog = new ChangeLogImpl();
+        changeLog.setType("Delete");
+        changeLog.setContext("http://data.europeana.eu/vocabulary/depublicationReason/sourceRemoval");
+        changeLog.setEndTime(new Date(1729502835000L));
+        bean.getEuropeanaAggregation().setChangeLog(List.of(changeLog));
+        bean.getEuropeanaAggregation().setEdmPreview("https://mymuseum.org/images/pretty-picture.jpg");
+        bean.getEuropeanaAggregation().setEdmLandingPage("https://www.europeana.eu/item/test/tombstone");
+
+        // For marshalling to EDM, JIBX requires aggregations to have aggregatedCHO, edmProvider, edmRights
+        AggregationImpl aggregation = new AggregationImpl();
+        aggregation.setAbout("/aggregation/provider" + about);
+        aggregation.setAggregatedCHO("/item/1234/test_5678"); // required
+        aggregation.setEdmIsShownBy("https://mymuseum.org/images/pretty-picture.jpg");
+        aggregation.setEdmIsShownAt("https://mymuseum.org/images/pretty-picture.jpg");
+        aggregation.setEdmObject("https://mymuseum.org/images/pretty-picture.jpg");
+        aggregation.setEdmProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/1234")); // required
+        aggregation.setEdmDataProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/5678"));
+        aggregation.setEdmRights(createSimpleHashMap("def", "Open")); // required
+        bean.setAggregations(List.of(aggregation));
+
+        // For marshalling to EDM, JIBX requires proxies to have edmType
+        bean.setProxies(new ArrayList<>());
+        ProxyImpl proxy = new ProxyImpl();
+        proxy.setAbout("/proxy/provider" + about);
+        proxy.setDcIdentifier(createSimpleHashMap("def", "myId"));
+        proxy.setDcRights(createSimpleHashMap("def", "Open"));
+        proxy.setDcTitle(createSimpleHashMap("nl","Dit is een title"));
+        proxy.setEdmType("IMAGE"); // required
+        proxy.setEuropeanaProxy(false);
+        bean.setProxies(List.of(proxy));
+
+        bean.setEuropeanaCompleteness(0);
+        bean.setTimestampCreated(new Date());
+        bean.setTimestampUpdated(new Date());
 
         return bean;
+    }
+
+    private static HashMap createSimpleHashMap(String key, String value) {
+        HashMap<String, List<String>> map = new HashMap<>();
+        map.put(key, List.of(value));
+        return map;
     }
 
     @Test
@@ -71,14 +100,38 @@ public class EdmUtilsTest {
         assertNotNull(rdf);
     }
 
+    @Test
+    public void testToEdmMinimalBean() {
+        String edmOut = EdmUtils.toEDM(minimalFullBean);
+        assertNotNull(edmOut);
+    }
+
+    @Test
+    public void testToRdfTombstoneBean() {
+        RDF rdf = EdmUtils.toRDF(getTombstoneFullBean());
+        assertNotNull(rdf);
+    }
+
+    @Test
+    public void testToEdmTombstoneBean() {
+        String edmOut = EdmUtils.toEDM(getTombstoneFullBean());
+        assertNotNull(edmOut);
+    }
+
     /**
      * Test if colorSpace information is converted to RDF properly
      */
     @Test
     public void testToRdfColorSpace() {
+        FullBeanImpl bean = minimalFullBean;
+
+        bean.setAggregations(new ArrayList<>());
+        AggregationImpl aggregation = new AggregationImpl();
+        aggregation.setAbout("/aggregation/provider/1234/test_5678");
+        bean.getAggregations().add(aggregation);
+
         // first we create a bean with a webresource with a 'normal' color space type
         ColorSpaceType expected = ColorSpaceType.LC_HAB;
-        FullBeanImpl bean = minimalFullBean;
 
         ImageMetaInfoImpl imageInfo = new ImageMetaInfoImpl();
         imageInfo.setColorSpace(expected.xmlValue());

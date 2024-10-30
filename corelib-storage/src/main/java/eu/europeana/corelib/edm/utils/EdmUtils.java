@@ -86,7 +86,7 @@ public final class EdmUtils {
             marshallingContext.setOutput(out, EuropeanaUTF8Escaper.s_instance);
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
             return out.toString();
-        } catch (JiBXException | IOException e) {
+        } catch (JiBXException | IOException | IllegalStateException  e) {
             String id = null;
             if (rdf != null && rdf.getProvidedCHOList() != null && !rdf.getProvidedCHOList().isEmpty()) {
                 id = rdf.getProvidedCHOList().get(0).getAbout();
@@ -304,7 +304,8 @@ public final class EdmUtils {
             aggregation.setAbout(getBaseUrl(europeanaAggregation.getAbout()));
         }
 
-        if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO(), preserveIdentifiers)) {
+        if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO(), preserveIdentifiers)
+                && fBean.getProvidedCHOs().size() > 0) {
             AggregatedCHO agCHO = new AggregatedCHO();
             if (preserveIdentifiers) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
@@ -314,9 +315,11 @@ public final class EdmUtils {
             aggregation.setAggregatedCHO(agCHO);
         }
         addAsList(aggregation, Aggregates.class, europeanaAggregation.getAggregates());
-        DatasetName datasetName = new DatasetName();
-        datasetName.setString(fBean.getEuropeanaCollectionName()[0]);
-        aggregation.setDatasetName(datasetName);
+        if (fBean.getEuropeanaCollectionName() !=  null) {
+            DatasetName datasetName = new DatasetName();
+            datasetName.setString(fBean.getEuropeanaCollectionName()[0]);
+            aggregation.setDatasetName(datasetName);
+        }
         // TODO country will be removed once Organizations are fully implemented
         Country country = convertMapToCountry(europeanaAggregation.getEdmCountry());
         if (country != null) {
@@ -476,7 +479,9 @@ public final class EdmUtils {
                 proxy.setProxyInList(pInList);
             }
             Type2 type = new Type2();
-            type.setType(EdmType.valueOf(typeStr.replace("3D", "_3_D")));
+            if (typeStr != null) {
+                type.setType(EdmType.valueOf(typeStr.replace("3D", "_3_D")));
+            }
             proxy.setType(type);
 
             addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
@@ -556,7 +561,8 @@ public final class EdmUtils {
             } else {
                 aggregation.setAbout(getBaseUrl(aggr.getAbout()));
             }
-            if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO(), preserveIdentifiers)) {
+            if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO(), preserveIdentifiers)
+                    && rdf.getProvidedCHOList().size() > 0) {
                 AggregatedCHO cho = new AggregatedCHO();
                 if (preserveIdentifiers) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());

@@ -51,9 +51,9 @@
         <morphia.version>2.4.14</morphia.version>
 
         <commonsIO.version>2.17.0</commonsIO.version>
-        <commonsLang3.version>3.17.0</commonsLang3.version>
 
         <!-- Dependencies below are also used in API2 -->
+        <commonsLang3.version>3.17.0</commonsLang3.version>
         <httpclient.version>4.5.14</httpclient.version>
         <jackson.version>2.18.0</jackson.version>
         <jodatime.version>2.13.0</jodatime.version>
