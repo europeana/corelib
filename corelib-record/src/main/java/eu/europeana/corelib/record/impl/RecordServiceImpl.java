@@ -1,10 +1,8 @@
 package eu.europeana.corelib.record.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.utils.ProxyAggregationUtils;
 import eu.europeana.corelib.record.BaseUrlWrapper;
-import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.record.api.IIIFLink;
 import eu.europeana.corelib.record.api.UrlConverter;
@@ -14,13 +12,11 @@ import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.metis.mongo.dao.RecordDao;
 import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import eu.europeana.metis.mongo.model.RecordRedirect;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Retrieves CHO records from Mongo database.
@@ -44,60 +40,37 @@ public class RecordServiceImpl implements RecordService {
     private String attributionCss;
 
     /**
-     * @see RecordService#findById(DataSourceWrapper, String, String, BaseUrlWrapper)
+     * @see RecordService#findById(RecordDao recordDao, String, String, BaseUrlWrapper)
      */
     @Override
-    public FullBean findById(DataSourceWrapper datasource, String collectionId, String recordId, BaseUrlWrapper urls) throws EuropeanaException {
-        return findById(datasource, EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), urls);
+    public FullBean findById(RecordDao recordDao, String collectionId, String recordId, BaseUrlWrapper urls) throws EuropeanaException {
+        return findById(recordDao, EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), urls);
     }
 
     /**
-     * @see RecordService#findById(DataSourceWrapper, String, BaseUrlWrapper)
+     * @see RecordService#findById(RecordDao recordDao, String, BaseUrlWrapper)
      */
     @Override
-    public FullBean findById(DataSourceWrapper datasource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException {
-        FullBean fullBean = fetchFullBean(datasource, europeanaObjectId, true);
+    public FullBean findById(RecordDao recordDao, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException {
+        FullBean fullBean = fetchFullBean(recordDao, europeanaObjectId);
 
-        if (fullBean != null && datasource.getRecordDao().isPresent()) {
-            return enrichFullBean(datasource.getRecordDao().get(), fullBean, urls);
+        if (fullBean != null) {
+            return enrichFullBean(recordDao, fullBean, urls);
         } else {
             return null;
         }
     }
 
     /**
-     * @see RecordService#fetchFullBean(DataSourceWrapper, String, boolean)
+     * @see RecordService#fetchFullBean(RecordDao, String)
      */
     @Override
-    public FullBean fetchFullBean(DataSourceWrapper datasource, String europeanaObjectId, boolean resolve) throws EuropeanaException {
-        long   startTime = System.currentTimeMillis();
-        if (datasource.getRecordDao().isEmpty()) {
-            LOG.warn("Could not fetch FullBean with europeanaObjectId {}. No record server configured", europeanaObjectId);
-            return null;
-        }
-        RecordDao recordDao = datasource.getRecordDao().get();
+    public FullBean fetchFullBean(RecordDao recordDao, String europeanaObjectId) throws EuropeanaException {
+        long startTime = System.currentTimeMillis();
         FullBean fullBean = recordDao.getFullBean(europeanaObjectId);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("RecordService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
-        }
-
-        if (Objects.isNull(fullBean) && resolve) {
-            // object not found, check redirect database
-            startTime = System.currentTimeMillis();
-            String newId = datasource.getRedirectDb().isPresent() ? resolveId(datasource.getRedirectDb().get(), europeanaObjectId) : null;
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("RecordService resolve newId took {} ms", (System.currentTimeMillis() - startTime));
-            }
-            if (StringUtils.isNotBlank(newId)){
-                startTime = System.currentTimeMillis();
-                fullBean = recordDao.getFullBean(newId);
-                if (fullBean == null) {
-                    LOG.debug("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
-                }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("RecordService fetch FullBean with new id took {} ms", (System.currentTimeMillis() - startTime));
-                }
-            }
+            LOG.debug("Load FullBean {} from db {} took {} ms, result = {}",
+                    europeanaObjectId, recordDao, (System.currentTimeMillis() - startTime), fullBean);
         }
         return fullBean;
     }
@@ -106,12 +79,18 @@ public class RecordServiceImpl implements RecordService {
      * @see RecordService#enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)
      */
     public FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper urls){
+
         // 1. order the proxy and aggregation
         fullBean.setProxies(ProxyAggregationUtils.orderProxy(fullBean));
         fullBean.setAggregations(ProxyAggregationUtils.orderAggregation(fullBean));
 
         // 2. add meta info for all webresources + generate attribution snippets
+        long startTime = System.currentTimeMillis();
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Loading {} webresources from db {} took {} ms",
+                    fullBean.getEuropeanaAggregation().getWebResources().size(), recordDao, (System.currentTimeMillis() - startTime));
+        }
 
         // 3. add link to IIIF for newspaper and AV/EUScreen items. Also adds the manifest resources for the IIIF links.
         IIIFLink.addReferencedByAndManifestResources(fullBean, manifestAddApiUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
@@ -128,28 +107,27 @@ public class RecordServiceImpl implements RecordService {
         return fullBean;
     }
 
-
-
     /**
-     * @see RecordService#resolveId(RecordRedirectDao, String)
+     * @see RecordService#fetchTombstone(RecordDao recordDao, String)
      */
     @Override
+    public FullBean fetchTombstone(RecordDao recordDao, String europeanaObjectId) throws EuropeanaException {
+        long startTime = System.currentTimeMillis();
+        FullBean result = recordDao.getFullBean(europeanaObjectId);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Load tombstone {} from db {} took {} ms, result = {}",
+                    europeanaObjectId, recordDao, (System.currentTimeMillis() - startTime), result);
+        }
+        return result;
+    }
+
     public String resolveId(RecordRedirectDao redirectDao, String europeanaId) {
         List<RecordRedirect> redirects = redirectDao.getRecordRedirectsByOldId(europeanaId);
         if (redirects.isEmpty()){
-            LOG.debug("RecordService no redirection was found for EuropeanaID {}", europeanaId);
             return null;
         } else {
             return redirects.get(0).getNewId();
         }
-    }
-
-    /**
-     * @see RecordService#resolveId(RecordRedirectDao redirectDao, String, String)
-     */
-    @Override
-    public String resolveId(RecordRedirectDao redirectDao, String collectionId, String recordId) throws BadDataException {
-        return resolveId(redirectDao, EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
     }
 
 }

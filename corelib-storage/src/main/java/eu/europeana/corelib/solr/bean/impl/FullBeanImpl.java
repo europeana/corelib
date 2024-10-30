@@ -243,8 +243,6 @@ public class FullBeanImpl implements FullBean {
                 return p.getEdmType();
             }
         }
-        LogManager.getLogger(FullBeanImpl.class)
-                .error("Type is null, no proxy.edmType found as fallback!");
         return null;
     }
 
