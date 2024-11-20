@@ -144,7 +144,7 @@ public final class EdmUtils {
                 if(serv.getDctermsConformsTo() !=null && serv.getDctermsConformsTo().length>0){
                     List<ConformsTo> conformsToList = new ArrayList<>();
 
-                    for(String conformsTo : serv.getDctermsConformsTo()){
+                    for (String conformsTo : serv.getDctermsConformsTo()){
                         if(StringUtils.isNotEmpty(conformsTo)) {
                             ConformsTo cTo = new ConformsTo();
                             ResourceOrLiteralType.Resource res = new Resource();
@@ -155,7 +155,7 @@ public final class EdmUtils {
                             conformsToList.add(cTo);
                         }
                     }
-                    if(!conformsToList.isEmpty()){
+                    if (!conformsToList.isEmpty()){
                         service.setConformsToList(conformsToList);
                     }
                 }
@@ -163,14 +163,14 @@ public final class EdmUtils {
                 if (serv.getDoapImplements() != null && serv.getDoapImplements().length > 0){
                     List<Implements> implementsList = new ArrayList<>();
 
-                    for(String doapImplements : serv.getDoapImplements()){
+                    for (String doapImplements : serv.getDoapImplements()){
                         if(StringUtils.isNotEmpty(doapImplements)) {
                             Implements anImplements = new Implements();
                             anImplements.setResource(doapImplements);
                             implementsList.add(anImplements);
                         }
                     }
-                    if(!implementsList.isEmpty()){
+                    if (!implementsList.isEmpty()){
                         service.setImplementList(implementsList);
                     }
                 }
@@ -349,6 +349,26 @@ public final class EdmUtils {
         Modified modified = new Modified();
         modified.setString(DateUtils.format(fBean.getTimestampUpdated()));
         aggregation.setModified(modified);
+
+        if (europeanaAggregation.getChangeLog() != null && europeanaAggregation.getChangeLog().size() > 0) {
+            Delete changeLog = new Delete();
+
+            Context c = new Context();
+            c.setResource(europeanaAggregation.getChangeLog().get(0).getContext());
+            changeLog.setContextList(List.of(c));
+
+            EndTime endTime = new EndTime();
+            endTime.setString(DateUtils.format(europeanaAggregation.getChangeLog().get(0).getEndTime()));
+            changeLog.setEndTime(endTime);
+
+            // When loading from Mongo (JSON output) the Delete/Changelog object is placed under the EuropeanaAggregation,
+            // but for RDF it is under the root RDF object, and in it we refer back to the Europeana aggregation (see also
+            // https://europeana.atlassian.net/browse/MET-6003?focusedCommentId=130969)
+            _Object1 obj = new _Object1();
+            obj.setResource(getBaseUrl(europeanaAggregation.getAbout()));
+            changeLog.setObject(obj);
+            rdf.setDeleteList(List.of(changeLog));
+        }
 
         List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
@@ -1198,7 +1218,9 @@ public final class EdmUtils {
     private static String getBaseUrl(String url) {
         // Urls supplied by API2 always start with "/item" (see ItemFix.class) and the ones from OAI-PMH do not so
         // that's why we need to check
-        if (url == null)  return null;
+        if (url == null) {
+            return null;
+        }
         String u = url.toLowerCase(Locale.GERMAN);
         if (u.startsWith("/item") || u.startsWith("/aggregation") || u.startsWith("/proxy")) {
             return BASE_URL + url;

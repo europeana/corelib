@@ -61,13 +61,13 @@ public class EdmUtilsTest {
         // For marshalling to EDM, JIBX requires aggregations to have aggregatedCHO, edmProvider, edmRights
         AggregationImpl aggregation = new AggregationImpl();
         aggregation.setAbout("/aggregation/provider" + about);
-        aggregation.setAggregatedCHO("/item/1234/test_5678"); // required
+        aggregation.setAggregatedCHO("/item/1234/test_5678"); // required, not empty or space
         aggregation.setEdmIsShownBy("https://mymuseum.org/images/pretty-picture.jpg");
         aggregation.setEdmIsShownAt("https://mymuseum.org/images/pretty-picture.jpg");
         aggregation.setEdmObject("https://mymuseum.org/images/pretty-picture.jpg");
-        aggregation.setEdmProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/1234")); // required
+        aggregation.setEdmProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/1234")); // required, map with at least 1 entry
         aggregation.setEdmDataProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/5678"));
-        aggregation.setEdmRights(createSimpleHashMap("def", "Open")); // required
+        aggregation.setEdmRights(createSimpleHashMap("def", "Open")); // required, map with at least 1 entry
         bean.setAggregations(List.of(aggregation));
 
         // For marshalling to EDM, JIBX requires proxies to have edmType
