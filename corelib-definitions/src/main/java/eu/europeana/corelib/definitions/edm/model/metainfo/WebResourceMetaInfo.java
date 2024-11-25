@@ -11,5 +11,7 @@ public interface WebResourceMetaInfo {
     VideoMetaInfo getVideoMetaInfo();
 
     TextMetaInfo getTextMetaInfo();
+    
+    ThreeDMetaInfo getThreeDMetaInfo();
 
 }
