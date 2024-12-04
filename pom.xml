@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>corelib</artifactId>
-    <version>2.16.10-SNAPSHOT</version>
+    <version>2.17.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Core Library</name>
@@ -36,34 +36,33 @@
     </scm>
 
     <properties>
-        <version.maven.compiler.plugin>3.8.1</version.maven.compiler.plugin>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- metis-framework 11 and metis.schema 9-SNAPSHOT uses JDK 17.
-        Moving forward we do need to upgrade to JDK 21 if we continue to use metis dependencies and want to upgrade them-->
-        <metis.version>11</metis.version>
-        <metis.schema.version>9</metis.schema.version>
+        <metis.version>13-SNAPSHOT</metis.version>
+        <metis.schema.version>10-SNAPSHOT</metis.schema.version>
 
-        <sonar.organization>europeana</sonar.organization>
-        <apacheSolr.version>8.11.3</apacheSolr.version>
-        <apacheLucene.version>8.11.3</apacheLucene.version>
-        <mongoDriver.version>4.7.2</mongoDriver.version>
-        <morphia.version>2.3.0</morphia.version>
+        <apacheSolr.version>8.11.4</apacheSolr.version>
+        <apacheLucene.version>8.11.4</apacheLucene.version>
+        <mongoDriver.version>4.11.4</mongoDriver.version>
+        <morphia.version>2.4.14</morphia.version>
 
-        <commonsIO.version>2.4</commonsIO.version>
-        <commonsLang3.version>3.12.0</commonsLang3.version>
-        <httpclient.version>4.5.13</httpclient.version>
-        <jackson.version>2.16.0</jackson.version>
-        <jibx.version>1.3.3</jibx.version>
-        <jodatime.version>2.9.2</jodatime.version>
-        <junit.version>4.13.1</junit.version>
-        <log4j2.version>2.19.0</log4j2.version>
-        <mockito.version>3.2.0</mockito.version>
+        <commonsIO.version>2.17.0</commonsIO.version>
 
+        <!-- Dependencies below are also used in API2 -->
+        <commonsLang3.version>3.17.0</commonsLang3.version>
+        <httpclient.version>4.5.14</httpclient.version>
+        <jackson.version>2.18.0</jackson.version>
+        <jodatime.version>2.13.0</jodatime.version>
+        <log4j2.version>2.24.1</log4j2.version>
         <springBoot.version>1.3.8.RELEASE</springBoot.version>
         <springCore.version>5.3.16</springCore.version>
 
-        <maven.compiler.release>17</maven.compiler.release>
+        <junit.version>4.13.2</junit.version>
+        <mockito.version>3.12.4</mockito.version>
     </properties>
 
     <dependencyManagement>
@@ -72,25 +71,25 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-definitions</artifactId>
-                <version>2.16.10-SNAPSHOT</version>
+                <version>2.17.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-record</artifactId>
-                <version>2.16.10-SNAPSHOT</version>
+                <version>2.17.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-search</artifactId>
-                <version>2.16.10-SNAPSHOT</version>
+                <version>2.17.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-storage</artifactId>
-                <version>2.16.10-SNAPSHOT</version>
+                <version>2.17.0-SNAPSHOT</version>
 
 
             </dependency>
@@ -98,19 +97,19 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-utils</artifactId>
-                <version>2.16.10-SNAPSHOT</version>
+                <version>2.17.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-web</artifactId>
-                <version>2.16.10-SNAPSHOT</version>
+                <version>2.17.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-schemaorg</artifactId>
-                <version>2.16.10-SNAPSHOT</version>
+                <version>2.17.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -131,7 +130,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
         <dependency>
