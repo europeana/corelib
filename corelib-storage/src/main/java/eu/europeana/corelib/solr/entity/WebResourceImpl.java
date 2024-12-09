@@ -330,6 +330,9 @@ public class WebResourceImpl implements WebResource {
             if (webResourceMetaInfo.getTextMetaInfo() != null) {
                 return webResourceMetaInfo.getTextMetaInfo().getMimeType();
             }
+            if (webResourceMetaInfo.getThreeDMetaInfo() != null) {
+                return webResourceMetaInfo.getThreeDMetaInfo().getMimeType();
+            }
         }
         return null;
     }
@@ -348,6 +351,9 @@ public class WebResourceImpl implements WebResource {
             }
             if (webResourceMetaInfo.getTextMetaInfo() != null) {
                 return webResourceMetaInfo.getTextMetaInfo().getFileSize();
+            }
+            if (webResourceMetaInfo.getThreeDMetaInfo() != null) {
+                return webResourceMetaInfo.getThreeDMetaInfo().getFileSize();
             }
         }
         return null;
