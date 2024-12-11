@@ -42,8 +42,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <metis.version>13-SNAPSHOT</metis.version>
-        <metis.schema.version>10-SNAPSHOT</metis.schema.version>
+        <metis.version>13</metis.version>
+        <metis.schema.version>10</metis.schema.version>
 
         <apacheSolr.version>8.11.4</apacheSolr.version>
         <apacheLucene.version>8.11.4</apacheLucene.version>
