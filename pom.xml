@@ -42,7 +42,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <metis.version>13</metis.version>
+        <metis.version>14</metis.version>
         <metis.schema.version>10</metis.schema.version>
 
         <apacheSolr.version>8.11.4</apacheSolr.version>
