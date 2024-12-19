@@ -20,9 +20,9 @@ public abstract class LazyInitializer<T> implements Supplier<T> {
     public T get() {
         if (!isInitialized) {
             synchronized (this) {
-                if (!isInitialized) {
-                    isInitialized = true;
+                if (!isInitialized) { // to prevent other waiting threads to initialize again after the 1st init
                     value = initialize();
+                    isInitialized = true;
                 }
             }
         }
