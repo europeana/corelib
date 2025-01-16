@@ -1,13 +1,13 @@
 package eu.europeana.corelib.record.config.initializers;
 
 import com.mongodb.client.MongoClient;
-import eu.europeana.corelib.utils.LazyInitializer;
+import eu.europeana.corelib.utils.MongoInitializer;
 import eu.europeana.metis.mongo.connection.MongoClientProvider;
 
 /**
- * Lazily initializes a connection to a Mongo instance
+ * Initializes a connection to a Mongo instance
  */
-public class MongoClientInitializer extends LazyInitializer<MongoClient> {
+public class MongoClientInitializer extends MongoInitializer<MongoClient> {
 
     private final String connectionUrl;
 
