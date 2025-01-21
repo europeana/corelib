@@ -1,12 +1,14 @@
 package eu.europeana.corelib.record.config.initializers;
 
-import eu.europeana.corelib.utils.MongoInitializer;
+import eu.europeana.corelib.utils.LazyInitializer;
 import eu.europeana.metis.mongo.dao.RecordDao;
 
 /**
  * This class manages an {@link RecordDao} object to which it lazily connects.
+ * @deprecated See- EA-4049
+ * @since 19 January 2025
  */
-public class RecordDaoInitializer extends MongoInitializer<RecordDao> {
+public class RecordDaoInitializer extends LazyInitializer<RecordDao> {
 
     private final MongoClientInitializer connection;
     private final String dbName;

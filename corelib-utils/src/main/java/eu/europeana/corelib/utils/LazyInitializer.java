@@ -11,7 +11,6 @@ import java.util.function.Supplier;
  * 
  * @deprecated See - EA-4049
  * @since 19 January 2025
-
  */
 public abstract class LazyInitializer<T> implements Supplier<T> {
     private T value;
