@@ -4,31 +4,16 @@ import java.util.function.Supplier;
 
 
 /**
- * This class provides a thread-safe generic implementation of the lazy initialization
- * pattern.
+ * This class provides a generic implementation via Java functions
  *
  * The initialization logic needs to be implemented by subclasses in the {@code initialize()} method.
  * Access to the data object is provided through the {@code get()} method.
  */
 public abstract class MongoInitializer<T> implements Supplier<T> {
 
-    private T value;
-
-    // used to track initialization state as initialize() can return null
-    private boolean isInitialized = false;
-
     @Override
     public T get() {
-        if (!isInitialized) {
-            synchronized (this) {
-                if (!isInitialized) { // to prevent other waiting threads to initialize again after the 1st init
-                    value = initialize();
-                    isInitialized = true;
-                }
-            }
-        }
-
-        return value;
+        return initialize();
     }
 
     /**
