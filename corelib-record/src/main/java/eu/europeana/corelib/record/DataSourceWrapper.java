@@ -13,42 +13,42 @@ import java.util.Optional;
  */
 public class DataSourceWrapper {
 
-    private RecordDaoInitializer recordDaoInitializer;
-    private RedirectDaoInitializer redirectDaoInitializer;
-    private RecordDaoInitializer tombstoneDaoInitializer;
+    private RecordDao recordDaoInitializer;
+    private RecordRedirectDao redirectDaoInitializer;
+    private RecordDao tombstoneDaoInitializer;
 
     public DataSourceWrapper() {
     }
 
-    public DataSourceWrapper(RecordDaoInitializer recordDaoInitializer, RedirectDaoInitializer redirectDaoInitializer,
-                             RecordDaoInitializer tombstoneDaoInitializer) {
+    public DataSourceWrapper(RecordDao recordDaoInitializer, RecordRedirectDao redirectDaoInitializer,
+                             RecordDao tombstoneDaoInitializer) {
         this.recordDaoInitializer = recordDaoInitializer;
         this.redirectDaoInitializer = redirectDaoInitializer;
         this.tombstoneDaoInitializer = tombstoneDaoInitializer;
     }
 
-    public void setRecordDao(RecordDaoInitializer recordDaoInitializer) {
+    public void setRecordDao(RecordDao recordDaoInitializer) {
         this.recordDaoInitializer = recordDaoInitializer;
     }
 
-    public void setRedirectDb(RedirectDaoInitializer redirectDb) {
+    public void setRedirectDb(RecordRedirectDao redirectDb) {
         this.redirectDaoInitializer = redirectDb;
     }
 
-    public void setTombstoneDb(RecordDaoInitializer tombstoneDb) {
+    public void setTombstoneDb(RecordDao tombstoneDb) {
         this.tombstoneDaoInitializer = tombstoneDb;
     }
 
     public Optional<RecordDao> getRecordDao() {
-        return Optional.ofNullable(recordDaoInitializer.get());
+        return Optional.ofNullable(recordDaoInitializer);
     }
 
     public Optional<RecordRedirectDao> getRedirectDao() {
-        return redirectDaoInitializer == null ? Optional.empty() : Optional.ofNullable(redirectDaoInitializer.get());
+        return redirectDaoInitializer == null ? Optional.empty() : Optional.ofNullable(redirectDaoInitializer);
     }
 
     public Optional<RecordDao> getTombstoneDao() {
-        return tombstoneDaoInitializer == null ? Optional.empty() : Optional.ofNullable(tombstoneDaoInitializer.get());
+        return tombstoneDaoInitializer == null ? Optional.empty() : Optional.ofNullable(tombstoneDaoInitializer);
     }
 
     public boolean isConfigured() {

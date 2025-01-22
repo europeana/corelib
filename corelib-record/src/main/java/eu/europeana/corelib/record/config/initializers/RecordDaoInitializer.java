@@ -5,6 +5,8 @@ import eu.europeana.metis.mongo.dao.RecordDao;
 
 /**
  * This class manages an {@link RecordDao} object to which it lazily connects.
+ * @deprecated See- EA-4049
+ * @since 19 January 2025
  */
 public class RecordDaoInitializer extends LazyInitializer<RecordDao> {
 

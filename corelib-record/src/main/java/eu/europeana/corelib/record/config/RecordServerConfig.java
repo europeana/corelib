@@ -4,6 +4,8 @@ import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.config.initializers.MongoClientInitializer;
 import eu.europeana.corelib.record.config.initializers.RecordDaoInitializer;
 import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
+import eu.europeana.metis.mongo.dao.RecordDao;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ public class RecordServerConfig {
 
         // create connection to Record db if configured
         if (dsConfig.getRecordDbName().isPresent()) {
-            dsWrapper.setRecordDao(new RecordDaoInitializer(connection, dsConfig.getRecordDbName().get()));
+            dsWrapper.setRecordDao(new RecordDao(connection.get(), dsConfig.getRecordDbName().get()));
             LOG.info("Registered RecordDao for data source: {}, record-dbName={}",
                     dsConfig.getId(), dsConfig.getRecordDbName().get());
         } else {
@@ -63,7 +65,7 @@ public class RecordServerConfig {
 
         // create connection to Redirect db if configured
         if (dsConfig.getRedirectDbName().isPresent()) {
-            dsWrapper.setRedirectDb(new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get()));
+            dsWrapper.setRedirectDb(new RecordRedirectDao(connection.get(), dsConfig.getRedirectDbName().get()));
             LOG.info("Registered RecordRedirectDao for data source: {}, redirect-dbName={}",
                     dsConfig.getId(), dsConfig.getRedirectDbName().get());
         } else {
@@ -72,7 +74,7 @@ public class RecordServerConfig {
 
         // create connection to tombstone db if configured
         if (dsConfig.getTombstoneDbName().isPresent()) {
-            dsWrapper.setTombstoneDb(new RecordDaoInitializer(connection, dsConfig.getTombstoneDbName().get()));
+            dsWrapper.setTombstoneDb(new RecordDao(connection.get(), dsConfig.getTombstoneDbName().get()));
             LOG.info("Registered RecordDao for data source: {}, tombstone-dbName={}",
                     dsConfig.getId(), dsConfig.getTombstoneDbName().get());
         } else {

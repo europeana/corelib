@@ -1,6 +1,5 @@
 package eu.europeana.corelib.utils;
 
-
 import java.util.function.Supplier;
 
 /**
@@ -9,6 +8,9 @@ import java.util.function.Supplier;
  *
  * The initialization logic needs to be implemented by subclasses in the {@code initialize()} method.
  * Access to the data object is provided through the {@code get()} method.
+ * 
+ * @deprecated See - EA-4049
+ * @since 19 January 2025
  */
 public abstract class LazyInitializer<T> implements Supplier<T> {
     private T value;
