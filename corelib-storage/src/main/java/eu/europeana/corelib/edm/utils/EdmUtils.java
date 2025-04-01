@@ -3,14 +3,162 @@ package eu.europeana.corelib.edm.utils;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
-import eu.europeana.metis.schema.jibx.*;
-import eu.europeana.metis.schema.jibx.Date;
-import eu.europeana.metis.schema.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.*;
+import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.LicenseImpl;
+import eu.europeana.corelib.solr.entity.OrganizationImpl;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.ServiceImpl;
+import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.utils.DateUtils;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
+import eu.europeana.metis.schema.jibx.AgentType;
+import eu.europeana.metis.schema.jibx.AggregatedCHO;
+import eu.europeana.metis.schema.jibx.Aggregates;
+import eu.europeana.metis.schema.jibx.Aggregation;
+import eu.europeana.metis.schema.jibx.Alt;
+import eu.europeana.metis.schema.jibx.AltLabel;
+import eu.europeana.metis.schema.jibx.Alternative;
+import eu.europeana.metis.schema.jibx.Begin;
+import eu.europeana.metis.schema.jibx.BiographicalInformation;
+import eu.europeana.metis.schema.jibx.BroadMatch;
+import eu.europeana.metis.schema.jibx.Broader;
+import eu.europeana.metis.schema.jibx.CloseMatch;
+import eu.europeana.metis.schema.jibx.Completeness;
+import eu.europeana.metis.schema.jibx.Concept;
+import eu.europeana.metis.schema.jibx.ConformsTo;
+import eu.europeana.metis.schema.jibx.Context;
+import eu.europeana.metis.schema.jibx.Contributor;
+import eu.europeana.metis.schema.jibx.Country;
+import eu.europeana.metis.schema.jibx.Coverage;
+import eu.europeana.metis.schema.jibx.Created;
+import eu.europeana.metis.schema.jibx.Creator;
+import eu.europeana.metis.schema.jibx.CurrentLocation;
+import eu.europeana.metis.schema.jibx.DataProvider;
+import eu.europeana.metis.schema.jibx.DatasetName;
+import eu.europeana.metis.schema.jibx.Date;
+import eu.europeana.metis.schema.jibx.DateOfBirth;
+import eu.europeana.metis.schema.jibx.DateOfDeath;
+import eu.europeana.metis.schema.jibx.DateOfEstablishment;
+import eu.europeana.metis.schema.jibx.DateOfTermination;
+import eu.europeana.metis.schema.jibx.DateType;
+import eu.europeana.metis.schema.jibx.Delete;
+import eu.europeana.metis.schema.jibx.Description;
+import eu.europeana.metis.schema.jibx.EdmType;
+import eu.europeana.metis.schema.jibx.End;
+import eu.europeana.metis.schema.jibx.EndTime;
+import eu.europeana.metis.schema.jibx.EuropeanaAggregationType;
+import eu.europeana.metis.schema.jibx.EuropeanaProxy;
+import eu.europeana.metis.schema.jibx.EuropeanaType;
+import eu.europeana.metis.schema.jibx.ExactMatch;
+import eu.europeana.metis.schema.jibx.Extent;
+import eu.europeana.metis.schema.jibx.Format;
+import eu.europeana.metis.schema.jibx.Gender;
+import eu.europeana.metis.schema.jibx.HasBody;
+import eu.europeana.metis.schema.jibx.HasFormat;
+import eu.europeana.metis.schema.jibx.HasMet;
+import eu.europeana.metis.schema.jibx.HasPart;
+import eu.europeana.metis.schema.jibx.HasQualityAnnotation;
+import eu.europeana.metis.schema.jibx.HasTarget;
+import eu.europeana.metis.schema.jibx.HasType;
+import eu.europeana.metis.schema.jibx.HasVersion;
+import eu.europeana.metis.schema.jibx.HasView;
+import eu.europeana.metis.schema.jibx.Identifier;
+import eu.europeana.metis.schema.jibx.Implements;
+import eu.europeana.metis.schema.jibx.InScheme;
+import eu.europeana.metis.schema.jibx.Incorporates;
+import eu.europeana.metis.schema.jibx.InheritFrom;
+import eu.europeana.metis.schema.jibx.IntermediateProvider;
+import eu.europeana.metis.schema.jibx.IsDerivativeOf;
+import eu.europeana.metis.schema.jibx.IsFormatOf;
+import eu.europeana.metis.schema.jibx.IsNextInSequence;
+import eu.europeana.metis.schema.jibx.IsPartOf;
+import eu.europeana.metis.schema.jibx.IsReferencedBy;
+import eu.europeana.metis.schema.jibx.IsRelatedTo;
+import eu.europeana.metis.schema.jibx.IsReplacedBy;
+import eu.europeana.metis.schema.jibx.IsRepresentationOf;
+import eu.europeana.metis.schema.jibx.IsRequiredBy;
+import eu.europeana.metis.schema.jibx.IsShownAt;
+import eu.europeana.metis.schema.jibx.IsShownBy;
+import eu.europeana.metis.schema.jibx.IsSimilarTo;
+import eu.europeana.metis.schema.jibx.IsSuccessorOf;
+import eu.europeana.metis.schema.jibx.IsVersionOf;
+import eu.europeana.metis.schema.jibx.Issued;
+import eu.europeana.metis.schema.jibx.LandingPage;
+import eu.europeana.metis.schema.jibx.Language;
+import eu.europeana.metis.schema.jibx.Language1;
+import eu.europeana.metis.schema.jibx.LanguageCodes;
+import eu.europeana.metis.schema.jibx.Lat;
+import eu.europeana.metis.schema.jibx.License;
+import eu.europeana.metis.schema.jibx.Lineage;
+import eu.europeana.metis.schema.jibx.LiteralType;
+import eu.europeana.metis.schema.jibx.Medium;
+import eu.europeana.metis.schema.jibx.Modified;
+import eu.europeana.metis.schema.jibx.Name;
+import eu.europeana.metis.schema.jibx.NarrowMatch;
+import eu.europeana.metis.schema.jibx.Narrower;
+import eu.europeana.metis.schema.jibx.Notation;
+import eu.europeana.metis.schema.jibx.Note;
+import eu.europeana.metis.schema.jibx.Organization;
+import eu.europeana.metis.schema.jibx.PlaceOfBirth;
+import eu.europeana.metis.schema.jibx.PlaceOfDeath;
+import eu.europeana.metis.schema.jibx.PlaceType;
+import eu.europeana.metis.schema.jibx.PrefLabel;
+import eu.europeana.metis.schema.jibx.Preview;
+import eu.europeana.metis.schema.jibx.ProfessionOrOccupation;
+import eu.europeana.metis.schema.jibx.Provenance;
+import eu.europeana.metis.schema.jibx.ProvidedCHOType;
+import eu.europeana.metis.schema.jibx.Provider;
+import eu.europeana.metis.schema.jibx.ProxyFor;
+import eu.europeana.metis.schema.jibx.ProxyIn;
+import eu.europeana.metis.schema.jibx.ProxyType;
+import eu.europeana.metis.schema.jibx.Publisher;
+import eu.europeana.metis.schema.jibx.QualityAnnotation;
+import eu.europeana.metis.schema.jibx.RDF;
+import eu.europeana.metis.schema.jibx.Realizes;
+import eu.europeana.metis.schema.jibx.References;
+import eu.europeana.metis.schema.jibx.Related;
+import eu.europeana.metis.schema.jibx.RelatedMatch;
+import eu.europeana.metis.schema.jibx.Relation;
+import eu.europeana.metis.schema.jibx.Replaces;
+import eu.europeana.metis.schema.jibx.Requires;
+import eu.europeana.metis.schema.jibx.ResourceOrLiteralType;
+import eu.europeana.metis.schema.jibx.ResourceOrLiteralType.Resource;
+import eu.europeana.metis.schema.jibx.ResourceType;
+import eu.europeana.metis.schema.jibx.Rights;
+import eu.europeana.metis.schema.jibx.Rights1;
+import eu.europeana.metis.schema.jibx.SameAs;
+import eu.europeana.metis.schema.jibx.Service;
+import eu.europeana.metis.schema.jibx.Source;
+import eu.europeana.metis.schema.jibx.Spatial;
+import eu.europeana.metis.schema.jibx.Subject;
+import eu.europeana.metis.schema.jibx.TableOfContents;
+import eu.europeana.metis.schema.jibx.Temporal;
+import eu.europeana.metis.schema.jibx.TimeSpanType;
+import eu.europeana.metis.schema.jibx.Title;
+import eu.europeana.metis.schema.jibx.Type;
+import eu.europeana.metis.schema.jibx.Type2;
+import eu.europeana.metis.schema.jibx.UGCType;
+import eu.europeana.metis.schema.jibx.Ugc;
+import eu.europeana.metis.schema.jibx.Year;
+import eu.europeana.metis.schema.jibx._Long;
+import eu.europeana.metis.schema.jibx._Object;
+import eu.europeana.metis.schema.jibx._Object1;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,13 +166,6 @@ import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.JiBXException;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * Convert a FullBean to EDM
@@ -395,40 +536,43 @@ public final class EdmUtils {
         if (europeanaAggregation.getDqvHasQualityAnnotation() == null || fBean.getQualityAnnotations() == null) {
             return;
         }
-
-        List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> fBeanQA = fBean.getQualityAnnotations();
         if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
-            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
-
-            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
-                for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation qa : fBeanQA) {
-                    if (StringUtils.equals(anno, qa.getAbout())) {
-                        QualityAnnotation qualityAnnotation = new QualityAnnotation();
-
-                        Created created = new Created();
-                        created.setString(qa.getCreated());
-                        qualityAnnotation.setCreated(created);
-
-                        HasBody hasBody = new HasBody();
-                        hasBody.setResource(qa.getBody());
-                        qualityAnnotation.setHasBody(hasBody);
-
-                        // value of target - will the 'about' field of europeana aggregation ('http://data.europeana.eu/aggregation/europeana/RECORD_ID')
-                        String[] about = new String[] {europeanaAggregation.getAbout()};
-                        // this for cases we do not want to append or change the values with a base urls. Mostly used in re-indexing
-                        if (preserveIdentifiers) {
-                            addAsList(qualityAnnotation, HasTarget.class, about );
-                        } else {
-                            addAsList(qualityAnnotation, HasTarget.class, about, null, true);
-                        }
-                        HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-                        hasQualityAnnotation.setQualityAnnotation(qualityAnnotation);
-                        qualityAnnotations.add(hasQualityAnnotation);
-                    }
-                }
-            }
-            aggregation.setHasQualityAnnotationList(qualityAnnotations);
+            aggregation.setHasQualityAnnotationList(
+                getListOfQualityAnnotations(europeanaAggregation.getAbout(), preserveIdentifiers, fBean.getQualityAnnotations())
+            );
         }
+    }
+
+    private static List<HasQualityAnnotation> getListOfQualityAnnotations(String about, boolean preserveIdentifiers,
+        List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations) {
+        List<HasQualityAnnotation> resultList = new ArrayList<>();
+        for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
+            // aggregation.getAbout() might have a BASE_URL appended depending on the preserveIdentifiers value
+            // hence we have about field to match the target values
+            if (StringUtils.equals(about, anno.getTarget()[0])) {
+                QualityAnnotation qualityAnnotation = new QualityAnnotation();
+
+                Created created = new Created();
+                created.setString(anno.getCreated());
+                qualityAnnotation.setCreated(created);
+
+                HasBody hasBody = new HasBody();
+                hasBody.setResource(anno.getBody());
+                qualityAnnotation.setHasBody(hasBody);
+
+                // this for cases we don't want to append or change the values with a base urls. Mostly used in re-indexing
+                if (preserveIdentifiers) {
+                    addAsList(qualityAnnotation, HasTarget.class, anno.getTarget());
+                } else {
+                    addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
+                }
+
+                HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
+                hasQualityAnnotation.setQualityAnnotation(qualityAnnotation);
+                resultList.add(hasQualityAnnotation);
+            }
+        }
+        return resultList;
     }
 
     private static Language1 convertMapToLanguage(Map<String, List<String>> edmLanguage) {
@@ -635,35 +779,7 @@ public final class EdmUtils {
                                                  List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
                                                  boolean preserveIdentifiers) {
         if (qualityAnnotations != null) {
-            List<HasQualityAnnotation> resultList = new ArrayList<>();
-
-            for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
-                // aggregation.getAbout() might have a BASE_URL appended depending on the preserveIdentifiers value
-                // hence we have about field to match the target values
-                if (StringUtils.equals(about, anno.getTarget()[0])) {
-                    QualityAnnotation qualityAnnotation = new QualityAnnotation();
-
-                    Created created = new Created();
-                    created.setString(anno.getCreated());
-                    qualityAnnotation.setCreated(created);
-
-                    HasBody hasBody = new HasBody();
-                    hasBody.setResource(anno.getBody());
-                    qualityAnnotation.setHasBody(hasBody);
-
-                    // this for cases we don not want to append or change the values with a base urls. Mostly used in re-indexing
-                    if (preserveIdentifiers) {
-                        addAsList(qualityAnnotation, HasTarget.class, anno.getTarget());
-                    } else {
-                        addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
-                    }
-
-                    HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-                    hasQualityAnnotation.setQualityAnnotation(qualityAnnotation);
-                    resultList.add(hasQualityAnnotation);
-                }
-            }
-            aggregation.setHasQualityAnnotationList(resultList);
+            aggregation.setHasQualityAnnotationList(getListOfQualityAnnotations(about, preserveIdentifiers, qualityAnnotations));
         }
     }
 
