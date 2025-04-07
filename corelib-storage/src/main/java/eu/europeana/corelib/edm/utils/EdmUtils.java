@@ -531,12 +531,8 @@ public final class EdmUtils {
                                                                        EuropeanaAggregation europeanaAggregation,
                                                                        FullBeanImpl fBean,
                                                                        boolean preserveIdentifiers) {
-        // if Europeana Aggregation doesn't have DqvHasQualityAnnotation no need to add QA
-        // OR if there are non QA present in the record
-        if (europeanaAggregation.getDqvHasQualityAnnotation() == null || fBean.getQualityAnnotations() == null) {
-            return;
-        }
-        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
+        // include europeana quality annotations according to the target
+        if (europeanaAggregation != null && fBean.getQualityAnnotations() != null) {
             aggregation.setHasQualityAnnotationList(
                 getListOfQualityAnnotations(europeanaAggregation.getAbout(), preserveIdentifiers, fBean.getQualityAnnotations())
             );
