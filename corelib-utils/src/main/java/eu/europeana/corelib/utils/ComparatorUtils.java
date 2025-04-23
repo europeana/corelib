@@ -22,6 +22,15 @@ public class ComparatorUtils implements Comparator<String> {
     }
 
     /**
+     * Strips '()' from the value
+     * @param value value for removing Parenthesis
+     * @return value without Parenthesis
+     */
+    public static String stripParenthesis(String value) {
+        return value.replaceAll("\\(", "").replaceAll("\\)", "");
+    }
+
+    /**
      * Method for removing Punctuations from list of strings
      * This will help in sorting and comparing better
      *

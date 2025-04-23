@@ -9,6 +9,7 @@ import eu.europeana.corelib.edm.exceptions.SolrQueryException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
+import eu.europeana.corelib.search.utils.CachingRefinementUtils;
 import eu.europeana.corelib.search.utils.SearchUtils;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
@@ -70,8 +71,8 @@ public class SearchServiceImpl implements SearchService {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query,boolean divideRefinements) throws EuropeanaException {
-        return search(solrClient, beanInterface, query, false,divideRefinements);
+    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query, boolean divideRefinements) throws EuropeanaException {
+        return search(solrClient, beanInterface, query, false, divideRefinements);
     }
 
     /**
@@ -79,7 +80,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient,  Class<T> beanInterface, Query query, boolean debug,boolean divideRefinements ) throws EuropeanaException {
+    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient,  Class<T> beanInterface, Query query, boolean debug, boolean divideRefinements) throws EuropeanaException {
 
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrQueryException(ProblemType.SEARCH_PAGE_LIMIT_REACHED,
@@ -90,7 +91,12 @@ public class SearchServiceImpl implements SearchService {
                 .getImplementationClass(beanInterface);
 
         if (isValidBeanClass(beanClazz)) {
+
             String[] refinements = query.getRefinements(divideRefinements);
+
+            // EA-4172 - add 'filter' clause in refinements if we have two or more clauses in fq
+            // combined with the boolean operator.
+            refinements = CachingRefinementUtils.getCachedRefinements(refinements);
 
             SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
 
