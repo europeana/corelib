@@ -648,8 +648,16 @@ public class Query implements Cloneable {
         }
 
         Map<String, FacetCollector> register = new LinkedHashMap<>();
+
         for (String facetTerm : refinementArray) {
-            if (facetTerm.contains(":")) {
+            // TODO remove this while working for EA-4192
+            // for filter tags are already tagged and caching logic is applied
+            // and until we fix EA-4192, this is needed. As filter tags can have
+            // multiple types of combinations and adding a tag from this method breaks the filter tags values
+            if (facetTerm.contains("filter_tags")) {
+                searchRefinementsList.add(facetTerm);
+            }
+            else if (facetTerm.contains(":")) {
                 boolean replaced        = false;
                 String  pseudoFacetName = null;
                 if (valueReplacementMap != null && valueReplacementMap.containsKey(facetTerm)) {

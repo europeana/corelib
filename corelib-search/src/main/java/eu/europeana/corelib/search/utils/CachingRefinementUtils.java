@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * For now the scope of caching qf parameters is limited to Facets (AUDIO, VIDEO, IMAGE, TEXT)
+ * For now the scope of caching qf parameters is limited to default technical Facets.
  * While processing these parameters there is a filter tag generated always.
  * See - SearchController.processQfParameters()
  * hence for now caching will be applied to filter tags if two or more present with boolean operator
@@ -66,12 +66,11 @@ public class CachingRefinementUtils {
      */
     public static String[] getCachedRefinements(String [] refinements) {
         List<String> cachedRefinements = new ArrayList<>(refinements.length);
-        Map<String, String> oldNewRefinements = getFilterClauseRefinement(getValuesForCaching(refinements));
-        System.out.println(oldNewRefinements);
-        if (!oldNewRefinements.isEmpty()) {
+        Map<String, String> cachingFieldsMap = getFilterClauseRefinement(getValuesForCaching(refinements));
+        if (!cachingFieldsMap.isEmpty()) {
             for (String refinement : refinements) {
                 boolean added = false;
-                for (Map.Entry<String, String> entry : oldNewRefinements.entrySet()) {
+                for (Map.Entry<String, String> entry : cachingFieldsMap.entrySet()) {
                     if (StringUtils.contains(refinement, entry.getKey())) {
                         cachedRefinements.add(StringUtils.replace(refinement, entry.getKey(), entry.getValue()));
                         added = true;

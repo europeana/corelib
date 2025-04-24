@@ -91,9 +91,7 @@ public class SearchServiceImpl implements SearchService {
                 .getImplementationClass(beanInterface);
 
         if (isValidBeanClass(beanClazz)) {
-
             String[] refinements = query.getRefinements(divideRefinements);
-
             // EA-4172 - add 'filter' clause in refinements if we have two or more clauses in fq
             // combined with the boolean operator.
             refinements = CachingRefinementUtils.getCachedRefinements(refinements);
