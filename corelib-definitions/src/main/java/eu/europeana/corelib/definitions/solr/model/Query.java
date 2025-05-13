@@ -20,8 +20,6 @@ public class Query implements Cloneable {
 
     private String currentCursorMark;
 
-    private final static String OR = " OR ";
-
     /**
      * Default start parameter for Solr
      */
@@ -646,14 +644,15 @@ public class Query implements Cloneable {
         if (null == refinementArray || refinementArray.length == 0) {
             return;
         }
-
         Map<String, FacetCollector> register = new LinkedHashMap<>();
 
         for (String facetTerm : refinementArray) {
-            // TODO remove this while working for EA-4192
-            // for filter tags are already tagged and caching logic is applied
-            // and until we fix EA-4192, this is needed. As filter tags can have
-            // multiple types of combinations and adding a tag from this method breaks the filter tags values
+            // Filter tags re now added in the refinement array instead of the query See: EA-4172
+            // filter tags are already tagged and caching logic is applied.
+            // As filter tags can have multiple types of combinations and adding a tag from
+            // this method not only breaks the filter tags values but also is not able to
+            // preserve the complex combinations of  boolean operators along with '()' .
+            // This is something to be refined in version 3.
             if (facetTerm.contains("filter_tags")) {
                 searchRefinementsList.add(facetTerm);
             }
@@ -702,115 +701,6 @@ public class Query implements Cloneable {
         facetsUsedInRefinementsList = new ArrayList<>(register.keySet());
         for (FacetCollector collector : register.values()) {
             facetedRefinementsList.add(collector.toString());
-        }
-    }
-
-    private class FacetCollector {
-        private boolean isTagged = true;
-        private String name;
-        private String tagName;
-        private List<String> values         = new ArrayList<>();
-        private List<String> replacedValues = new ArrayList<>();
-        private boolean      isApiQuery     = false;
-        private boolean      replaced       = false;
-
-        public FacetCollector(String name) {
-            this.name = name;
-            this.tagName = name;
-        }
-
-        public FacetCollector(String name, boolean isApiQuery) {
-            this(name);
-            this.isApiQuery = isApiQuery;
-        }
-
-        public boolean isTagged() {
-            return isTagged;
-        }
-
-        public void setTagged(boolean isTagged) {
-            this.isTagged = isTagged;
-        }
-
-        public void setTagName(String tagName) {
-            this.tagName = tagName;
-        }
-
-        private boolean isAlreadyQuoted(String value) {
-            return value.startsWith("\"") && value.endsWith("\"");
-        }
-
-        private boolean hasOr(String value) {
-            return value.startsWith("(") && value.endsWith(")") && value.contains(" OR ");
-        }
-
-        public void addValue(String value, boolean isReplaced) {
-            if (name.equals(SolrFacetType.RIGHTS.name())) {
-                if (value.endsWith("*")) {
-                    value = value.replace(":", "\\:").replace("/", "\\/");
-                } else if (!isAlreadyQuoted(value) && !hasOr(value)) {
-                    value = '"' + value + '"';
-                }
-            } else if (name.equals(SolrFacetType.TYPE.name())) {
-                value = value.toUpperCase().replace("\"", "");
-            } else {
-                if (!isApiQuery && (value.contains(" ") || value.contains("!"))) {
-                    if (!value.startsWith("\"")) {
-                        value = '"' + value;
-                    }
-                    if (!value.endsWith("\"")) {
-                        value += '"';
-                    }
-                }
-            }
-            if (isReplaced) {
-                replacedValues.add(value);
-            } else {
-                values.add(value);
-            }
-        }
-
-        private String join(List<String> valueList, String booleanOperator) {
-            if (valueList.size() == 0) {
-                return null;
-            }
-            StringBuilder sb = new StringBuilder();
-            if (valueList.size() > 1) {
-                sb.append("(");
-                sb.append(StringUtils.join(valueList, booleanOperator));
-                sb.append(")");
-            } else {
-                sb.append(valueList.get(0));
-            }
-
-            return sb.toString();
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            if (isTagged && !replaced) {
-                sb.append("{!tag=").append(tagName).append("}");
-            }
-            sb.append(name);
-            sb.append(":");
-
-            String valuesString         = join(values, OR);
-            String replacedValuesString = join(replacedValues, OR);
-
-            if (StringUtils.isNotBlank(valuesString)) {
-                if (StringUtils.isNotBlank(replacedValuesString)) {
-                    sb.append(String.format("(%s AND %s)", valuesString, replacedValuesString));
-                } else {
-                    sb.append(valuesString);
-                }
-            } else {
-                if (StringUtils.isNotBlank(replacedValuesString)) {
-                    sb.append(replacedValuesString);
-                }
-            }
-
-            return sb.toString();
         }
     }
 }
