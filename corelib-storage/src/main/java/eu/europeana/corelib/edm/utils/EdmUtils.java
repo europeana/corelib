@@ -366,6 +366,7 @@ public final class EdmUtils {
                 addAsList(timeSpan, Note.class, ts.getNote());
                 addAsList(timeSpan, SameAs.class, ts.getOwlSameAs());
                 addAsList(timeSpan, PrefLabel.class, ts.getPrefLabel());
+                addAsObject(timeSpan, Notation.class, ts.getSkosNotation());
                 timespanList.add(timeSpan);
             }
             rdf.setTimeSpanList(timespanList);
