@@ -3,6 +3,8 @@ package eu.europeana.corelib.solr.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Property;
+import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.DocType;
 import java.util.List;
@@ -22,12 +24,28 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
 	private Map<String,List<String>> userTags;
 
+	/**
+	 * PIDs are only present in the provider Proxy
+	 * @Property annotation - name of the field in the Mongo
+	 */
+	@Property("persistentIdentifier")
+	private List<PersistentIdentifierImpl> pid;
+
 	private boolean europeanaProxy;
 
 	@Override
 	public void setEdmType(String edmType) {
 		this.edmType = Optional.ofNullable(DocType.safeValueOf(edmType)).map(DocType::getEnumNameValue)
 				.orElse(null);
+	}
+
+	@Override
+	public List<? extends PersistentIdentifier> getPID() {
+		return this.pid;
+	}
+
+	public void setPID(List<? extends PersistentIdentifier> pid) {
+		this.pid = (List<PersistentIdentifierImpl>) pid;
 	}
 
 	@Override
