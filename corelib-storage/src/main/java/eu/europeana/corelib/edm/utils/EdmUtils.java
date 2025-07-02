@@ -1,154 +1,20 @@
 package eu.europeana.corelib.edm.utils;
 
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.entity.LicenseImpl;
-import eu.europeana.corelib.solr.entity.OrganizationImpl;
-import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.ServiceImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.utils.DateUtils;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
-import eu.europeana.metis.schema.jibx.AgentType;
-import eu.europeana.metis.schema.jibx.AggregatedCHO;
-import eu.europeana.metis.schema.jibx.Aggregates;
-import eu.europeana.metis.schema.jibx.Aggregation;
-import eu.europeana.metis.schema.jibx.Alt;
-import eu.europeana.metis.schema.jibx.AltLabel;
-import eu.europeana.metis.schema.jibx.Alternative;
-import eu.europeana.metis.schema.jibx.Begin;
-import eu.europeana.metis.schema.jibx.BiographicalInformation;
-import eu.europeana.metis.schema.jibx.BroadMatch;
-import eu.europeana.metis.schema.jibx.Broader;
-import eu.europeana.metis.schema.jibx.CloseMatch;
-import eu.europeana.metis.schema.jibx.Completeness;
-import eu.europeana.metis.schema.jibx.Concept;
-import eu.europeana.metis.schema.jibx.ConformsTo;
-import eu.europeana.metis.schema.jibx.Context;
-import eu.europeana.metis.schema.jibx.Contributor;
-import eu.europeana.metis.schema.jibx.Country;
-import eu.europeana.metis.schema.jibx.Coverage;
-import eu.europeana.metis.schema.jibx.Created;
-import eu.europeana.metis.schema.jibx.Creator;
-import eu.europeana.metis.schema.jibx.CurrentLocation;
-import eu.europeana.metis.schema.jibx.DataProvider;
-import eu.europeana.metis.schema.jibx.DatasetName;
-import eu.europeana.metis.schema.jibx.Date;
-import eu.europeana.metis.schema.jibx.DateOfBirth;
-import eu.europeana.metis.schema.jibx.DateOfDeath;
-import eu.europeana.metis.schema.jibx.DateOfEstablishment;
-import eu.europeana.metis.schema.jibx.DateOfTermination;
-import eu.europeana.metis.schema.jibx.DateType;
-import eu.europeana.metis.schema.jibx.Delete;
-import eu.europeana.metis.schema.jibx.Description;
+import eu.europeana.metis.schema.jibx.*;
 import eu.europeana.metis.schema.jibx.EdmType;
-import eu.europeana.metis.schema.jibx.End;
-import eu.europeana.metis.schema.jibx.EndTime;
-import eu.europeana.metis.schema.jibx.EuropeanaAggregationType;
-import eu.europeana.metis.schema.jibx.EuropeanaProxy;
-import eu.europeana.metis.schema.jibx.EuropeanaType;
-import eu.europeana.metis.schema.jibx.ExactMatch;
-import eu.europeana.metis.schema.jibx.Extent;
-import eu.europeana.metis.schema.jibx.Format;
-import eu.europeana.metis.schema.jibx.Gender;
-import eu.europeana.metis.schema.jibx.HasBody;
-import eu.europeana.metis.schema.jibx.HasFormat;
-import eu.europeana.metis.schema.jibx.HasMet;
-import eu.europeana.metis.schema.jibx.HasPart;
-import eu.europeana.metis.schema.jibx.HasQualityAnnotation;
-import eu.europeana.metis.schema.jibx.HasTarget;
-import eu.europeana.metis.schema.jibx.HasType;
-import eu.europeana.metis.schema.jibx.HasVersion;
-import eu.europeana.metis.schema.jibx.HasView;
-import eu.europeana.metis.schema.jibx.Identifier;
-import eu.europeana.metis.schema.jibx.Implements;
-import eu.europeana.metis.schema.jibx.InScheme;
-import eu.europeana.metis.schema.jibx.Incorporates;
-import eu.europeana.metis.schema.jibx.InheritFrom;
-import eu.europeana.metis.schema.jibx.IntermediateProvider;
-import eu.europeana.metis.schema.jibx.IsDerivativeOf;
-import eu.europeana.metis.schema.jibx.IsFormatOf;
-import eu.europeana.metis.schema.jibx.IsNextInSequence;
-import eu.europeana.metis.schema.jibx.IsPartOf;
-import eu.europeana.metis.schema.jibx.IsReferencedBy;
-import eu.europeana.metis.schema.jibx.IsRelatedTo;
-import eu.europeana.metis.schema.jibx.IsReplacedBy;
-import eu.europeana.metis.schema.jibx.IsRepresentationOf;
-import eu.europeana.metis.schema.jibx.IsRequiredBy;
-import eu.europeana.metis.schema.jibx.IsShownAt;
-import eu.europeana.metis.schema.jibx.IsShownBy;
-import eu.europeana.metis.schema.jibx.IsSimilarTo;
-import eu.europeana.metis.schema.jibx.IsSuccessorOf;
-import eu.europeana.metis.schema.jibx.IsVersionOf;
-import eu.europeana.metis.schema.jibx.Issued;
-import eu.europeana.metis.schema.jibx.LandingPage;
-import eu.europeana.metis.schema.jibx.Language;
-import eu.europeana.metis.schema.jibx.Language1;
 import eu.europeana.metis.schema.jibx.LanguageCodes;
-import eu.europeana.metis.schema.jibx.Lat;
-import eu.europeana.metis.schema.jibx.License;
-import eu.europeana.metis.schema.jibx.Lineage;
-import eu.europeana.metis.schema.jibx.LiteralType;
-import eu.europeana.metis.schema.jibx.Medium;
-import eu.europeana.metis.schema.jibx.Modified;
-import eu.europeana.metis.schema.jibx.Name;
-import eu.europeana.metis.schema.jibx.NarrowMatch;
-import eu.europeana.metis.schema.jibx.Narrower;
-import eu.europeana.metis.schema.jibx.Notation;
-import eu.europeana.metis.schema.jibx.Note;
-import eu.europeana.metis.schema.jibx.Organization;
-import eu.europeana.metis.schema.jibx.PlaceOfBirth;
-import eu.europeana.metis.schema.jibx.PlaceOfDeath;
-import eu.europeana.metis.schema.jibx.PlaceType;
-import eu.europeana.metis.schema.jibx.PrefLabel;
-import eu.europeana.metis.schema.jibx.Preview;
-import eu.europeana.metis.schema.jibx.ProfessionOrOccupation;
-import eu.europeana.metis.schema.jibx.Provenance;
-import eu.europeana.metis.schema.jibx.ProvidedCHOType;
-import eu.europeana.metis.schema.jibx.Provider;
-import eu.europeana.metis.schema.jibx.ProxyFor;
-import eu.europeana.metis.schema.jibx.ProxyIn;
-import eu.europeana.metis.schema.jibx.ProxyType;
-import eu.europeana.metis.schema.jibx.Publisher;
-import eu.europeana.metis.schema.jibx.QualityAnnotation;
-import eu.europeana.metis.schema.jibx.RDF;
-import eu.europeana.metis.schema.jibx.Realizes;
-import eu.europeana.metis.schema.jibx.References;
-import eu.europeana.metis.schema.jibx.Related;
-import eu.europeana.metis.schema.jibx.RelatedMatch;
-import eu.europeana.metis.schema.jibx.Relation;
-import eu.europeana.metis.schema.jibx.Replaces;
-import eu.europeana.metis.schema.jibx.Requires;
-import eu.europeana.metis.schema.jibx.ResourceOrLiteralType;
 import eu.europeana.metis.schema.jibx.ResourceOrLiteralType.Resource;
-import eu.europeana.metis.schema.jibx.ResourceType;
-import eu.europeana.metis.schema.jibx.Rights;
-import eu.europeana.metis.schema.jibx.Rights1;
-import eu.europeana.metis.schema.jibx.SameAs;
-import eu.europeana.metis.schema.jibx.Service;
-import eu.europeana.metis.schema.jibx.Source;
-import eu.europeana.metis.schema.jibx.Spatial;
-import eu.europeana.metis.schema.jibx.Subject;
-import eu.europeana.metis.schema.jibx.TableOfContents;
-import eu.europeana.metis.schema.jibx.Temporal;
-import eu.europeana.metis.schema.jibx.TimeSpanType;
-import eu.europeana.metis.schema.jibx.Title;
-import eu.europeana.metis.schema.jibx.Type;
-import eu.europeana.metis.schema.jibx.Type2;
 import eu.europeana.metis.schema.jibx.UGCType;
-import eu.europeana.metis.schema.jibx.Ugc;
-import eu.europeana.metis.schema.jibx.Year;
-import eu.europeana.metis.schema.jibx._Long;
-import eu.europeana.metis.schema.jibx._Object;
-import eu.europeana.metis.schema.jibx._Object1;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -652,6 +518,8 @@ public final class EdmUtils {
                 addAsList(proxy, Lineage.class, prx.getLineage(), null, true);
             }
 
+            // EA-4203 : add edm:pid and edm:PersistentIdentifier
+            appendPID(rdf, prx, proxy);
             addAsList(proxy, HasMet.class, prx.getEdmHasMet());
             addAsList(proxy, HasType.class, prx.getEdmHasType());
             addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
@@ -709,6 +577,77 @@ public final class EdmUtils {
 
         rdf.setProxyList(proxyList);
     }
+
+    /**
+     * Appends edm:pid to the proxy and edm:PersistentIdentifier to the rdf
+     * @param rdf RDF to be processed
+     * @param prx full bean proxy
+     * @param proxy ProxyType of Jibx
+     *
+     * NOTE : for values that are ResourceOrLiteralType and if the value is a Resource
+     *        we need to explicitly set the string "" (empty) instead being null
+     *        Otherwise we  do get NPE - Null value writing text content from object eu.europeana.metis.schema.jibx.<class>
+     *
+     */
+    private static void appendPID(RDF rdf, ProxyImpl prx, ProxyType proxy) {
+        if (!prx.isEuropeanaProxy() && prx.getPID() != null ) {
+            List<Pid> pidList = new ArrayList<>(prx.getPID().size());
+            List<PersistentIdentifierType> persistentIdentifierTypeList = new ArrayList<>(prx.getPID().size());
+
+            for (PersistentIdentifier pid : prx.getPID()) {
+                var p = new Pid();
+                // add pid as a resource
+                if (EuropeanaUriUtils.isUri(pid.getAbout())) {
+                    Resource resource = new Resource();
+                    resource.setResource(pid.getAbout());
+                    p.setResource(resource);
+                    p.setString("");
+                    // if pid is a reference then add PersistentIdentifierType object in the rdf
+                    persistentIdentifierTypeList.add(createPersistentIdentifier(pid));
+                } else { // add as a literal
+                    p.setString(pid.getAbout());
+                }
+                pidList.add(p);
+            }
+            proxy.setPidList(pidList);
+            rdf.setPersistentIdentifierList(persistentIdentifierTypeList);
+        }
+    }
+
+    private static PersistentIdentifierType createPersistentIdentifier(PersistentIdentifier pid) {
+        var persistentIdentifier = new PersistentIdentifierType();
+        persistentIdentifier.setAbout(pid.getAbout());
+
+        Value value = new Value();
+        value.setString(pid.getValue());
+        persistentIdentifier.setValue(value);
+
+        addAsList(persistentIdentifier, Notation.class, pid.getNotation().toArray(new String[0]));
+        addAsList(persistentIdentifier, HasURL.class, new String[] {pid.getHasURL()});
+
+        Created created = new Created();
+        created.setString(pid.getCreated());
+        persistentIdentifier.setCreated(created);
+
+        for (Map.Entry<String, String> creator : pid.getCreator().entrySet()) {
+            Creator1 creator1 = new Creator1();
+            ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
+            lang.setLang(creator.getKey());
+            Resource res = new Resource();
+            res.setResource(creator.getValue());
+            creator1.setResource(res);
+            creator1.setLang(lang);
+            creator1.setString("");
+            persistentIdentifier.setCreator(creator1);
+        }
+
+        addAsObject(persistentIdentifier, HasPolicy.class, pid.getHasPolicy(), false);
+        addAsObject(persistentIdentifier, InScheme.class, pid.getInScheme(), false);
+        addAsList(persistentIdentifier, EquivalentPID.class, pid.getEquivalentPID().toArray(new String[0]));
+        addAsList(persistentIdentifier, ReplacesPID.class, pid.getReplacesPID().toArray(new String[0]));
+        return persistentIdentifier;
+    }
+
 
     private static void appendAggregation(RDF rdf, List<AggregationImpl> aggregations,
                                           List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
@@ -1123,6 +1062,9 @@ public final class EdmUtils {
                     T obj = clazz.newInstance();
                     if (ResourceType.class.isAssignableFrom(obj.getClass())) {
                         ((ResourceType) obj).setResource(str);
+                    }
+                    if (LiteralType.class.isAssignableFrom(obj.getClass())) {
+                        ((LiteralType) obj).setString(str);
                     }
                     tList.add(obj);
                 }
