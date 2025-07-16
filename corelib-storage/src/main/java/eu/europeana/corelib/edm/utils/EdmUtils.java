@@ -623,29 +623,45 @@ public final class EdmUtils {
         value.setString(pid.getValue());
         persistentIdentifier.setValue(value);
 
-        addAsList(persistentIdentifier, Notation.class, pid.getNotation().toArray(new String[0]));
-        addAsList(persistentIdentifier, HasURL.class, new String[] {pid.getHasURL()});
-
-        Created created = new Created();
-        created.setString(pid.getCreated());
-        persistentIdentifier.setCreated(created);
-
-        for (Map.Entry<String, String> creator : pid.getCreator().entrySet()) {
-            Creator1 creator1 = new Creator1();
-            ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
-            lang.setLang(creator.getKey());
-            Resource res = new Resource();
-            res.setResource(creator.getValue());
-            creator1.setResource(res);
-            creator1.setLang(lang);
-            creator1.setString("");
-            persistentIdentifier.setCreator(creator1);
+        if (pid.getNotation() != null) {
+            addAsList(persistentIdentifier, Notation.class, pid.getNotation().toArray(new String[0]));
+        }
+        if (StringUtils.isNotEmpty(pid.getHasURL())) {
+            addAsList(persistentIdentifier, HasURL.class, new String[] {pid.getHasURL()});
+        }
+        if (StringUtils.isNotEmpty(pid.getCreated())) {
+            Created created = new Created();
+            created.setString(pid.getCreated());
+            persistentIdentifier.setCreated(created);
         }
 
-        addAsObject(persistentIdentifier, HasPolicy.class, pid.getHasPolicy(), false);
-        addAsObject(persistentIdentifier, InScheme.class, pid.getInScheme(), false);
-        addAsList(persistentIdentifier, EquivalentPID.class, pid.getEquivalentPID().toArray(new String[0]));
-        addAsList(persistentIdentifier, ReplacesPID.class, pid.getReplacesPID().toArray(new String[0]));
+
+        if (pid.getCreator() != null && !pid.getCreator().isEmpty()) {
+            for (Map.Entry<String, String> creator : pid.getCreator().entrySet()) {
+                Creator1 creator1 = new Creator1();
+                ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
+                lang.setLang(creator.getKey());
+                Resource res = new Resource();
+                res.setResource(creator.getValue());
+                creator1.setResource(res);
+                creator1.setLang(lang);
+                creator1.setString("");
+                persistentIdentifier.setCreator(creator1);
+            }
+        }
+
+        if (StringUtils.isNotEmpty(pid.getHasPolicy())) {
+            addAsObject(persistentIdentifier, HasPolicy.class, pid.getHasPolicy(), false);
+        }
+        if (StringUtils.isNotEmpty(pid.getInScheme())) {
+            addAsObject(persistentIdentifier, InScheme.class, pid.getInScheme(), false);
+        }
+        if (pid.getEquivalentPID() != null && !pid.getEquivalentPID().isEmpty()) {
+            addAsList(persistentIdentifier, EquivalentPID.class, pid.getEquivalentPID().toArray(new String[0]));
+        }
+        if (pid.getReplacesPID() != null && !pid.getReplacesPID().isEmpty()) {
+            addAsList(persistentIdentifier, ReplacesPID.class, pid.getReplacesPID().toArray(new String[0]));
+        }
         return persistentIdentifier;
     }
 

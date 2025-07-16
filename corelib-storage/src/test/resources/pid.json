@@ -1,0 +1,31 @@
+[
+    {
+      "about": "#pid_1",
+      "value": "ark:/12148/bpt6k279983",
+      "creator": {
+        "en": "Bibliothèque nationale de France"
+      },
+      "created": "ISO_DATE",
+      "hasPolicy": "http://ark.bnf.fr/ark:/12148/bpt6k2102478.policy",
+      "notation": [
+        "XPTO"
+      ],
+      "hasURL": "https://ark.bnf.fr/ark:/12148/bpt6k279983",
+      "equivalentPID": [
+        "doi:10.5962/bhl.title.62506"
+      ],
+      "replacesPID": [
+        "ark:/12148/XPTO"
+      ],
+      "inScheme": "https://arks.org/"
+    },
+    {
+      "value" : "PID2"
+    },
+    {
+      "about": "#pid_3",
+      "value": "pid3",
+      "inScheme": "https://arks.org/"
+    }
+]
+

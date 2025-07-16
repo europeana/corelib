@@ -1,9 +1,8 @@
 package eu.europeana.corelib.edm.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import eu.europeana.metis.schema.jibx.RDF;
@@ -11,9 +10,15 @@ import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests both the EdmUtils and EdmWebResourceUtils classes.
@@ -24,7 +29,7 @@ import org.junit.Test;
  */
 public class EdmUtilsTest {
 
-
+    public static final String PID = "/pid.json";
     private static FullBeanImpl minimalFullBean = getMinimalFullBean();
 
     private static FullBeanImpl getMinimalFullBean() {
@@ -86,6 +91,10 @@ public class EdmUtilsTest {
         bean.setTimestampUpdated(new Date());
 
         return bean;
+    }
+
+    private static void appendPIDInBean() {
+
     }
 
     private static HashMap createSimpleHashMap(String key, String value) {
@@ -157,5 +166,49 @@ public class EdmUtilsTest {
         imageInfo.setColorSpace(null);
         rdf = EdmUtils.toRDF(minimalFullBean);
         assertNull(rdf.getWebResourceList().get(0).getHasColorSpace());
+    }
+
+    @Test
+    public void testPID() throws IOException {
+        FullBeanImpl bean = getPIDBean();
+        RDF rdf = EdmUtils.toRDF(bean);
+        System.out.println(rdf);
+    }
+
+
+    private FullBeanImpl getPIDBean() throws IOException {
+        FullBeanImpl bean = minimalFullBean;
+        ObjectMapper mapper = new ObjectMapper();
+        List<PersistentIdentifierImpl> pids = mapper.readValue(
+                getJsonStringInput(PID),
+                mapper.getTypeFactory().constructCollectionType(List.class, PersistentIdentifierImpl.class));
+
+        bean.setProxies(new ArrayList<>());
+        ProxyImpl proxy = new ProxyImpl();
+        proxy.setAbout("/proxy/provider" + bean.getAbout());
+        proxy.setEuropeanaProxy(false);
+        proxy.setPID(pids);
+        bean.setProxies(List.of(proxy));
+        return bean;
+    }
+
+
+    /**
+     * This method extracts JSON content from a file
+     *
+     * @param resource
+     * @return JSON string
+     * @throws IOException
+     */
+    protected String getJsonStringInput(String resource) throws IOException {
+
+        try (InputStream resourceAsStream = getClass().getResourceAsStream(resource)) {
+            List<String> lines = IOUtils.readLines(resourceAsStream, StandardCharsets.UTF_8);
+            StringBuilder out = new StringBuilder();
+            for (String line : lines) {
+                out.append(line);
+            }
+            return out.toString();
+        }
     }
 }
