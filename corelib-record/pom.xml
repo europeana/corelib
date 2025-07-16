@@ -39,7 +39,7 @@
         <dependency>
             <groupId>eu.europeana.metis</groupId>
             <artifactId>metis-common-mongo</artifactId>
-            <version>${metis.version}</version>
+            <version>${metis.common.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
