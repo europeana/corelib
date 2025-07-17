@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
+import eu.europeana.metis.schema.jibx.PersistentIdentifierType;
 import eu.europeana.metis.schema.jibx.RDF;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
@@ -171,8 +172,15 @@ public class EdmUtilsTest {
     @Test
     public void testPID() throws IOException {
         FullBeanImpl bean = getPIDBean();
+        // check all three 3 pids reference/literals are loaded
+        assertEquals(bean.getProxies().get(0).getPID().size() , 3);
         RDF rdf = EdmUtils.toRDF(bean);
-        System.out.println(rdf);
+
+        assertEquals(rdf.getProxyList().get(0).getPidList().size(), 3); // all three are added in proxies
+        assertEquals(rdf.getPersistentIdentifierList().size(), 2); // two PIDs (only reference ones are added)
+        assertEquals(rdf.getPersistentIdentifierList().get(0).getAbout(), "#pid_1");
+        assertEquals(rdf.getPersistentIdentifierList().get(1).getAbout(), "#pid_3");
+
     }
 
 

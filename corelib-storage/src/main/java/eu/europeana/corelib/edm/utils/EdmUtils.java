@@ -606,7 +606,9 @@ public final class EdmUtils {
                     // if pid is a reference then add PersistentIdentifierType object in the rdf
                     persistentIdentifierTypeList.add(createPersistentIdentifier(pid));
                 } else { // add as a literal
-                    p.setString(pid.getAbout());
+                    // TODO verify later when we have data if for literal value we will only have values and not about field
+                    // p.setString(pid.getAbout());
+                    p.setString(pid.getValue());
                 }
                 pidList.add(p);
             }
