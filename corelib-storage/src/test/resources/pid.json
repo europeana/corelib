@@ -10,7 +10,7 @@
       "notation": [
         "XPTO"
       ],
-      "hasURL": "https://ark.bnf.fr/ark:/12148/bpt6k279983",
+      "hasURL": ["https://ark.bnf.fr/ark:/12148/bpt6k279983"],
       "equivalentPID": [
         "doi:10.5962/bhl.title.62506"
       ],

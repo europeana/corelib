@@ -3,6 +3,7 @@ package eu.europeana.corelib.edm.utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import eu.europeana.metis.schema.jibx.PersistentIdentifierType;
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.apache.commons.io.IOUtils;
+import org.bson.types.ObjectId;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -31,10 +33,19 @@ import static org.junit.Assert.*;
 public class EdmUtilsTest {
 
     public static final String PID = "/pid.json";
-    private static FullBeanImpl minimalFullBean = getMinimalFullBean();
 
     private static FullBeanImpl getMinimalFullBean() {
         FullBeanImpl bean = new FullBeanImpl();
+
+//        bean.setAbout("/test/minimalbean_1");
+//
+//        bean.setProxies(new ArrayList<>());
+//        ProxyImpl proxy = new ProxyImpl();
+//        proxy.setAbout("/proxy/provider" + bean.getAbout());
+//        proxy.setEuropeanaProxy(false);
+//        proxy.setEdmType("IMAGE");
+//        bean.setProxies(List.of(proxy));
+
 
         // EdmUtils code assumes there is always a EuropeanaAggregation
         // For marshalling to EDM, JIBX requires EuropeanaAggregation to have aggregatedCHO, edmCountry (with a proper
@@ -106,13 +117,14 @@ public class EdmUtilsTest {
 
     @Test
     public void testToRdfMinimalBean() {
-        RDF rdf = EdmUtils.toRDF(minimalFullBean);
+        RDF rdf = EdmUtils.toRDF(getMinimalFullBean());
+        System.out.println(rdf);
         assertNotNull(rdf);
     }
 
     @Test
     public void testToEdmMinimalBean() {
-        String edmOut = EdmUtils.toEDM(minimalFullBean);
+        String edmOut = EdmUtils.toEDM(getMinimalFullBean());
         assertNotNull(edmOut);
     }
 
@@ -133,7 +145,7 @@ public class EdmUtilsTest {
      */
     @Test
     public void testToRdfColorSpace() {
-        FullBeanImpl bean = minimalFullBean;
+        FullBeanImpl bean = getMinimalFullBean();
 
         bean.setAggregations(new ArrayList<>());
         AggregationImpl aggregation = new AggregationImpl();
@@ -155,17 +167,17 @@ public class EdmUtilsTest {
         webResources.add(webResource);
         bean.getAggregations().get(0).setWebResources(webResources);
 
-        RDF rdf = EdmUtils.toRDF(minimalFullBean);
+        RDF rdf = EdmUtils.toRDF(bean);
         assertEquals(expected, rdf.getWebResourceList().get(0).getHasColorSpace().getHasColorSpace());
 
         // second we change to an unknown color space type
         imageInfo.setColorSpace("this is an unknown color for testing purposes");
-        rdf = EdmUtils.toRDF(minimalFullBean);
+        rdf = EdmUtils.toRDF(bean);
         assertNull(rdf.getWebResourceList().get(0).getHasColorSpace());
 
         // finally we change to an empty color space type
         imageInfo.setColorSpace(null);
-        rdf = EdmUtils.toRDF(minimalFullBean);
+        rdf = EdmUtils.toRDF(bean);
         assertNull(rdf.getWebResourceList().get(0).getHasColorSpace());
     }
 
@@ -185,7 +197,7 @@ public class EdmUtilsTest {
 
 
     private FullBeanImpl getPIDBean() throws IOException {
-        FullBeanImpl bean = minimalFullBean;
+        FullBeanImpl bean = getMinimalFullBean();
         ObjectMapper mapper = new ObjectMapper();
         List<PersistentIdentifierImpl> pids = mapper.readValue(
                 getJsonStringInput(PID),

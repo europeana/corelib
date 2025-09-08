@@ -21,7 +21,7 @@ public class PersistentIdentifierImpl implements PersistentIdentifier {
     private String created;
     private String hasPolicy;
     private List<String> notation;
-    private String hasURL;
+    private List<String> hasURL;
     private List<String> equivalentPID;
     private List<String> replacesPID;
     private String inScheme;
@@ -81,11 +81,11 @@ public class PersistentIdentifierImpl implements PersistentIdentifier {
     }
 
     @Override
-    public String getHasURL() {
+    public List<String> getHasURL() {
         return hasURL;
     }
 
-    public void setHasURL(String hasURL) {
+    public void setHasURL(List<String> hasURL) {
         this.hasURL = hasURL;
     }
 

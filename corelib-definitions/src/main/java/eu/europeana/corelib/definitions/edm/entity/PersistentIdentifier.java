@@ -22,7 +22,7 @@ public interface PersistentIdentifier {
 
     List<String> getNotation();
 
-    String getHasURL();
+    List<String> getHasURL();
 
     List<String> getEquivalentPID();
 
