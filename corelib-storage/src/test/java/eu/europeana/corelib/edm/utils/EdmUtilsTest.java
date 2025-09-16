@@ -1,19 +1,27 @@
 package eu.europeana.corelib.edm.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
+import eu.europeana.metis.schema.jibx.PersistentIdentifierType;
 import eu.europeana.metis.schema.jibx.RDF;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import org.apache.commons.io.IOUtils;
+import org.bson.types.ObjectId;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests both the EdmUtils and EdmWebResourceUtils classes.
@@ -24,11 +32,20 @@ import org.junit.Test;
  */
 public class EdmUtilsTest {
 
-
-    private static FullBeanImpl minimalFullBean = getMinimalFullBean();
+    public static final String PID = "/pid.json";
 
     private static FullBeanImpl getMinimalFullBean() {
         FullBeanImpl bean = new FullBeanImpl();
+
+//        bean.setAbout("/test/minimalbean_1");
+//
+//        bean.setProxies(new ArrayList<>());
+//        ProxyImpl proxy = new ProxyImpl();
+//        proxy.setAbout("/proxy/provider" + bean.getAbout());
+//        proxy.setEuropeanaProxy(false);
+//        proxy.setEdmType("IMAGE");
+//        bean.setProxies(List.of(proxy));
+
 
         // EdmUtils code assumes there is always a EuropeanaAggregation
         // For marshalling to EDM, JIBX requires EuropeanaAggregation to have aggregatedCHO, edmCountry (with a proper
@@ -88,6 +105,10 @@ public class EdmUtilsTest {
         return bean;
     }
 
+    private static void appendPIDInBean() {
+
+    }
+
     private static HashMap createSimpleHashMap(String key, String value) {
         HashMap<String, List<String>> map = new HashMap<>();
         map.put(key, List.of(value));
@@ -96,13 +117,14 @@ public class EdmUtilsTest {
 
     @Test
     public void testToRdfMinimalBean() {
-        RDF rdf = EdmUtils.toRDF(minimalFullBean);
+        RDF rdf = EdmUtils.toRDF(getMinimalFullBean());
+        System.out.println(rdf);
         assertNotNull(rdf);
     }
 
     @Test
     public void testToEdmMinimalBean() {
-        String edmOut = EdmUtils.toEDM(minimalFullBean);
+        String edmOut = EdmUtils.toEDM(getMinimalFullBean());
         assertNotNull(edmOut);
     }
 
@@ -123,7 +145,7 @@ public class EdmUtilsTest {
      */
     @Test
     public void testToRdfColorSpace() {
-        FullBeanImpl bean = minimalFullBean;
+        FullBeanImpl bean = getMinimalFullBean();
 
         bean.setAggregations(new ArrayList<>());
         AggregationImpl aggregation = new AggregationImpl();
@@ -145,17 +167,68 @@ public class EdmUtilsTest {
         webResources.add(webResource);
         bean.getAggregations().get(0).setWebResources(webResources);
 
-        RDF rdf = EdmUtils.toRDF(minimalFullBean);
+        RDF rdf = EdmUtils.toRDF(bean);
         assertEquals(expected, rdf.getWebResourceList().get(0).getHasColorSpace().getHasColorSpace());
 
         // second we change to an unknown color space type
         imageInfo.setColorSpace("this is an unknown color for testing purposes");
-        rdf = EdmUtils.toRDF(minimalFullBean);
+        rdf = EdmUtils.toRDF(bean);
         assertNull(rdf.getWebResourceList().get(0).getHasColorSpace());
 
         // finally we change to an empty color space type
         imageInfo.setColorSpace(null);
-        rdf = EdmUtils.toRDF(minimalFullBean);
+        rdf = EdmUtils.toRDF(bean);
         assertNull(rdf.getWebResourceList().get(0).getHasColorSpace());
+    }
+
+    @Test
+    public void testPID() throws IOException {
+        FullBeanImpl bean = getPIDBean();
+        // check all three 3 pids reference/literals are loaded
+        assertEquals(bean.getProxies().get(0).getPID().size() , 3);
+        RDF rdf = EdmUtils.toRDF(bean);
+
+        assertEquals(rdf.getProxyList().get(0).getPidList().size(), 3); // all three are added in proxies
+        assertEquals(rdf.getPersistentIdentifierList().size(), 2); // two PIDs (only reference ones are added)
+        assertEquals(rdf.getPersistentIdentifierList().get(0).getAbout(), "#pid_1");
+        assertEquals(rdf.getPersistentIdentifierList().get(1).getAbout(), "#pid_3");
+
+    }
+
+
+    private FullBeanImpl getPIDBean() throws IOException {
+        FullBeanImpl bean = getMinimalFullBean();
+        ObjectMapper mapper = new ObjectMapper();
+        List<PersistentIdentifierImpl> pids = mapper.readValue(
+                getJsonStringInput(PID),
+                mapper.getTypeFactory().constructCollectionType(List.class, PersistentIdentifierImpl.class));
+
+        bean.setProxies(new ArrayList<>());
+        ProxyImpl proxy = new ProxyImpl();
+        proxy.setAbout("/proxy/provider" + bean.getAbout());
+        proxy.setEuropeanaProxy(false);
+        proxy.setPID(pids);
+        bean.setProxies(List.of(proxy));
+        return bean;
+    }
+
+
+    /**
+     * This method extracts JSON content from a file
+     *
+     * @param resource
+     * @return JSON string
+     * @throws IOException
+     */
+    protected String getJsonStringInput(String resource) throws IOException {
+
+        try (InputStream resourceAsStream = getClass().getResourceAsStream(resource)) {
+            List<String> lines = IOUtils.readLines(resourceAsStream, StandardCharsets.UTF_8);
+            StringBuilder out = new StringBuilder();
+            for (String line : lines) {
+                out.append(line);
+            }
+            return out.toString();
+        }
     }
 }
