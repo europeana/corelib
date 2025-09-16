@@ -629,7 +629,7 @@ public final class EdmUtils {
             addAsList(persistentIdentifier, Notation.class, pid.getNotation().toArray(new String[0]));
         }
         if (pid.getHasURL() != null) {
-            addAsList(persistentIdentifier, HasURL.class, pid.getNotation().toArray(new String[0]));
+            addAsList(persistentIdentifier, HasURL.class, pid.getHasURL().toArray(new String[0]));
         }
         if (StringUtils.isNotEmpty(pid.getCreated())) {
             Created created = new Created();
