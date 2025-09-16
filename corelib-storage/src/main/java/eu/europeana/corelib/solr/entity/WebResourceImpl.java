@@ -12,10 +12,11 @@ import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
-import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
+import eu.europeana.metis.schema.jibx.ColorSpaceType;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,15 @@ public class WebResourceImpl implements WebResource {
     private String[] dctermsIsReferencedBy;
     private String edmPreview;
     private String rdfType;
+    private String schemaDigitalSourceType;
+    private String[] edmIntendedUsage;
+    private String[] dcTitle;
+    private String[] dcLanguage;
+    private String[] dcTermsTemporal;
+    private BigInteger edmPointCount;
+    private BigInteger edmPolygonCount;
+    private BigInteger edmVerticeCount;
+    private String rdfsSeeAlso;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
@@ -579,5 +589,167 @@ public class WebResourceImpl implements WebResource {
      */
     public Aggregation getParentAggregation() {
         return this.parentAggregation;
+    }
+
+    /**
+     * Gets schema digital source type.
+     *
+     * @return the schema digital source type
+     */
+    public String getSchemaDigitalSourceType() {
+      return schemaDigitalSourceType;
+    }
+
+    /**
+     * Sets schema digital source type.
+     *
+     * @param schemaDigitalSourceType the schema digital source type
+     */
+    public void setSchemaDigitalSourceType(String schemaDigitalSourceType) {
+      this.schemaDigitalSourceType = schemaDigitalSourceType;
+    }
+
+    /**
+     * Get edm intended usage string [ ].
+     *
+     * @return the string [ ]
+     */
+    public String[] getEdmIntendedUsage() {
+      return edmIntendedUsage;
+    }
+
+    /**
+     * Sets edm intended usage.
+     *
+     * @param edmIntendedUsage the edm intended usage
+     */
+    public void setEdmIntendedUsage(String[] edmIntendedUsage) {
+      this.edmIntendedUsage = edmIntendedUsage;
+    }
+
+    /**
+     * Get dc title string [ ].
+     *
+     * @return the string [ ]
+     */
+    public String[] getDcTitle() {
+      return dcTitle;
+    }
+
+    /**
+     * Sets dc title.
+     *
+     * @param dcTitle the dc title
+     */
+    public void setDcTitle(String[] dcTitle) {
+      this.dcTitle = dcTitle;
+    }
+
+    /**
+     * Get dc language string [ ].
+     *
+     * @return the string [ ]
+     */
+    public String[] getDcLanguage() {
+      return dcLanguage;
+    }
+
+    /**
+     * Sets dc language.
+     *
+     * @param dcLanguage the dc language
+     */
+    public void setDcLanguage(String[] dcLanguage) {
+      this.dcLanguage = dcLanguage;
+    }
+
+    /**
+     * Get dc terms temporal string [ ].
+     *
+     * @return the string [ ]
+     */
+    public String[] getDcTermsTemporal() {
+      return dcTermsTemporal;
+    }
+
+    /**
+     * Sets dc terms temporal.
+     *
+     * @param dcTermsTemporal the dc terms temporal
+     */
+    public void setDcTermsTemporal(String[] dcTermsTemporal) {
+      this.dcTermsTemporal = dcTermsTemporal;
+    }
+
+    /**
+     * Gets edm point count.
+     *
+     * @return the edm point count
+     */
+    public BigInteger getEdmPointCount() {
+      return edmPointCount;
+    }
+
+    /**
+     * Sets edm point count.
+     *
+     * @param edmPointCount the edm point count
+     */
+    public void setEdmPointCount(BigInteger edmPointCount) {
+      this.edmPointCount = edmPointCount;
+    }
+
+    /**
+     * Gets edm polygon count.
+     *
+     * @return the edm polygon count
+     */
+    public BigInteger getEdmPolygonCount() {
+      return edmPolygonCount;
+    }
+
+    /**
+     * Sets edm polygon count.
+     *
+     * @param edmPolygonCount the edm polygon count
+     */
+    public void setEdmPolygonCount(BigInteger edmPolygonCount) {
+      this.edmPolygonCount = edmPolygonCount;
+    }
+
+  /**
+     * Gets edm vertice count.
+     *
+     * @return the edm vertice count
+     */
+    public BigInteger getEdmVerticeCount() {
+      return edmVerticeCount;
+    }
+
+    /**
+     * Sets edm vertice count.
+     *
+     * @param edmVerticeCount the edm vertice count
+     */
+    public void setEdmVerticeCount(BigInteger edmVerticeCount) {
+      this.edmVerticeCount = edmVerticeCount;
+    }
+
+    /**
+     * Gets rdfs see also.
+     *
+     * @return the rdfs see also
+     */
+    public String getRdfsSeeAlso() {
+      return rdfsSeeAlso;
+    }
+
+    /**
+     * Sets rdfs see also.
+     *
+     * @param rdfsSeeAlso the rdfs see also
+     */
+    public void setRdfsSeeAlso(String rdfsSeeAlso) {
+      this.rdfsSeeAlso = rdfsSeeAlso;
     }
 }

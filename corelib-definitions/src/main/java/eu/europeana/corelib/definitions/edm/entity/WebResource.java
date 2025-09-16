@@ -1,5 +1,6 @@
 package eu.europeana.corelib.definitions.edm.entity;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -311,4 +312,131 @@ public interface WebResource extends AbstractEdmEntity {
   String[] getDctermsIsReferencedBy();
 
   void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy);
+
+  /**
+   * gets schema:digitalSourceType.
+   *
+   * @return the schema digital source type
+   */
+  String getSchemaDigitalSourceType();
+
+  /**
+   * Sets schema:digitalSourceType.
+   *
+   * @param schemaDigitalSourceType the schema digital source type
+   */
+  void setSchemaDigitalSourceType(String schemaDigitalSourceType);
+
+  /**
+   * Get edm:intendedUsage string [ ].
+   *
+   * @return the string [ ]
+   */
+  String[] getEdmIntendedUsage();
+
+  /**
+   * Sets edm:intendedUsage.
+   *
+   * @param edmIntendedUsage the edm intended usage
+   */
+  void setEdmIntendedUsage(String[] edmIntendedUsage);
+
+  /**
+   * Get dc:title string [ ].
+   *
+   * @return the string [ ]
+   */
+  String[] getDcTitle();
+
+  /**
+   * Sets dc:title.
+   *
+   * @param dcTitle the dc title
+   */
+  void setDcTitle(String[] dcTitle);
+
+  /**
+   * Get dc:language string [ ].
+   *
+   * @return the string [ ]
+   */
+  String[] getDcLanguage();
+
+  /**
+   * Sets dc:language.
+   *
+   * @param dcLanguage the dc language
+   */
+  void setDcLanguage(String[] dcLanguage);
+
+  /**
+   * Get dc:termstemporal string [ ].
+   *
+   * @return the string [ ]
+   */
+  String[] getDcTermsTemporal();
+
+  /**
+   * Sets dc:termstemporal.
+   *
+   * @param dcTermsTemporal the dc terms temporal
+   */
+  void setDcTermsTemporal(String[] dcTermsTemporal);
+
+  /**
+   * Gets edm:pointCount.
+   *
+   * @return the edm point count
+   */
+  BigInteger getEdmPointCount();
+
+  /**
+   * Sets edm:pointCount.
+   *
+   * @param edmPointCount the edm point count
+   */
+  void setEdmPointCount(BigInteger edmPointCount);
+
+  /**
+   * Gets edm:polygonCount.
+   *
+   * @return the edm polygon count
+   */
+  BigInteger getEdmPolygonCount();
+
+  /**
+   * Sets edm:polygonCount.
+   *
+   * @param edmPolygonCount the edm polygon count
+   */
+  void setEdmPolygonCount(BigInteger edmPolygonCount);
+
+
+  /**
+   * Gets edm:verticeCount.
+   *
+   * @return the edm vertice count
+   */
+  BigInteger getEdmVerticeCount();
+
+  /**
+   * Sets edm:verticeCount.
+   *
+   * @param edmVerticeCount the edm vertice count
+   */
+  void setEdmVerticeCount(BigInteger edmVerticeCount);
+
+  /**
+   * Gets rdfs:seeAlso.
+   *
+   * @return the rdfs see also
+   */
+  String getRdfsSeeAlso();
+
+  /**
+   * Sets rdfs:seeAlso.
+   *
+   * @param rdfsSeeAlso the rdfs see also
+   */
+  void setRdfsSeeAlso(String rdfsSeeAlso);
 }

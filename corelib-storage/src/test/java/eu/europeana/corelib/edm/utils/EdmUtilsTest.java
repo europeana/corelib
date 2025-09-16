@@ -1,16 +1,23 @@
 package eu.europeana.corelib.edm.utils;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import eu.europeana.corelib.edm.model.metainfo.ThreeDMetaInfoImpl;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
+import eu.europeana.metis.schema.jibx.IntendedUsage;
+import eu.europeana.metis.schema.jibx.Language;
 import eu.europeana.metis.schema.jibx.RDF;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 
+import eu.europeana.metis.schema.jibx.Temporal;
+import eu.europeana.metis.schema.jibx.WebResourceType;
+import java.math.BigInteger;
 import java.util.*;
 
 import org.junit.Test;
@@ -157,5 +164,48 @@ public class EdmUtilsTest {
         imageInfo.setColorSpace(null);
         rdf = EdmUtils.toRDF(minimalFullBean);
         assertNull(rdf.getWebResourceList().get(0).getHasColorSpace());
+    }
+
+    @Test
+    public void testToRdf3DFields() {
+      FullBeanImpl bean = minimalFullBean;
+      bean.setAggregations(new ArrayList<>());
+      AggregationImpl aggregation = new AggregationImpl();
+      aggregation.setAbout("/aggregation/provider/2468/test_1357");
+      bean.getAggregations().add(aggregation);
+
+      ThreeDMetaInfoImpl threeDInfo = new ThreeDMetaInfoImpl();
+      threeDInfo.setFileSize(256L);
+      threeDInfo.setMimeType("model/x.stl-ascii");
+
+      WebResourceMetaInfoImpl wrThreeDInfo = new WebResourceMetaInfoImpl("test three d",null,null,null,null, threeDInfo);
+      WebResourceImpl webResource = new WebResourceImpl();
+      webResource.setAbout("/2468/test_1357");
+      webResource.setEdmPointCount(new BigInteger("4096"));
+      webResource.setEdmPolygonCount(new BigInteger("2048"));
+      webResource.setEdmVerticeCount(new BigInteger("8192"));
+      webResource.setDcLanguage(new String[]{"en","nl"});
+      webResource.setDcTermsTemporal(new String[]{"2019-09-11T08:10:18.452Z"});
+      webResource.setSchemaDigitalSourceType("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture");
+      webResource.setEdmIntendedUsage(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"});
+      webResource.setRdfsSeeAlso("http://data_partner.org/the_paradata");
+      webResource.setWebResourceMetaInfo(wrThreeDInfo);
+
+      List<WebResourceImpl> webResources = new ArrayList<>();
+      webResources.add(webResource);
+      bean.getAggregations().getFirst().setWebResources(webResources);
+
+      RDF rdf = EdmUtils.toRDF(minimalFullBean);
+      WebResourceType wrResult = rdf.getWebResourceList().get(0);
+
+      assertEquals("/2468/test_1357",wrResult.getAbout());
+      assertEquals(0, new BigInteger("4096").compareTo(wrResult.getPointCount().getInteger()));
+      assertEquals(0, new BigInteger("2048").compareTo(wrResult.getPolygonCount().getInteger()));
+      assertEquals(0, new BigInteger("8192").compareTo(wrResult.getVerticeCount().getInteger()));
+      assertArrayEquals(new String[]{"en","nl"}, wrResult.getLanguageList().stream().map(Language::getString).toArray());
+      assertArrayEquals(new String[]{"2019-09-11T08:10:18.452Z"}, wrResult.getTemporalList().stream().map(Temporal::getString).toArray());
+      assertEquals("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture", wrResult.getDigitalSourceType().getResource());
+      assertArrayEquals(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"}, wrResult.getIntendedUsageList().stream().map(IntendedUsage::getResource).toArray());
+      assertEquals("http://data_partner.org/the_paradata", wrResult.getSeeAlso().getResource());
     }
 }
