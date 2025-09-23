@@ -5,4 +5,10 @@ public interface ThreeDMetaInfo {
     String getMimeType();
 
     Long getFileSize();
+
+    Long getPointCount();
+
+    Long getPolygonCount();
+
+    Long getVerticeCount();
 }

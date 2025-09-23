@@ -80,11 +80,11 @@ public class EdmWebResourceUtils {
             EdmUtils.addAsList(wResource, IntendedUsage.class, wr.getEdmIntendedUsage());
             EdmUtils.addAsList(wResource, Title.class, wr.getDcTitle());
             EdmUtils.addAsList(wResource, Language.class, wr.getDcLanguage());
-            setDcTermsTemporalList(wr, wResource);
+            EdmUtils.addAsList(wResource, Temporal.class, wr.getDcTermsTemporal());
             setEdmPointCount(wr, wResource);
             setEdmPolygonCount(wr, wResource);
             setEdmVerticeCount(wr, wResource);
-            EdmUtils.addAsObject(wResource, SeeAlso.class, wr.getRdfsSeeAlso(), preserveIdentifiers);
+            EdmUtils.addAsList(wResource, SeeAlso.class, wr.getRdfsSeeAlso());
 
             EdmUtils.addAsObject(wResource, Preview.class, wr.getEdmPreview(), preserveIdentifiers);
             //addAsList(wResource, IsReferencedBy.class, wr.getDctermsIsReferencedBy());
@@ -286,7 +286,7 @@ public class EdmWebResourceUtils {
     private static void setEdmPointCount(WebResource wr, WebResourceType wResource) {
         if (wr.getEdmPointCount() != null) {
             PointCount pointCount = new PointCount();
-            pointCount.setInteger(wr.getEdmPointCount());
+            pointCount.setInteger(BigInteger.valueOf(wr.getEdmPointCount()));
             wResource.setPointCount(pointCount);
         }
     }
@@ -294,7 +294,7 @@ public class EdmWebResourceUtils {
     private static void setEdmPolygonCount(WebResource wr, WebResourceType wResource) {
         if (wr.getEdmPolygonCount() != null) {
             PolygonCount polygonCount = new PolygonCount();
-            polygonCount.setInteger(wr.getEdmPolygonCount());
+            polygonCount.setInteger(BigInteger.valueOf(wr.getEdmPolygonCount()));
             wResource.setPolygonCount(polygonCount);
         }
     }
@@ -302,20 +302,8 @@ public class EdmWebResourceUtils {
     private static void setEdmVerticeCount(WebResource wr, WebResourceType wResource) {
         if (wr.getEdmVerticeCount() != null) {
             VerticeCount verticeCount = new VerticeCount();
-            verticeCount.setInteger(wr.getEdmVerticeCount());
+            verticeCount.setInteger(BigInteger.valueOf(wr.getEdmVerticeCount()));
             wResource.setVerticeCount(verticeCount);
-        }
-    }
-
-    private static void setDcTermsTemporalList(WebResource wr, WebResourceType wResource) {
-        if (wr.getDcTermsTemporal() != null) {
-            List<Temporal> temporals = new ArrayList<>();
-              for (String temporalValue : wr.getDcTermsTemporal()) {
-                  Temporal temporal = new Temporal();
-                  temporal.setString(temporalValue);
-                  temporals.add(temporal);
-              }
-            wResource.setTemporalList(temporals);
         }
     }
 }

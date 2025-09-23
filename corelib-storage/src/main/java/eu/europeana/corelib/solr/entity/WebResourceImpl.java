@@ -16,7 +16,6 @@ import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -63,13 +62,10 @@ public class WebResourceImpl implements WebResource {
     private String rdfType;
     private String schemaDigitalSourceType;
     private String[] edmIntendedUsage;
-    private String[] dcTitle;
-    private String[] dcLanguage;
-    private String[] dcTermsTemporal;
-    private BigInteger edmPointCount;
-    private BigInteger edmPolygonCount;
-    private BigInteger edmVerticeCount;
-    private String rdfsSeeAlso;
+    private Map<String, List<String>> dcTitle;
+    private Map<String, List<String>> dcLanguage;
+    private Map<String, List<String>> dcTermsTemporal;
+    private String[] rdfsSeeAlso;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
@@ -632,7 +628,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @return the string [ ]
      */
-    public String[] getDcTitle() {
+    public Map<String, List<String>> getDcTitle() {
       return dcTitle;
     }
 
@@ -641,7 +637,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @param dcTitle the dc title
      */
-    public void setDcTitle(String[] dcTitle) {
+    public void setDcTitle(Map<String, List<String>> dcTitle) {
       this.dcTitle = dcTitle;
     }
 
@@ -650,7 +646,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @return the string [ ]
      */
-    public String[] getDcLanguage() {
+    public Map<String, List<String>> getDcLanguage() {
       return dcLanguage;
     }
 
@@ -659,7 +655,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @param dcLanguage the dc language
      */
-    public void setDcLanguage(String[] dcLanguage) {
+    public void setDcLanguage(Map<String, List<String>> dcLanguage) {
       this.dcLanguage = dcLanguage;
     }
 
@@ -668,7 +664,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @return the string [ ]
      */
-    public String[] getDcTermsTemporal() {
+    public Map<String, List<String>> getDcTermsTemporal() {
       return dcTermsTemporal;
     }
 
@@ -677,7 +673,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @param dcTermsTemporal the dc terms temporal
      */
-    public void setDcTermsTemporal(String[] dcTermsTemporal) {
+    public void setDcTermsTemporal(Map<String, List<String>> dcTermsTemporal) {
       this.dcTermsTemporal = dcTermsTemporal;
     }
 
@@ -686,17 +682,13 @@ public class WebResourceImpl implements WebResource {
      *
      * @return the edm point count
      */
-    public BigInteger getEdmPointCount() {
-      return edmPointCount;
-    }
-
-    /**
-     * Sets edm point count.
-     *
-     * @param edmPointCount the edm point count
-     */
-    public void setEdmPointCount(BigInteger edmPointCount) {
-      this.edmPointCount = edmPointCount;
+    public Long getEdmPointCount() {
+        if (webResourceMetaInfo != null
+              && webResourceMetaInfo.getThreeDMetaInfo() != null
+              && webResourceMetaInfo.getThreeDMetaInfo().getPointCount() != null) {
+              return webResourceMetaInfo.getThreeDMetaInfo().getPointCount();
+        }
+        return null;
     }
 
     /**
@@ -704,35 +696,27 @@ public class WebResourceImpl implements WebResource {
      *
      * @return the edm polygon count
      */
-    public BigInteger getEdmPolygonCount() {
-      return edmPolygonCount;
+    public Long getEdmPolygonCount() {
+        if (webResourceMetaInfo != null
+              && webResourceMetaInfo.getThreeDMetaInfo() != null
+              && webResourceMetaInfo.getThreeDMetaInfo().getPolygonCount() != null) {
+            return webResourceMetaInfo.getThreeDMetaInfo().getPolygonCount();
+        }
+        return null;
     }
 
     /**
-     * Sets edm polygon count.
-     *
-     * @param edmPolygonCount the edm polygon count
-     */
-    public void setEdmPolygonCount(BigInteger edmPolygonCount) {
-      this.edmPolygonCount = edmPolygonCount;
-    }
-
-  /**
      * Gets edm vertice count.
      *
      * @return the edm vertice count
      */
-    public BigInteger getEdmVerticeCount() {
-      return edmVerticeCount;
-    }
-
-    /**
-     * Sets edm vertice count.
-     *
-     * @param edmVerticeCount the edm vertice count
-     */
-    public void setEdmVerticeCount(BigInteger edmVerticeCount) {
-      this.edmVerticeCount = edmVerticeCount;
+    public Long getEdmVerticeCount() {
+        if (webResourceMetaInfo != null
+            && webResourceMetaInfo.getThreeDMetaInfo() != null
+            && webResourceMetaInfo.getThreeDMetaInfo().getVerticeCount() != null) {
+            return webResourceMetaInfo.getThreeDMetaInfo().getVerticeCount();
+        }
+        return null;
     }
 
     /**
@@ -740,7 +724,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @return the rdfs see also
      */
-    public String getRdfsSeeAlso() {
+    public String[] getRdfsSeeAlso() {
       return rdfsSeeAlso;
     }
 
@@ -749,7 +733,7 @@ public class WebResourceImpl implements WebResource {
      *
      * @param rdfsSeeAlso the rdfs see also
      */
-    public void setRdfsSeeAlso(String rdfsSeeAlso) {
+    public void setRdfsSeeAlso(String[] rdfsSeeAlso) {
       this.rdfsSeeAlso = rdfsSeeAlso;
     }
 }

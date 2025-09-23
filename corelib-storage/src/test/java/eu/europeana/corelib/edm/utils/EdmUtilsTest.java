@@ -1,33 +1,39 @@
 package eu.europeana.corelib.edm.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
-import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.ThreeDMetaInfoImpl;
-import eu.europeana.corelib.solr.entity.*;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ChangeLogImpl;
+import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
+import eu.europeana.corelib.solr.entity.PersistentIdentifierImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import eu.europeana.metis.schema.jibx.IntendedUsage;
 import eu.europeana.metis.schema.jibx.Language;
-import eu.europeana.metis.schema.jibx.PersistentIdentifierType;
 import eu.europeana.metis.schema.jibx.RDF;
-import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
-import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-
+import eu.europeana.metis.schema.jibx.SeeAlso;
 import eu.europeana.metis.schema.jibx.Temporal;
 import eu.europeana.metis.schema.jibx.WebResourceType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
-import org.bson.types.ObjectId;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Tests both the EdmUtils and EdmWebResourceUtils classes.
@@ -248,19 +254,19 @@ public class EdmUtilsTest {
 
     ThreeDMetaInfoImpl threeDInfo = new ThreeDMetaInfoImpl();
     threeDInfo.setFileSize(256L);
+    threeDInfo.setPointCount(4096L);
+    threeDInfo.setPolygonCount(2048L);
+    threeDInfo.setVerticeCount(8192L);
     threeDInfo.setMimeType("model/x.stl-ascii");
 
     WebResourceMetaInfoImpl wrThreeDInfo = new WebResourceMetaInfoImpl("test three d",null,null,null,null, threeDInfo);
     WebResourceImpl webResource = new WebResourceImpl();
     webResource.setAbout("/2468/test_1357");
-    webResource.setEdmPointCount(new BigInteger("4096"));
-    webResource.setEdmPolygonCount(new BigInteger("2048"));
-    webResource.setEdmVerticeCount(new BigInteger("8192"));
-    webResource.setDcLanguage(new String[]{"en","nl"});
-    webResource.setDcTermsTemporal(new String[]{"2019-09-11T08:10:18.452Z"});
+    webResource.setDcLanguage(Map.of("en", List.of("UK","US")));
+    webResource.setDcTermsTemporal(Map.of("en", List.of("2019-09-11T08:10:18.452Z","2019-09-23T08:10:18.452Z")));
     webResource.setSchemaDigitalSourceType("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture");
     webResource.setEdmIntendedUsage(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"});
-    webResource.setRdfsSeeAlso("http://data_partner.org/the_paradata");
+    webResource.setRdfsSeeAlso(new String[]{"http://data_partner.org/the_paradata","http://data_partner.org/the_metahuman"});
     webResource.setWebResourceMetaInfo(wrThreeDInfo);
 
     List<WebResourceImpl> webResources = new ArrayList<>();
@@ -268,17 +274,16 @@ public class EdmUtilsTest {
     bean.getAggregations().getFirst().setWebResources(webResources);
 
     RDF rdf = EdmUtils.toRDF(bean);
-    WebResourceType wrResult = rdf.getWebResourceList().get(0);
+    WebResourceType wrResult = rdf.getWebResourceList().getFirst();
 
     assertEquals("/2468/test_1357",wrResult.getAbout());
     assertEquals(0, new BigInteger("4096").compareTo(wrResult.getPointCount().getInteger()));
     assertEquals(0, new BigInteger("2048").compareTo(wrResult.getPolygonCount().getInteger()));
     assertEquals(0, new BigInteger("8192").compareTo(wrResult.getVerticeCount().getInteger()));
-    assertArrayEquals(new String[]{"en","nl"}, wrResult.getLanguageList().stream().map(Language::getString).toArray());
-    assertArrayEquals(new String[]{"2019-09-11T08:10:18.452Z"}, wrResult.getTemporalList().stream().map(Temporal::getString).toArray());
+    assertArrayEquals(new String[]{"UK","US"}, wrResult.getLanguageList().stream().map(Language::getString).toArray());
+    assertArrayEquals(new String[]{"2019-09-11T08:10:18.452Z","2019-09-23T08:10:18.452Z"}, wrResult.getTemporalList().stream().map(Temporal::getString).toArray());
     assertEquals("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture", wrResult.getDigitalSourceType().getResource());
-    assertArrayEquals(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"}, wrResult.getIntendedUsageList().stream().map(
-        IntendedUsage::getResource).toArray());
-    assertEquals("http://data_partner.org/the_paradata", wrResult.getSeeAlso().getResource());
+    assertArrayEquals(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"}, wrResult.getIntendedUsageList().stream().map(IntendedUsage::getResource).toArray());
+    assertArrayEquals(new String[]{"http://data_partner.org/the_paradata","http://data_partner.org/the_metahuman"}, wrResult.getSeeAlsoList().stream().map(SeeAlso::getResource).toArray());
   }
 }

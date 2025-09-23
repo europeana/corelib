@@ -1,6 +1,5 @@
 package eu.europeana.corelib.definitions.edm.entity;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -342,101 +341,79 @@ public interface WebResource extends AbstractEdmEntity {
   void setEdmIntendedUsage(String[] edmIntendedUsage);
 
   /**
-   * Get dc:title string [ ].
+   * Retrieve the dc:title fields of a WebResource
    *
-   * @return the string [ ]
+   * @return Map representing the dc:title fields of a WebResource
    */
-  String[] getDcTitle();
+  Map<String, List<String>> getDcTitle();
 
   /**
-   * Sets dc:title.
+   * Set the dc:title fields of a WebResource
    *
-   * @param dcTitle the dc title
+   * @param dcTitle Map representing the dc:title fields of a WebResource
    */
-  void setDcTitle(String[] dcTitle);
+  void setDcTitle(Map<String, List<String>> dcTitle);
 
   /**
-   * Get dc:language string [ ].
+   * Retrieve the dc:language fields of a WebResource
    *
-   * @return the string [ ]
+   * @return Map representing the dc:language fields of a WebResource
    */
-  String[] getDcLanguage();
+  Map<String, List<String>> getDcLanguage();
 
   /**
-   * Sets dc:language.
+   * Set the dc:language fields of a WebResource
    *
-   * @param dcLanguage the dc language
+   * @param dcLanguage Map representing the dc:language fields of a WebResource
    */
-  void setDcLanguage(String[] dcLanguage);
+  void setDcLanguage(Map<String, List<String>> dcLanguage);
 
   /**
-   * Get dc:termstemporal string [ ].
+   * Retrieve the dc:termstemporal fields of a WebResource
    *
-   * @return the string [ ]
+   * @return Map representing the dc:termstemporal fields of a WebResource
    */
-  String[] getDcTermsTemporal();
+  Map<String, List<String>> getDcTermsTemporal();
 
   /**
-   * Sets dc:termstemporal.
+   * Set the dc:termstemporal fields of a WebResource
    *
-   * @param dcTermsTemporal the dc terms temporal
+   * @param dcTermsTemporal Map representing the dc:termstemporal fields of a WebResource
    */
-  void setDcTermsTemporal(String[] dcTermsTemporal);
+  void setDcTermsTemporal(Map<String, List<String>> dcTermsTemporal);
 
   /**
    * Gets edm:pointCount.
    *
    * @return the edm point count
    */
-  BigInteger getEdmPointCount();
-
-  /**
-   * Sets edm:pointCount.
-   *
-   * @param edmPointCount the edm point count
-   */
-  void setEdmPointCount(BigInteger edmPointCount);
+  Long getEdmPointCount();
 
   /**
    * Gets edm:polygonCount.
    *
    * @return the edm polygon count
    */
-  BigInteger getEdmPolygonCount();
-
-  /**
-   * Sets edm:polygonCount.
-   *
-   * @param edmPolygonCount the edm polygon count
-   */
-  void setEdmPolygonCount(BigInteger edmPolygonCount);
-
+  Long getEdmPolygonCount();
 
   /**
    * Gets edm:verticeCount.
    *
    * @return the edm vertice count
    */
-  BigInteger getEdmVerticeCount();
+  Long getEdmVerticeCount();
 
   /**
-   * Sets edm:verticeCount.
-   *
-   * @param edmVerticeCount the edm vertice count
-   */
-  void setEdmVerticeCount(BigInteger edmVerticeCount);
-
-  /**
-   * Gets rdfs:seeAlso.
+   * Gets rdfs:seeAlso for edm:WebResource
    *
    * @return the rdfs see also
    */
-  String getRdfsSeeAlso();
+  String[] getRdfsSeeAlso();
 
   /**
-   * Sets rdfs:seeAlso.
+   * Sets rdfs:seeAlso for edm:WebResource
    *
    * @param rdfsSeeAlso the rdfs see also
    */
-  void setRdfsSeeAlso(String rdfsSeeAlso);
+  void setRdfsSeeAlso(String[] rdfsSeeAlso);
 }
