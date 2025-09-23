@@ -25,7 +25,6 @@ import eu.europeana.metis.schema.jibx.Temporal;
 import eu.europeana.metis.schema.jibx.WebResourceType;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
@@ -246,44 +245,58 @@ public class EdmUtilsTest {
 
   @Test
   public void testToRdf3DFields() {
-    FullBeanImpl bean = getMinimalFullBean();
-    bean.setAggregations(new ArrayList<>());
-    AggregationImpl aggregation = new AggregationImpl();
-    aggregation.setAbout("/aggregation/provider/2468/test_1357");
-    bean.getAggregations().add(aggregation);
+      FullBeanImpl bean = getMinimalFullBean();
+      bean.setAggregations(new ArrayList<>());
+      AggregationImpl aggregation = new AggregationImpl();
+      aggregation.setAbout("/aggregation/provider/2468/test_1357");
+      bean.getAggregations().add(aggregation);
 
-    ThreeDMetaInfoImpl threeDInfo = new ThreeDMetaInfoImpl();
-    threeDInfo.setFileSize(256L);
-    threeDInfo.setPointCount(4096L);
-    threeDInfo.setPolygonCount(2048L);
-    threeDInfo.setVerticeCount(8192L);
-    threeDInfo.setMimeType("model/x.stl-ascii");
+      WebResourceImpl webResource = getWebResourceWith3DInfo();
 
-    WebResourceMetaInfoImpl wrThreeDInfo = new WebResourceMetaInfoImpl("test three d",null,null,null,null, threeDInfo);
-    WebResourceImpl webResource = new WebResourceImpl();
-    webResource.setAbout("/2468/test_1357");
-    webResource.setDcLanguage(Map.of("en", List.of("UK","US")));
-    webResource.setDcTermsTemporal(Map.of("en", List.of("2019-09-11T08:10:18.452Z","2019-09-23T08:10:18.452Z")));
-    webResource.setSchemaDigitalSourceType("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture");
-    webResource.setEdmIntendedUsage(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"});
-    webResource.setRdfsSeeAlso(new String[]{"http://data_partner.org/the_paradata","http://data_partner.org/the_metahuman"});
-    webResource.setWebResourceMetaInfo(wrThreeDInfo);
+      List<WebResourceImpl> webResources = new ArrayList<>();
+      webResources.add(webResource);
+      bean.getAggregations().getFirst().setWebResources(webResources);
 
-    List<WebResourceImpl> webResources = new ArrayList<>();
-    webResources.add(webResource);
-    bean.getAggregations().getFirst().setWebResources(webResources);
+      RDF rdf = EdmUtils.toRDF(bean);
+      WebResourceType wrResult = rdf.getWebResourceList().getFirst();
 
-    RDF rdf = EdmUtils.toRDF(bean);
-    WebResourceType wrResult = rdf.getWebResourceList().getFirst();
+      assertWebResourceTypeWith3DInfo(wrResult);
+  }
 
-    assertEquals("/2468/test_1357",wrResult.getAbout());
-    assertEquals(0, new BigInteger("4096").compareTo(wrResult.getPointCount().getInteger()));
-    assertEquals(0, new BigInteger("2048").compareTo(wrResult.getPolygonCount().getInteger()));
-    assertEquals(0, new BigInteger("8192").compareTo(wrResult.getVerticeCount().getInteger()));
-    assertArrayEquals(new String[]{"UK","US"}, wrResult.getLanguageList().stream().map(Language::getString).toArray());
-    assertArrayEquals(new String[]{"2019-09-11T08:10:18.452Z","2019-09-23T08:10:18.452Z"}, wrResult.getTemporalList().stream().map(Temporal::getString).toArray());
-    assertEquals("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture", wrResult.getDigitalSourceType().getResource());
-    assertArrayEquals(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"}, wrResult.getIntendedUsageList().stream().map(IntendedUsage::getResource).toArray());
-    assertArrayEquals(new String[]{"http://data_partner.org/the_paradata","http://data_partner.org/the_metahuman"}, wrResult.getSeeAlsoList().stream().map(SeeAlso::getResource).toArray());
+  private static void assertWebResourceTypeWith3DInfo(WebResourceType wrResult) {
+    assertEquals("/2468/test_1357", wrResult.getAbout());
+    assertEquals(4096L, wrResult.getPointCount().getInteger().longValue());
+    assertEquals(2048L, wrResult.getPolygonCount().getInteger().longValue());
+    assertEquals(8192L, wrResult.getVerticeCount().getInteger().longValue());
+    assertArrayEquals(new String[]{"UK", "US"},
+        wrResult.getLanguageList().stream().map(Language::getString).toArray());
+    assertArrayEquals(new String[]{"2019-09-11T08:10:18.452Z", "2019-09-23T08:10:18.452Z"},
+        wrResult.getTemporalList().stream().map(Temporal::getString).toArray());
+    assertEquals("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture",
+        wrResult.getDigitalSourceType().getResource());
+    assertArrayEquals(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"},
+        wrResult.getIntendedUsageList().stream().map(IntendedUsage::getResource).toArray());
+    assertArrayEquals(new String[]{"http://data_partner.org/the_paradata", "http://data_partner.org/the_metahuman"},
+        wrResult.getSeeAlsoList().stream().map(SeeAlso::getResource).toArray());
+  }
+
+  private static WebResourceImpl getWebResourceWith3DInfo() {
+      ThreeDMetaInfoImpl threeDInfo = new ThreeDMetaInfoImpl();
+      threeDInfo.setFileSize(256L);
+      threeDInfo.setPointCount(4096L);
+      threeDInfo.setPolygonCount(2048L);
+      threeDInfo.setVerticeCount(8192L);
+      threeDInfo.setMimeType("model/x.stl-ascii");
+
+      WebResourceMetaInfoImpl wrThreeDInfo = new WebResourceMetaInfoImpl("test three d", null, null, null, null, threeDInfo);
+      WebResourceImpl webResource = new WebResourceImpl();
+      webResource.setAbout("/2468/test_1357");
+      webResource.setDcLanguage(Map.of("en", List.of("UK", "US")));
+      webResource.setDcTermsTemporal(Map.of("en", List.of("2019-09-11T08:10:18.452Z", "2019-09-23T08:10:18.452Z")));
+      webResource.setSchemaDigitalSourceType("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture");
+      webResource.setEdmIntendedUsage(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"});
+      webResource.setRdfsSeeAlso(new String[]{"http://data_partner.org/the_paradata", "http://data_partner.org/the_metahuman"});
+      webResource.setWebResourceMetaInfo(wrThreeDInfo);
+      return webResource;
   }
 }
