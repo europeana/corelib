@@ -12,10 +12,10 @@ import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
-import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
+import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +60,12 @@ public class WebResourceImpl implements WebResource {
     private String[] dctermsIsReferencedBy;
     private String edmPreview;
     private String rdfType;
+    private String schemaDigitalSourceType;
+    private String[] edmIntendedUsage;
+    private Map<String, List<String>> dcTitle;
+    private Map<String, List<String>> dcLanguage;
+    private Map<String, List<String>> dcTermsTemporal;
+    private String[] rdfsSeeAlso;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
@@ -579,5 +585,155 @@ public class WebResourceImpl implements WebResource {
      */
     public Aggregation getParentAggregation() {
         return this.parentAggregation;
+    }
+
+    /**
+     * Gets schema digital source type.
+     *
+     * @return the schema digital source type
+     */
+    public String getSchemaDigitalSourceType() {
+      return schemaDigitalSourceType;
+    }
+
+    /**
+     * Sets schema digital source type.
+     *
+     * @param schemaDigitalSourceType the schema digital source type
+     */
+    public void setSchemaDigitalSourceType(String schemaDigitalSourceType) {
+      this.schemaDigitalSourceType = schemaDigitalSourceType;
+    }
+
+    /**
+     * Get edm intended usage string [ ].
+     *
+     * @return the string [ ]
+     */
+    public String[] getEdmIntendedUsage() {
+      return edmIntendedUsage;
+    }
+
+    /**
+     * Sets edm intended usage.
+     *
+     * @param edmIntendedUsage the edm intended usage
+     */
+    public void setEdmIntendedUsage(String[] edmIntendedUsage) {
+      this.edmIntendedUsage = edmIntendedUsage;
+    }
+
+    /**
+     * Get dc title string [ ].
+     *
+     * @return the string [ ]
+     */
+    public Map<String, List<String>> getDcTitle() {
+      return dcTitle;
+    }
+
+    /**
+     * Sets dc title.
+     *
+     * @param dcTitle the dc title
+     */
+    public void setDcTitle(Map<String, List<String>> dcTitle) {
+      this.dcTitle = dcTitle;
+    }
+
+    /**
+     * Get dc language string [ ].
+     *
+     * @return the string [ ]
+     */
+    public Map<String, List<String>> getDcLanguage() {
+      return dcLanguage;
+    }
+
+    /**
+     * Sets dc language.
+     *
+     * @param dcLanguage the dc language
+     */
+    public void setDcLanguage(Map<String, List<String>> dcLanguage) {
+      this.dcLanguage = dcLanguage;
+    }
+
+    /**
+     * Get dc terms temporal string [ ].
+     *
+     * @return the string [ ]
+     */
+    public Map<String, List<String>> getDcTermsTemporal() {
+      return dcTermsTemporal;
+    }
+
+    /**
+     * Sets dc terms temporal.
+     *
+     * @param dcTermsTemporal the dc terms temporal
+     */
+    public void setDcTermsTemporal(Map<String, List<String>> dcTermsTemporal) {
+      this.dcTermsTemporal = dcTermsTemporal;
+    }
+
+    /**
+     * Gets edm point count.
+     *
+     * @return the edm point count
+     */
+    public Long getEdmPointCount() {
+        if (webResourceMetaInfo != null
+              && webResourceMetaInfo.getThreeDMetaInfo() != null
+              && webResourceMetaInfo.getThreeDMetaInfo().getPointCount() != null) {
+              return webResourceMetaInfo.getThreeDMetaInfo().getPointCount();
+        }
+        return null;
+    }
+
+    /**
+     * Gets edm polygon count.
+     *
+     * @return the edm polygon count
+     */
+    public Long getEdmPolygonCount() {
+        if (webResourceMetaInfo != null
+              && webResourceMetaInfo.getThreeDMetaInfo() != null
+              && webResourceMetaInfo.getThreeDMetaInfo().getPolygonCount() != null) {
+            return webResourceMetaInfo.getThreeDMetaInfo().getPolygonCount();
+        }
+        return null;
+    }
+
+    /**
+     * Gets edm vertice count.
+     *
+     * @return the edm vertice count
+     */
+    public Long getEdmVerticeCount() {
+        if (webResourceMetaInfo != null
+            && webResourceMetaInfo.getThreeDMetaInfo() != null
+            && webResourceMetaInfo.getThreeDMetaInfo().getVerticeCount() != null) {
+            return webResourceMetaInfo.getThreeDMetaInfo().getVerticeCount();
+        }
+        return null;
+    }
+
+    /**
+     * Gets rdfs see also.
+     *
+     * @return the rdfs see also
+     */
+    public String[] getRdfsSeeAlso() {
+      return rdfsSeeAlso;
+    }
+
+    /**
+     * Sets rdfs see also.
+     *
+     * @param rdfsSeeAlso the rdfs see also
+     */
+    public void setRdfsSeeAlso(String[] rdfsSeeAlso) {
+      this.rdfsSeeAlso = rdfsSeeAlso;
     }
 }

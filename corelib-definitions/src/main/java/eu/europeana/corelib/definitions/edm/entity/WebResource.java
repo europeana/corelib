@@ -311,4 +311,109 @@ public interface WebResource extends AbstractEdmEntity {
   String[] getDctermsIsReferencedBy();
 
   void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy);
+
+  /**
+   * gets schema:digitalSourceType.
+   *
+   * @return the schema digital source type
+   */
+  String getSchemaDigitalSourceType();
+
+  /**
+   * Sets schema:digitalSourceType.
+   *
+   * @param schemaDigitalSourceType the schema digital source type
+   */
+  void setSchemaDigitalSourceType(String schemaDigitalSourceType);
+
+  /**
+   * Get edm:intendedUsage string [ ].
+   *
+   * @return the string [ ]
+   */
+  String[] getEdmIntendedUsage();
+
+  /**
+   * Sets edm:intendedUsage.
+   *
+   * @param edmIntendedUsage the edm intended usage
+   */
+  void setEdmIntendedUsage(String[] edmIntendedUsage);
+
+  /**
+   * Retrieve the dc:title fields of a WebResource
+   *
+   * @return Map representing the dc:title fields of a WebResource
+   */
+  Map<String, List<String>> getDcTitle();
+
+  /**
+   * Set the dc:title fields of a WebResource
+   *
+   * @param dcTitle Map representing the dc:title fields of a WebResource
+   */
+  void setDcTitle(Map<String, List<String>> dcTitle);
+
+  /**
+   * Retrieve the dc:language fields of a WebResource
+   *
+   * @return Map representing the dc:language fields of a WebResource
+   */
+  Map<String, List<String>> getDcLanguage();
+
+  /**
+   * Set the dc:language fields of a WebResource
+   *
+   * @param dcLanguage Map representing the dc:language fields of a WebResource
+   */
+  void setDcLanguage(Map<String, List<String>> dcLanguage);
+
+  /**
+   * Retrieve the dc:termstemporal fields of a WebResource
+   *
+   * @return Map representing the dc:termstemporal fields of a WebResource
+   */
+  Map<String, List<String>> getDcTermsTemporal();
+
+  /**
+   * Set the dc:termstemporal fields of a WebResource
+   *
+   * @param dcTermsTemporal Map representing the dc:termstemporal fields of a WebResource
+   */
+  void setDcTermsTemporal(Map<String, List<String>> dcTermsTemporal);
+
+  /**
+   * Gets edm:pointCount.
+   *
+   * @return the edm point count
+   */
+  Long getEdmPointCount();
+
+  /**
+   * Gets edm:polygonCount.
+   *
+   * @return the edm polygon count
+   */
+  Long getEdmPolygonCount();
+
+  /**
+   * Gets edm:verticeCount.
+   *
+   * @return the edm vertice count
+   */
+  Long getEdmVerticeCount();
+
+  /**
+   * Gets rdfs:seeAlso for edm:WebResource
+   *
+   * @return the rdfs see also
+   */
+  String[] getRdfsSeeAlso();
+
+  /**
+   * Sets rdfs:seeAlso for edm:WebResource
+   *
+   * @param rdfsSeeAlso the rdfs see also
+   */
+  void setRdfsSeeAlso(String[] rdfsSeeAlso);
 }
