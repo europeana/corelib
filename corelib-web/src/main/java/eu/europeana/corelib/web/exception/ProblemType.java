@@ -48,6 +48,7 @@ public enum ProblemType {
     TRANSLATION_SERVICE_DISABLED(null, "Sorry, there is no translation service available for this application", ProblemResponseAction.IGNORE),
     TRANSLATION_SERVICE_ERROR(null, "Error translating data", ProblemResponseAction.LOG_ERR),
     TRANSLATION_SERVICE_LIMIT_ERROR("502-TS", "Translation service not available !!", ProblemResponseAction.LOG_ERR),
+    KEYCLOAK_API_URL_ERROR("null", "Keycloak token endpoint and parameters NOT set !!", ProblemResponseAction.LOG_ERR),
 
     SERIALIZATION_ERROR(null, "Unexpected exception occurred when serializing.", ProblemResponseAction.LOG_ERR);
 
