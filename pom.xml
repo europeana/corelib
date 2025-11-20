@@ -43,8 +43,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Old metis Mongo classes are moved to metis-common-->
-        <metis.common.version>16-SNAPSHOT</metis.common.version>
-        <metis.schema.version>12-SNAPSHOT</metis.schema.version>
+        <metis.common.version>16.1</metis.common.version>
+        <metis.schema.version>12</metis.schema.version>
 
         <apacheSolr.version>8.11.4</apacheSolr.version>
         <apacheLucene.version>8.11.4</apacheLucene.version>
@@ -146,7 +146,7 @@
         <repository>
             <id>libs-release</id>
             <name>libs-release</name>
-            <url>https://artifactory.eanadev.org/artifactory/libs-release</url>
+            <url>https://artifactory-prod.eanadev.org/artifactory/libs-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -157,7 +157,7 @@
         <repository>
             <id>libs-snapshot</id>
             <name>libs-snapshot</name>
-            <url>https://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+            <url>https://artifactory-prod.eanadev.org/artifactory/libs-snapshot-local</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
