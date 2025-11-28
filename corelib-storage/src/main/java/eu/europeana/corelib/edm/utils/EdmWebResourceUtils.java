@@ -83,7 +83,7 @@ public class EdmWebResourceUtils {
             EdmUtils.addAsList(wResource, Temporal.class, wr.getDcTermsTemporal());
             setEdmPointCount(wr, wResource);
             setEdmPolygonCount(wr, wResource);
-            setEdmVerticeCount(wr, wResource);
+            setEdmVertexCount(wr, wResource);
             EdmUtils.addAsList(wResource, SeeAlso.class, wr.getRdfsSeeAlso());
 
             EdmUtils.addAsObject(wResource, Preview.class, wr.getEdmPreview(), preserveIdentifiers);
@@ -299,11 +299,11 @@ public class EdmWebResourceUtils {
         }
     }
 
-    private static void setEdmVerticeCount(WebResource wr, WebResourceType wResource) {
-        if (wr.getEdmVerticeCount() != null) {
-            VerticeCount verticeCount = new VerticeCount();
-            verticeCount.setInteger(BigInteger.valueOf(wr.getEdmVerticeCount()));
-            wResource.setVerticeCount(verticeCount);
+    private static void setEdmVertexCount(WebResource wr, WebResourceType wResource) {
+        if (wr.getEdmVertexCount() != null) {
+            VertexCount vertexCount = new VertexCount();
+            vertexCount.setInteger(BigInteger.valueOf(wr.getEdmVertexCount()));
+            wResource.setVertexCount(vertexCount);
         }
     }
 }

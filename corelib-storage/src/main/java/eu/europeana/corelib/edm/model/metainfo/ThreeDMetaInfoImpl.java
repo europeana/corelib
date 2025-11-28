@@ -34,7 +34,7 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
     /**
      * The vertex count
      */
-    private Long verticeCount;
+    private Long vertexCount;
 
     /**
      * Instantiates a new Three d meta info.
@@ -43,14 +43,14 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
      * @param fileSize the file size
      * @param pointCount the point count
      * @param polygonCount the polygon count
-     * @param verticeCount the vertice count
+     * @param vertexCount the vertex count
      */
-    public ThreeDMetaInfoImpl(String mimeType, Long fileSize, Long pointCount, Long polygonCount, Long verticeCount) {
+    public ThreeDMetaInfoImpl(String mimeType, Long fileSize, Long pointCount, Long polygonCount, Long vertexCount) {
         this.mimeType = mimeType;
         this.fileSize = fileSize;
         this.pointCount = pointCount;
         this.polygonCount = polygonCount;
-        this.verticeCount = verticeCount;
+        this.vertexCount = vertexCount;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
         this.fileSize = null;
         this.pointCount = null;
         this.polygonCount = null;
-        this.verticeCount = null;
+        this.vertexCount = null;
     }
 
     /**
@@ -137,20 +137,20 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
     }
 
     /**
-     * Gets vertice count.
+     * Gets vertex count.
      *
-     * @return the vertice count
+     * @return the vertex count
      */
-    public Long getVerticeCount() {
-        return verticeCount;
+    public Long getVertexCount() {
+        return vertexCount;
     }
 
     /**
-     * Sets vertice count.
+     * Sets vertex count.
      *
-     * @param verticeCount the vertice count
+     * @param vertexCount the vertex count
      */
-    public void setVerticeCount(Long verticeCount) {
-        this.verticeCount = verticeCount;
+    public void setVertexCount(Long vertexCount) {
+        this.vertexCount = vertexCount;
     }
 }

@@ -397,11 +397,11 @@ public interface WebResource extends AbstractEdmEntity {
   Long getEdmPolygonCount();
 
   /**
-   * Gets edm:verticeCount.
+   * Gets edm:vertexCount.
    *
-   * @return the edm vertice count
+   * @return the edm vertex count
    */
-  Long getEdmVerticeCount();
+  Long getEdmVertexCount();
 
   /**
    * Gets rdfs:seeAlso for edm:WebResource
