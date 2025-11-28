@@ -706,15 +706,15 @@ public class WebResourceImpl implements WebResource {
     }
 
     /**
-     * Gets edm vertice count.
+     * Gets edm vertex count.
      *
-     * @return the edm vertice count
+     * @return the edm vertex count
      */
-    public Long getEdmVerticeCount() {
+    public Long getEdmVertexCount() {
         if (webResourceMetaInfo != null
             && webResourceMetaInfo.getThreeDMetaInfo() != null
-            && webResourceMetaInfo.getThreeDMetaInfo().getVerticeCount() != null) {
-            return webResourceMetaInfo.getThreeDMetaInfo().getVerticeCount();
+            && webResourceMetaInfo.getThreeDMetaInfo().getVertexCount() != null) {
+            return webResourceMetaInfo.getThreeDMetaInfo().getVertexCount();
         }
         return null;
     }
