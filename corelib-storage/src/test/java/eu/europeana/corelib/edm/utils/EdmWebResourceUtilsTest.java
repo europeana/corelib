@@ -11,6 +11,7 @@ import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.metis.schema.jibx.*;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.Assert;
@@ -46,6 +47,10 @@ public class EdmWebResourceUtilsTest {
         List<WebResourceType> existingResources = new ArrayList<>();
         WebResourceType existing = new WebResourceType();
         existing.setAbout("existing");
+        List<IsRepresentationOf> existingIsRepresentationOfList = new ArrayList<>();
+        existingIsRepresentationOfList.add(new IsRepresentationOf());
+        existingIsRepresentationOfList.get(0).setResource("existingRepresentation1");
+        existing.setIsRepresentationOfList(existingIsRepresentationOfList);
         existingResources.add(existing);
         rdf.setWebResourceList(existingResources);
 
@@ -67,9 +72,12 @@ public class EdmWebResourceUtilsTest {
                .collect(Collectors.toSet()));
         List<IsRepresentationOf> isRepresentationOfList =
             rdf.getWebResourceList()
-               .get(0)
-               .getIsRepresentationOfList();
-        assertEquals(Set.of("representation1", "representation2"),
+               .stream()
+                .map(WebResourceType::getIsRepresentationOfList)
+                .filter(Objects::nonNull)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        assertEquals(Set.of("existingRepresentation1","representation1", "representation2"),
             isRepresentationOfList.stream()
                                   .map(ResourceType::getResource)
                                   .collect(Collectors.toSet()));
