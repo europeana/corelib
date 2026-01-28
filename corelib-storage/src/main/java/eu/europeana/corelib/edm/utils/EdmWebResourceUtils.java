@@ -78,6 +78,7 @@ public class EdmWebResourceUtils {
 
             EdmUtils.addAsObject(wResource, DigitalSourceType.class, wr.getSchemaDigitalSourceType(), preserveIdentifiers);
             EdmUtils.addAsList(wResource, IntendedUsage.class, wr.getEdmIntendedUsage());
+            EdmUtils.addAsList(wResource, IsRepresentationOf.class, wr.getEdmIsRepresentationOf());
             EdmUtils.addAsList(wResource, Title.class, wr.getDcTitle());
             EdmUtils.addAsList(wResource, Language.class, wr.getDcLanguage());
             EdmUtils.addAsList(wResource, Temporal.class, wr.getDcTermsTemporal());

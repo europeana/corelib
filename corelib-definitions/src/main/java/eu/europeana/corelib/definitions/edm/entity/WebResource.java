@@ -3,7 +3,6 @@ package eu.europeana.corelib.definitions.edm.entity;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * EDM WebResource Fields implementation
  *
@@ -77,8 +76,6 @@ public interface WebResource extends AbstractEdmEntity {
    * @return the dcterms:isPartOf for the edm:WebResource
    */
   Map<String, List<String>> getDctermsIsPartOf();
-
-
 
   /**
    * sets the dcterms:created for the edm:WebResource
@@ -200,12 +197,10 @@ public interface WebResource extends AbstractEdmEntity {
    */
   String getEdmCodecName();
 
-
   /**
    * File format is not used in EDM, so no need to serialize!
    */
   String getFileFormat();
-
 
   /**
    * ebucore:hasMimeType
@@ -225,10 +220,10 @@ public interface WebResource extends AbstractEdmEntity {
    */
   String getEbucoreDuration();
 
-/**
- * ebucore:audioChannelNumber
- * @return The total number of audio channels contained in the Media Resource (non-negative integer)
- */
+  /**
+   * ebucore:audioChannelNumber
+   * @return The total number of audio channels contained in the Media Resource (non-negative integer)
+   */
   Integer getEbucoreAudioChannelNumber();
 
   /**
@@ -308,8 +303,18 @@ public interface WebResource extends AbstractEdmEntity {
    */
   void setSvcsHasService(String[] svcsHasService);
 
+  /**
+   * Get dcterms is referenced by string [ ].
+   *
+   * @return the string [ ]
+   */
   String[] getDctermsIsReferencedBy();
 
+  /**
+   * Sets dcterms is referenced by.
+   *
+   * @param dctermsIsReferencedBy the dcterms is referenced by
+   */
   void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy);
 
   /**
@@ -416,4 +421,18 @@ public interface WebResource extends AbstractEdmEntity {
    * @param rdfsSeeAlso the rdfs see also
    */
   void setRdfsSeeAlso(String[] rdfsSeeAlso);
+
+  /**
+   * Get edm is representation of string [ ].
+   *
+   * @return the string [ ]
+   */
+  String[] getEdmIsRepresentationOf();
+
+  /**
+   * Sets edm is representation of.
+   *
+   * @param edmIsRepresentationOf the edm is representation of
+   */
+  void setEdmIsRepresentationOf(String[] edmIsRepresentationOf);
 }
