@@ -77,7 +77,7 @@ public class EdmWebResourceUtilsTest {
                 .filter(Objects::nonNull)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        assertEquals(Set.of("existingRepresentation1","representation1", "representation2"),
+        assertEquals(Set.of("existingRepresentation1", "representation1", "representation2"),
             isRepresentationOfList.stream()
                                   .map(ResourceType::getResource)
                                   .collect(Collectors.toSet()));
