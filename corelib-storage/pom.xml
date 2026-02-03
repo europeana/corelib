@@ -30,6 +30,12 @@
             <groupId>eu.europeana.metis</groupId>
             <artifactId>metis-schema</artifactId>
             <version>${metis.schema.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Corelib -->
         <dependency>
