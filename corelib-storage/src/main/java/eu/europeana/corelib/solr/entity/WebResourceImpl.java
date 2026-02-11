@@ -66,7 +66,7 @@ public class WebResourceImpl implements WebResource {
     private Map<String, List<String>> dcLanguage;
     private Map<String, List<String>> dcTermsTemporal;
     private String[] rdfsSeeAlso;
-    private String[] isRepresentationOf;
+    private String[] edmIsRepresentationOf;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
@@ -744,7 +744,7 @@ public class WebResourceImpl implements WebResource {
      * @return the edm is representation of
      */
     public String[] getEdmIsRepresentationOf() {
-        return isRepresentationOf;
+        return edmIsRepresentationOf;
     }
 
     /**
@@ -753,6 +753,6 @@ public class WebResourceImpl implements WebResource {
      * @param edmIsRepresentationOf the edm is representation of
      */
     public void setEdmIsRepresentationOf(String[] edmIsRepresentationOf) {
-        this.isRepresentationOf = edmIsRepresentationOf;
+        this.edmIsRepresentationOf = edmIsRepresentationOf;
     }
 }
