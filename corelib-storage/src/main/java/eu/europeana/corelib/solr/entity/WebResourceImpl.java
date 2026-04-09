@@ -721,6 +721,20 @@ public class WebResourceImpl implements WebResource {
     }
 
     /**
+     * Gets edm Gaussian count.
+     *
+     * @return the edm Gaussian count
+     */
+    public Long getEdmGaussianCount() {
+      if (webResourceMetaInfo != null
+          && webResourceMetaInfo.getThreeDMetaInfo() != null
+          && webResourceMetaInfo.getThreeDMetaInfo().getGaussianCount() != null) {
+        return webResourceMetaInfo.getThreeDMetaInfo().getGaussianCount();
+      }
+      return null;
+    }
+
+    /**
      * Gets rdfs see also.
      *
      * @return the rdfs see also

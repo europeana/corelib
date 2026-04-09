@@ -85,6 +85,7 @@ public class EdmWebResourceUtils {
             setEdmPointCount(wr, wResource);
             setEdmPolygonCount(wr, wResource);
             setEdmVertexCount(wr, wResource);
+            setEdmGaussianCount(wr, wResource);
             EdmUtils.addAsList(wResource, SeeAlso.class, wr.getRdfsSeeAlso());
 
             EdmUtils.addAsObject(wResource, Preview.class, wr.getEdmPreview(), preserveIdentifiers);
@@ -306,5 +307,13 @@ public class EdmWebResourceUtils {
             vertexCount.setInteger(BigInteger.valueOf(wr.getEdmVertexCount()));
             wResource.setVertexCount(vertexCount);
         }
+    }
+
+    private static void setEdmGaussianCount(WebResource wr, WebResourceType wResource) {
+      if (wr.getEdmGaussianCount() != null) {
+        GaussianCount gaussianCount = new GaussianCount();
+        gaussianCount.setInteger(BigInteger.valueOf(wr.getEdmGaussianCount()));
+        wResource.setGaussianCount(gaussianCount);
+      }
     }
 }

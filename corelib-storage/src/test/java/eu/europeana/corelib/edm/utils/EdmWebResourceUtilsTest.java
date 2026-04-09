@@ -115,6 +115,7 @@ public class EdmWebResourceUtilsTest {
         threeDMetaInfo.setPointCount(200L);
         threeDMetaInfo.setPolygonCount(50L);
         threeDMetaInfo.setVertexCount(200L);
+        threeDMetaInfo.setGaussianCount(100L);
         webResourceMetaInfo.setThreeDMetaInfo(threeDMetaInfo);
         webResource.setWebResourceMetaInfo(webResourceMetaInfo);
         aggregation.setWebResources(Collections.singletonList(webResource));
@@ -152,6 +153,7 @@ public class EdmWebResourceUtilsTest {
         assertEquals(200L, webResourceType.getPointCount().getInteger().longValue());
         assertEquals(50L, webResourceType.getPolygonCount().getInteger().longValue());
         assertEquals(200L, webResourceType.getVertexCount().getInteger().longValue());
+        assertEquals(100L, webResourceType.getGaussianCount().getInteger().longValue());
     }
 
     @Test
