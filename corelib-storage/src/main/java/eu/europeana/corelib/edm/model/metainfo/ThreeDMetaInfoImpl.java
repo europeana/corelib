@@ -37,6 +37,11 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
     private Long vertexCount;
 
     /**
+     * The Gaussian count
+     */
+    private Long gaussianCount;
+
+    /**
      * Instantiates a new Three d meta info.
      *
      * @param mimeType the mime type
@@ -44,13 +49,15 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
      * @param pointCount the point count
      * @param polygonCount the polygon count
      * @param vertexCount the vertex count
+     * @param gaussianCount the Gaussian count
      */
-    public ThreeDMetaInfoImpl(String mimeType, Long fileSize, Long pointCount, Long polygonCount, Long vertexCount) {
+    public ThreeDMetaInfoImpl(String mimeType, Long fileSize, Long pointCount, Long polygonCount, Long vertexCount, Long gaussianCount) {
         this.mimeType = mimeType;
         this.fileSize = fileSize;
         this.pointCount = pointCount;
         this.polygonCount = polygonCount;
         this.vertexCount = vertexCount;
+        this.gaussianCount = gaussianCount;
     }
 
     /**
@@ -62,6 +69,7 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
         this.pointCount = null;
         this.polygonCount = null;
         this.vertexCount = null;
+        this.gaussianCount = null;
     }
 
     /**
@@ -152,5 +160,23 @@ public class ThreeDMetaInfoImpl implements eu.europeana.corelib.definitions.edm.
      */
     public void setVertexCount(Long vertexCount) {
         this.vertexCount = vertexCount;
+    }
+
+    /**
+     * Gets Gaussian count.
+     *
+     * @return the Gaussian count
+     */
+    public Long getGaussianCount() {
+      return gaussianCount;
+    }
+
+    /**
+     * Sets Gaussian count.
+     *
+     * @param gaussianCount the Gaussian count
+     */
+    public void setGaussianCount(Long gaussianCount) {
+      this.gaussianCount = gaussianCount;
     }
 }

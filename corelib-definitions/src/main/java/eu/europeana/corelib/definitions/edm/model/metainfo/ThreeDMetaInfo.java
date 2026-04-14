@@ -11,4 +11,6 @@ public interface ThreeDMetaInfo {
     Long getPolygonCount();
 
     Long getVertexCount();
+
+    Long getGaussianCount();
 }

@@ -268,6 +268,7 @@ public class EdmUtilsTest {
     assertEquals(4096L, wrResult.getPointCount().getInteger().longValue());
     assertEquals(2048L, wrResult.getPolygonCount().getInteger().longValue());
     assertEquals(8192L, wrResult.getVertexCount().getInteger().longValue());
+    assertEquals(100L, wrResult.getGaussianCount().getInteger().longValue());
     assertArrayEquals(new String[]{"UK", "US"},
         wrResult.getLanguageList().stream().map(Language::getString).toArray());
     assertArrayEquals(new String[]{"2019-09-11T08:10:18.452Z", "2019-09-23T08:10:18.452Z"},
@@ -286,6 +287,7 @@ public class EdmUtilsTest {
       threeDInfo.setPointCount(4096L);
       threeDInfo.setPolygonCount(2048L);
       threeDInfo.setVertexCount(8192L);
+      threeDInfo.setGaussianCount(100L);
       threeDInfo.setMimeType("model/x.stl-ascii");
 
       WebResourceMetaInfoImpl wrThreeDInfo = new WebResourceMetaInfoImpl("test three d", null, null, null, null, threeDInfo);

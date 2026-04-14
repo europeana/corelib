@@ -409,6 +409,13 @@ public interface WebResource extends AbstractEdmEntity {
   Long getEdmVertexCount();
 
   /**
+   * Gets edm:gaussianCount.
+   *
+   * @return the edm Gaussian count
+   */
+  Long getEdmGaussianCount();
+
+  /**
    * Gets rdfs:seeAlso for edm:WebResource
    *
    * @return the rdfs see also
