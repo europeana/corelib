@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
+import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.ThreeDMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
@@ -14,7 +15,6 @@ import eu.europeana.metis.schema.jibx.*;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -99,6 +99,7 @@ public class EdmWebResourceUtilsTest {
         webResource.setRdfType("http://example.com/type");
         webResource.setSvcsHasService(new String[]{"http://example.com/service"});
         webResource.setDctermsIsReferencedBy(new String[]{"http://example.com/ref", "literal ref"});
+        webResource.setEdmType(DocType._3D.getEnumNameValue());
 
         WebResourceMetaInfoImpl webResourceMetaInfo = new WebResourceMetaInfoImpl();
         ImageMetaInfoImpl imageMetaInfo = new ImageMetaInfoImpl();
@@ -140,6 +141,7 @@ public class EdmWebResourceUtilsTest {
         assertEquals(2, webResourceType.getIsReferencedByList().size());
         assertEquals("http://example.com/ref", webResourceType.getIsReferencedByList().get(0).getResource().getResource());
         assertEquals("literal ref", webResourceType.getIsReferencedByList().get(1).getString());
+        assertEquals(EdmType._3_D, webResourceType.getType1().getType());
         
         assertEquals(1, webResourceType.getComponentColorList().size());
         assertEquals("FFFFFF", webResourceType.getComponentColorList().get(0).getString());

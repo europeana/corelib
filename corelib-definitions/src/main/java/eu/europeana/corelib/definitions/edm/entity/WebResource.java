@@ -374,18 +374,18 @@ public interface WebResource extends AbstractEdmEntity {
   void setDcLanguage(Map<String, List<String>> dcLanguage);
 
   /**
-   * Retrieve the dc:termstemporal fields of a WebResource
+   * Retrieve the dcterms:temporal fields of a WebResource
    *
-   * @return Map representing the dc:termstemporal fields of a WebResource
+   * @return Map representing the dcterms:temporal fields of a WebResource
    */
-  Map<String, List<String>> getDcTermsTemporal();
+  Map<String, List<String>> getDctermsTemporal();
 
   /**
-   * Set the dc:termstemporal fields of a WebResource
+   * Set the dcterms:temporal fields of a WebResource
    *
-   * @param dcTermsTemporal Map representing the dc:termstemporal fields of a WebResource
+   * @param dcTermsTemporal Map representing the dcterms:temporal fields of a WebResource
    */
-  void setDcTermsTemporal(Map<String, List<String>> dcTermsTemporal);
+  void setDctermsTemporal(Map<String, List<String>> dcTermsTemporal);
 
   /**
    * Gets edm:pointCount.
@@ -442,4 +442,18 @@ public interface WebResource extends AbstractEdmEntity {
    * @param edmIsRepresentationOf the edm is representation of
    */
   void setEdmIsRepresentationOf(String[] edmIsRepresentationOf);
+
+  /**
+   * Set the edmType field
+   *
+   * @param edmType the edmType
+   */
+  void setEdmType(String edmType);
+
+  /**
+   * Get the edm type
+   *
+   * @return the edm type
+   */
+  String getEdmType();
 }
