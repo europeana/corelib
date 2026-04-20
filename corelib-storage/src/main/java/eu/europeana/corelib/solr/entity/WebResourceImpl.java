@@ -13,12 +13,14 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.definitions.model.Orientation;
+import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
 import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
@@ -64,9 +66,10 @@ public class WebResourceImpl implements WebResource {
     private String[] edmIntendedUsage;
     private Map<String, List<String>> dcTitle;
     private Map<String, List<String>> dcLanguage;
-    private Map<String, List<String>> dcTermsTemporal;
+    private Map<String, List<String>> dctermsTemporal;
     private String[] rdfsSeeAlso;
     private String[] edmIsRepresentationOf;
+    private String edmType;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
@@ -665,8 +668,8 @@ public class WebResourceImpl implements WebResource {
      *
      * @return the string [ ]
      */
-    public Map<String, List<String>> getDcTermsTemporal() {
-      return dcTermsTemporal;
+    public Map<String, List<String>> getDctermsTemporal() {
+      return dctermsTemporal;
     }
 
     /**
@@ -674,8 +677,8 @@ public class WebResourceImpl implements WebResource {
      *
      * @param dcTermsTemporal the dc terms temporal
      */
-    public void setDcTermsTemporal(Map<String, List<String>> dcTermsTemporal) {
-      this.dcTermsTemporal = dcTermsTemporal;
+    public void setDctermsTemporal(Map<String, List<String>> dcTermsTemporal) {
+      this.dctermsTemporal = dcTermsTemporal;
     }
 
     /**
@@ -768,5 +771,15 @@ public class WebResourceImpl implements WebResource {
      */
     public void setEdmIsRepresentationOf(String[] edmIsRepresentationOf) {
         this.edmIsRepresentationOf = edmIsRepresentationOf;
+    }
+
+    @Override
+    public void setEdmType(String edmType) {
+      this.edmType = Optional.ofNullable(DocType.safeValueOf(edmType)).map(DocType::getEnumNameValue).orElse(null);
+    }
+
+    @Override
+    public String getEdmType() {
+      return this.edmType;
     }
 }

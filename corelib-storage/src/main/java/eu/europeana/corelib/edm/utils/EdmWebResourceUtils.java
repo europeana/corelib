@@ -81,7 +81,7 @@ public class EdmWebResourceUtils {
             EdmUtils.addAsList(wResource, IsRepresentationOf.class, wr.getEdmIsRepresentationOf());
             EdmUtils.addAsList(wResource, Title.class, wr.getDcTitle());
             EdmUtils.addAsList(wResource, Language.class, wr.getDcLanguage());
-            EdmUtils.addAsList(wResource, Temporal.class, wr.getDcTermsTemporal());
+            EdmUtils.addAsList(wResource, Temporal.class, wr.getDctermsTemporal());
             setEdmPointCount(wr, wResource);
             setEdmPolygonCount(wr, wResource);
             setEdmVertexCount(wr, wResource);
@@ -92,6 +92,7 @@ public class EdmWebResourceUtils {
             //addAsList(wResource, IsReferencedBy.class, wr.getDctermsIsReferencedBy());
 
             setIsReferencedBy(wr, wResource);
+            setEdmType(wr, wResource);
             webResources.add(wResource);
         }
         if (rdf.getWebResourceList() != null && !rdf.getWebResourceList().isEmpty()) {
@@ -314,6 +315,14 @@ public class EdmWebResourceUtils {
         GaussianCount gaussianCount = new GaussianCount();
         gaussianCount.setInteger(BigInteger.valueOf(wr.getEdmGaussianCount()));
         wResource.setGaussianCount(gaussianCount);
+      }
+    }
+
+    private static void setEdmType(WebResource wr, WebResourceType wResource) {
+      if (wr.getEdmType() != null) {
+        Type2 type = new Type2();
+        type.setType(EdmType.valueOf(wr.getEdmType().replace("3D", "_3_D")));
+        wResource.setType1(type);
       }
     }
 }

@@ -294,7 +294,7 @@ public class EdmUtilsTest {
       WebResourceImpl webResource = new WebResourceImpl();
       webResource.setAbout("/2468/test_1357");
       webResource.setDcLanguage(Map.of("en", List.of("UK", "US")));
-      webResource.setDcTermsTemporal(Map.of("en", List.of("2019-09-11T08:10:18.452Z", "2019-09-23T08:10:18.452Z")));
+      webResource.setDctermsTemporal(Map.of("en", List.of("2019-09-11T08:10:18.452Z", "2019-09-23T08:10:18.452Z")));
       webResource.setSchemaDigitalSourceType("https://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture");
       webResource.setEdmIntendedUsage(new String[]{"http://data.europeana.eu/vocabulary/usageArea/Knowledge"});
       webResource.setRdfsSeeAlso(new String[]{"http://data_partner.org/the_paradata", "http://data_partner.org/the_metahuman"});
