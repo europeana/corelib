@@ -1,5 +1,8 @@
 package eu.europeana.corelib.definitions.edm.entity;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Interface of the svcs:Service
  *
@@ -12,4 +15,7 @@ public interface Service extends AbstractEdmEntity{
 
     String[] getDoapImplements();
     void setDoapImplements(String[] doapImplements);
+
+    Map<String, List<String>> getRdfsLabel();
+    void setRdfsLabel(Map<String,List<String>> rdfsLabel);
 }

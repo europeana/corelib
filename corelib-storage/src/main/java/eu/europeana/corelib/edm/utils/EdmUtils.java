@@ -146,7 +146,6 @@ public final class EdmUtils {
             for (ServiceImpl serv : services) {
                 Service service = new Service();
                 service.setAbout(serv.getAbout());
-                //addAsList(service, ConformsTo.class, serv.getDctermsConformsTo());
 
                 if(serv.getDctermsConformsTo() !=null && serv.getDctermsConformsTo().length>0){
                     List<ConformsTo> conformsToList = new ArrayList<>();
@@ -182,6 +181,7 @@ public final class EdmUtils {
                     }
                 }
 
+                addAsList(service, Label.class, serv.getRdfsLabel());
                 serviceList.add(service);
             }
             rdf.setServiceList(serviceList);
