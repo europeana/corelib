@@ -65,6 +65,7 @@ public class EdmUtilsTest {
         europeanaAggregation.setAggregatedCHO("/item/1234/test_5678"); // required
         europeanaAggregation.setEdmCountry(createSimpleHashMap("def", "Poland")); // required
         europeanaAggregation.setEdmLanguage(createSimpleHashMap("def", "pl")); // required
+        europeanaAggregation.setWasGeneratedBy("http://data.europeana.eu/provenance/europeana");
         bean.setEuropeanaAggregation(europeanaAggregation);
 
         return bean;
@@ -136,6 +137,7 @@ public class EdmUtilsTest {
     @Test
     public void testToEdmMinimalBean() {
         String edmOut = EdmUtils.toEDM(getMinimalFullBean());
+      System.out.println(edmOut);
         assertNotNull(edmOut);
     }
 

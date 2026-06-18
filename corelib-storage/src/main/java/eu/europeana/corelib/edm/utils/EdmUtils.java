@@ -377,6 +377,7 @@ public final class EdmUtils {
             changeLog.setObject(obj);
             rdf.setDeleteList(List.of(changeLog));
         }
+        EdmUtils.addAsObject(aggregation, WasGeneratedBy.class, europeanaAggregation.getWasGeneratedBy(), preserveIdentifiers);
 
         List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
