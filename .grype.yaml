@@ -1,0 +1,23 @@
+# .grype.yml
+# Expect this working too (with or without package details)
+
+ignore:
+  # full set of supported rule fields available here:
+  # https://github.com/anchore/grype?tab=readme-ov-file#specifying-matches-to-ignore
+  - vulnerability: "GHSA-36p3-wjmg-h94x" #using github advisory id
+  - vulnerability: "GHSA-4wrc-f8pq-fpqp" #using github advisory id
+  - vulnerability: "GHSA-hh32-7344-cg2f" #using github advisory id
+  - vulnerability: "GHSA-c4q5-6c82-3qpw" #using github advisory id
+  - vulnerability: "GHSA-7286-pgfv-vxvh" #using github advisory id
+  - vulnerability: "GHSA-mf92-479x-3373" #using github advisory id
+
+
+# 2. Suppress a vulnerability but ONLY for a specific package
+#- vulnerability: CVE-2022-27943
+#package:
+#name: libc6
+
+# 3. Suppress all vulnerabilities for a specific internal/safe component
+#- package:
+#name: my-trusted-internal-helper
+#version: 1.2.0
