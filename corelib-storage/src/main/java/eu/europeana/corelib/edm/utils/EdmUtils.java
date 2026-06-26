@@ -715,6 +715,7 @@ public final class EdmUtils {
             if (aggr.getWebResources() != null && !aggr.getWebResources().isEmpty()) {
                 EdmWebResourceUtils.createWebResources(rdf, aggr, preserveIdentifiers);
             }
+            EdmUtils.addAsObject(aggregation, WasGeneratedBy.class, aggr.getWasGeneratedBy(), preserveIdentifiers);
         }
         rdf.setAggregationList(aggregationList);
     }

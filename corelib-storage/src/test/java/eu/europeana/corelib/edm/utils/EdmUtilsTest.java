@@ -97,6 +97,7 @@ public class EdmUtilsTest {
         aggregation.setEdmProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/1234")); // required, map with at least 1 entry
         aggregation.setEdmDataProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/5678"));
         aggregation.setEdmRights(createSimpleHashMap("def", "Open")); // required, map with at least 1 entry
+        aggregation.setWasGeneratedBy("http://data.europeana.eu/provenance/europeana");
         bean.setAggregations(List.of(aggregation));
 
         // For marshalling to EDM, JIBX requires proxies to have edmType
