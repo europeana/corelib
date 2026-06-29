@@ -56,6 +56,8 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 //	@GraphProperty(defaultValue="")
 	private String[] edmUnstored;
 
+  private String wasGeneratedBy;
+
 //	@Transient
 	@Reference
 	private List<WebResourceImpl> webResources = new ArrayList<>();
@@ -241,6 +243,16 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	public void setEdmIntermediateProvider(Map<String, List<String>> edmIntermediateProvider) {
 		this.edmIntermediateProvider = edmIntermediateProvider;
 	}
+
+  @Override
+  public String getWasGeneratedBy() {
+    return wasGeneratedBy;
+  }
+
+  @Override
+  public void setWasGeneratedBy(String wasGeneratedBy) {
+    this.wasGeneratedBy = wasGeneratedBy;
+  }
 
 	public List<QualityAnnotation> getDqvHasQualityAnnotation() {
 		return dqvHasQualityAnnotation;

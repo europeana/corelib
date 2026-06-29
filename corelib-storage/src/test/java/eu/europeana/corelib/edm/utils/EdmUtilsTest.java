@@ -65,6 +65,7 @@ public class EdmUtilsTest {
         europeanaAggregation.setAggregatedCHO("/item/1234/test_5678"); // required
         europeanaAggregation.setEdmCountry(createSimpleHashMap("def", "Poland")); // required
         europeanaAggregation.setEdmLanguage(createSimpleHashMap("def", "pl")); // required
+        europeanaAggregation.setWasGeneratedBy("http://data.europeana.eu/provenance/europeana");
         bean.setEuropeanaAggregation(europeanaAggregation);
 
         return bean;
@@ -96,6 +97,7 @@ public class EdmUtilsTest {
         aggregation.setEdmProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/1234")); // required, map with at least 1 entry
         aggregation.setEdmDataProvider(createSimpleHashMap("def", "http://data.europeana.eu/organization/5678"));
         aggregation.setEdmRights(createSimpleHashMap("def", "Open")); // required, map with at least 1 entry
+        aggregation.setWasGeneratedBy("http://data.europeana.eu/provenance/europeana");
         bean.setAggregations(List.of(aggregation));
 
         // For marshalling to EDM, JIBX requires proxies to have edmType
@@ -136,6 +138,7 @@ public class EdmUtilsTest {
     @Test
     public void testToEdmMinimalBean() {
         String edmOut = EdmUtils.toEDM(getMinimalFullBean());
+      System.out.println(edmOut);
         assertNotNull(edmOut);
     }
 
