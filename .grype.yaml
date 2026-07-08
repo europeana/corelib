@@ -1,0 +1,38 @@
+ignore:
+  - reason: "Legacy unmanaged test resource directory. Scheduled for removal."
+    # Matches the files regardless of how the path is evaluated
+    location: "**/src/test/resources/solr/search/lib/*"
+    # Overrides and covers any CVE linked to these packages inside that path
+    package:
+      name: "log4j"
+
+  - reason: "Legacy unmanaged test resource directory. Scheduled for removal."
+    location: "**/src/test/resources/solr/search/lib/*"
+    package:
+      name: "commons-collections"
+
+  - reason: "Legacy unmanaged test resource directory. Scheduled for removal."
+    # Matches the files regardless of how the path is evaluated
+    location: "**/src/test/resources/solr/search/lib/*"
+    # Overrides and covers any CVE linked to these packages inside that path
+    package:
+      name: "commons-fileupload"
+
+  - reason: "Legacy unmanaged test resource directory. Scheduled for removal."
+    # Matches the files regardless of how the path is evaluated
+    location: "**/src/test/resources/solr/search/lib/*"
+    # Overrides and covers any CVE linked to these packages inside that path
+    package:
+      name: "dom4j"
+
+  - reason: "Legacy unmanaged test resource directory. Scheduled for removal."
+    # Matches the files regardless of how the path is evaluated
+    location: "**/src/test/resources/solr/search/lib/*"
+    # Overrides and covers any CVE linked to these packages inside that path
+    package:
+      name: "hadoop-common"
+
+  - reason: "Legacy unmanaged test resource directory. Scheduled for removal."
+    location: "**/src/test/resources/solr/search/lib/*"
+    package:
+      name: "simple-xml"
