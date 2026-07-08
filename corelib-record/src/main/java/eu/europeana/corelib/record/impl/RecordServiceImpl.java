@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Retrieves CHO records from Mongo database.
@@ -62,21 +63,37 @@ public class RecordServiceImpl implements RecordService {
     }
 
     /**
-     * @see RecordService#fetchFullBean(RecordDao, String)
+     * Fetches the full record details as a FullBean object using the provided RecordDao
+     * and Europeana object ID. If the record is not found, null is returned.
+     *
+     * IMPORTANT: this already fetches the WebMetaInfo. the method internally calls the
+     *           {@link WebMetaInfo#injectWebMetaInfoBatch(FullBean, RecordDao, String)}
+     *
+     * @param recordDao The data access object used to fetch the record from the underlying data source.
+     * @param europeanaObjectId The unique identifier of the record to be fetched.
+     * @return The FullBean object representing the full record details, or null if no record is found.
+     * @throws EuropeanaException If there is an error while fetching the record.
      */
     @Override
     public FullBean fetchFullBean(RecordDao recordDao, String europeanaObjectId) throws EuropeanaException {
         long startTime = System.currentTimeMillis();
-        FullBean fullBean = recordDao.getFullBean(europeanaObjectId);
+        Optional<FullBean> fullBean = recordDao.getRecord(europeanaObjectId);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Load FullBean {} from db {} took {} ms, result = {}",
                     europeanaObjectId, recordDao, (System.currentTimeMillis() - startTime), fullBean);
         }
-        return fullBean;
+        return fullBean.isPresent() ? fullBean.get() : null ;
     }
 
     /**
-     * @see RecordService#enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)
+     * Enhances a {@link FullBean} object with additional metadata and URL configurations.
+     * This method performs several operations such as ordering proxies and aggregations,
+     * injecting metadata, generating IIIF links, and setting proper thumbnail and portal URLs.
+     *
+     * @param recordDao The data access object used to retrieve metadata for the FullBean.
+     * @param fullBean The FullBean object to be enriched with additional metadata and configurations.
+     * @param urls A wrapper containing base URLs used for generating APIs and portal links.
+     * @return The enriched FullBean object after applying all necessary modifications.
      */
     public FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper urls){
 
@@ -86,7 +103,7 @@ public class RecordServiceImpl implements RecordService {
 
         // 2. add meta info for all webresources + generate attribution snippets
         long startTime = System.currentTimeMillis();
-        WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
+       // WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Loading {} webresources from db {} took {} ms",
                     fullBean.getEuropeanaAggregation().getWebResources().size(), recordDao, (System.currentTimeMillis() - startTime));
