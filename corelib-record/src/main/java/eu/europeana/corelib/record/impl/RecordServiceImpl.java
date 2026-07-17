@@ -1,6 +1,9 @@
 package eu.europeana.corelib.record.impl;
 
+import dev.morphia.mapping.MappingException;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.utils.ProxyAggregationUtils;
 import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.RecordService;
@@ -9,6 +12,7 @@ import eu.europeana.corelib.record.api.UrlConverter;
 import eu.europeana.corelib.record.api.WebMetaInfo;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.metis.mongo.dao.RecordDao;
 import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import eu.europeana.metis.mongo.model.RecordRedirect;
@@ -17,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Retrieves CHO records from Mongo database.
@@ -62,21 +67,41 @@ public class RecordServiceImpl implements RecordService {
     }
 
     /**
-     * @see RecordService#fetchFullBean(RecordDao, String)
+     * Fetches the full record details as a FullBean object using the provided RecordDao
+     * and Europeana object ID. If the record is not found, null is returned.
+     *
+     * IMPORTANT: this already fetches the WebMetaInfo. the method internally calls the
+     *           {@link WebMetaInfo#injectWebMetaInfoBatch(FullBean, RecordDao, String)}
+     *
+     * @param recordDao The data access object used to fetch the record from the underlying data source.
+     * @param europeanaObjectId The unique identifier of the record to be fetched.
+     * @return The FullBean object representing the full record details, or null if no record is found.
+     * @throws EuropeanaException If there is an error while fetching the record.
      */
     @Override
     public FullBean fetchFullBean(RecordDao recordDao, String europeanaObjectId) throws EuropeanaException {
-        long startTime = System.currentTimeMillis();
-        FullBean fullBean = recordDao.getFullBean(europeanaObjectId);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Load FullBean {} from db {} took {} ms, result = {}",
-                    europeanaObjectId, recordDao, (System.currentTimeMillis() - startTime), fullBean);
+        try {
+            long startTime = System.currentTimeMillis();
+            Optional<FullBean> fullBean = recordDao.getRecord(europeanaObjectId);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Load FullBean {} from db {} took {} ms, result = {}",
+                        europeanaObjectId, recordDao, (System.currentTimeMillis() - startTime), fullBean);
+            }
+            return fullBean.isPresent() ? fullBean.get() : null;
+        } catch (RuntimeException re) { // the exception handling is removed from metis-mongo and moved in corelib
+            throw processException(re);
         }
-        return fullBean;
     }
 
     /**
-     * @see RecordService#enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)
+     * Enhances a {@link FullBean} object with additional metadata and URL configurations.
+     * This method performs several operations such as ordering proxies and aggregations,
+     * injecting metadata, generating IIIF links, and setting proper thumbnail and portal URLs.
+     *
+     * @param recordDao The data access object used to retrieve metadata for the FullBean.
+     * @param fullBean The FullBean object to be enriched with additional metadata and configurations.
+     * @param urls A wrapper containing base URLs used for generating APIs and portal links.
+     * @return The enriched FullBean object after applying all necessary modifications.
      */
     public FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper urls){
 
@@ -86,7 +111,7 @@ public class RecordServiceImpl implements RecordService {
 
         // 2. add meta info for all webresources + generate attribution snippets
         long startTime = System.currentTimeMillis();
-        WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
+       // WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Loading {} webresources from db {} took {} ms",
                     fullBean.getEuropeanaAggregation().getWebResources().size(), recordDao, (System.currentTimeMillis() - startTime));
@@ -112,13 +137,18 @@ public class RecordServiceImpl implements RecordService {
      */
     @Override
     public FullBean fetchTombstone(RecordDao recordDao, String europeanaObjectId) throws EuropeanaException {
-        long startTime = System.currentTimeMillis();
-        FullBean result = recordDao.getFullBean(europeanaObjectId);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Load tombstone {} from db {} took {} ms, result = {}",
-                    europeanaObjectId, recordDao, (System.currentTimeMillis() - startTime), result);
+        try {
+            long startTime = System.currentTimeMillis();
+            // using getFullBean as we don't need to fetch web meta infos
+            FullBean result = recordDao.getFullBean(europeanaObjectId);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Load tombstone {} from db {} took {} ms, result = {}",
+                        europeanaObjectId, recordDao, (System.currentTimeMillis() - startTime), result);
+            }
+            return result;
+        } catch (RuntimeException e) {
+            throw processException(e);
         }
-        return result;
     }
 
     public String resolveId(RecordRedirectDao redirectDao, String europeanaId) {
@@ -130,4 +160,20 @@ public class RecordServiceImpl implements RecordService {
         }
     }
 
+
+    /**
+     * Processes a {@link RuntimeException} and maps it to a specific {@link EuropeanaException}.
+     * Determines the exception type based on the cause and provides an appropriate error context.
+     *
+     * @param re the runtime exception to process
+     * @return a {@link EuropeanaException} instance representing the processed exception
+     */
+    protected EuropeanaException processException(RuntimeException re) {
+        if (re.getCause() != null && (re.getCause() instanceof MappingException
+                || re.getCause() instanceof ClassCastException)) {
+            return new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR, re);
+        } else {
+            return new MongoRuntimeException(ProblemType.MONGO_UNREACHABLE, re);
+        }
+    }
 }

@@ -25,6 +25,7 @@ import eu.europeana.metis.schema.jibx.Temporal;
 import eu.europeana.metis.schema.jibx.WebResourceType;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
@@ -137,9 +138,12 @@ public class EdmUtilsTest {
 
     @Test
     public void testToEdmMinimalBean() {
-        String edmOut = EdmUtils.toEDM(getMinimalFullBean());
-      System.out.println(edmOut);
-        assertNotNull(edmOut);
+        try (StringWriter writer = new StringWriter()) {
+            EdmUtils.toEDM(getMinimalFullBean(), writer, true);
+            assertNotNull(writer.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -150,8 +154,12 @@ public class EdmUtilsTest {
 
     @Test
     public void testToEdmTombstoneBean() {
-        String edmOut = EdmUtils.toEDM(getTombstoneFullBean());
-        assertNotNull(edmOut);
+        try (StringWriter writer = new StringWriter()) {
+            EdmUtils.toEDM(getTombstoneFullBean(), writer, true);
+            assertNotNull(writer.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

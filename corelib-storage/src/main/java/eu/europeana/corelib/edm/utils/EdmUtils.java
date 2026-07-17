@@ -16,7 +16,9 @@ import eu.europeana.metis.schema.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.metis.schema.jibx.UGCType;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.io.output.CloseShieldWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,21 +36,24 @@ import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.JiBXException;
+import org.springframework.util.StreamUtils;
 
 /**
- * Convert a FullBean to EDM
+ * Utility class for handling EDM (Europeana Data Model) related operations, including
+ * data conversion between FullBeanImpl and EDM/RDF formats, and the manipulation of relevant RDF structures.
+ * This class consists of static methods and constants primarily designed for internal processing and integration purposes.
  *
- * @author Yorgos.Mamakis@ kb.nl
- * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * The class contains methods for converting objects to EDM/RDF representations, appending data
+ * structures, manipulating metadata, and extracting specific details like record IDs.
+ * It is not intended to be instantiated.
+ *
  */
 public final class EdmUtils {
 
-    public static final String DEFAULT_LANGUAGE = "def";
+    private static final Logger LOG             = LogManager.getLogger(EdmUtils.class);
 
-    private static final Logger LOG = LogManager.getLogger(EdmUtils.class);
-
-    private static final String BASE_URL = "http://data.europeana.eu";
-
+    public  static final String DEFAULT_LANGUAGE = "def";
+    private static final String BASE_URL         = "http://data.europeana.eu";
     private static IBindingFactory bfact;
 
     private EdmUtils() {
@@ -61,68 +68,186 @@ public final class EdmUtils {
         }
     }
 
-
     /**
-     * Convert a FullBean to an EDM String
+     * Converts a given FullBeanImpl object into its equivalent EDM representation as a String.
      *
-     * @param fullBean The FullBean to convert
-     * @return The resulting EDM string in RDF-XML
+     * @param fullBean The FullBeanImpl object to be converted.
+     * @return The EDM representation of the provided FullBeanImpl object as a String.
+     * @throws IOException If an error occurs during the conversion process.
+     * @deprecated This method is deprecated and may be removed in future releases. Consider using alternative methods.
      */
-    public static synchronized String toEDM(FullBeanImpl fullBean) {
-        RDF rdf = toRDF(fullBean);
-        return marshallToEDM(rdf);
-    }
-
-    /**
-     * Convert an RDF object to an EDM String
-     *
-     * @param rdf The RDF to convert
-     * @return The resulting EDM string in RDF-XML
-     */
-    public static synchronized String toEDM(RDF rdf) {
-        if (rdf == null) {
-            return null;
-        }
-        return marshallToEDM(rdf);
-    }
-
-    private static String marshallToEDM(RDF rdf) {
-        IMarshallingContext marshallingContext;
-        try (StringWriter out = new StringWriter()){
-            marshallingContext = bfact.createMarshallingContext();
-            marshallingContext.setOutput(out, EuropeanaUTF8Escaper.s_instance);
-            marshallingContext.marshalDocument(rdf, "UTF-8", true);
+    @Deprecated
+    public static String toEDM(FullBeanImpl fullBean) throws IOException{
+        try (StringWriter out = new StringWriter()) {
+            toEDM(fullBean, out, true);
             return out.toString();
-        } catch (JiBXException | IOException | IllegalStateException  e) {
-            String id = null;
-            if (rdf != null && rdf.getProvidedCHOList() != null && !rdf.getProvidedCHOList().isEmpty()) {
-                id = rdf.getProvidedCHOList().get(0).getAbout();
-            }
-            LOG.error("Error marshalling RDF of record {}", id, e);
         }
-        return null;
+    }
+
+    @Deprecated
+    public static String toEDM(RDF rdf, boolean docHeader) throws IOException {
+        try (StringWriter out = new StringWriter()) {
+            toEDM(rdf, out, docHeader);
+            return out.toString();
+        }
+    }
+
+    @Deprecated
+    public static String toEDM(RDF rdf) throws IOException {
+        return toEDM(rdf, true);
     }
 
     /**
-     * Convert a FullBean to an RDF object
-     * @param fullBean the fullbean to convert
-     * @return RDF object
+     * Converts a FullBeanImpl object to an EDM (Europeana Data Model) RDF representation
+     * and writes it to the provided Writer.
+     *
+     * @param fullBean the FullBeanImpl object containing data to be converted to EDM format
+     * @param writer the Writer to which the EDM RDF representation will be written
+     * @param docHeader a boolean indicating whether to include a document header in the output
+     * @throws IOException if an I/O error occurs while writing to the Writer
      */
-    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+    public static void toEDM(FullBeanImpl fullBean, Writer writer,
+                             boolean docHeader) throws IOException {
+        RDF rdf = toRDF(fullBean);
+        toEDM(rdf, writer, docHeader);
+    }
+
+    /**
+     * Converts the given FullBeanImpl object into an EDM representation and writes it to the specified output stream.
+     *
+     * @param fullBean   the FullBeanImpl object to be converted to EDM
+     * @param out        the OutputStream to which the EDM data will be written
+     * @param docHeader  a boolean indicating whether to include a document header in the output
+     * @throws IOException if an I/O error occurs during the conversion or writing process
+     */
+    public static void toEDM(FullBeanImpl fullBean, OutputStream out,
+                             boolean docHeader) throws IOException {
+        RDF rdf = toRDF(fullBean);
+        toEDM(rdf, out, docHeader);
+    }
+
+
+    /**
+     * Converts the given RDF data into the Europeana Data Model (EDM) format and
+     * writes the result to the specified output stream.
+     *
+     * @param rdf the RDF data to be converted
+     * @param out the output stream where the EDM-formatted data will be written
+     * @throws IOException if an I/O error occurs during the operation
+     */
+    public static void toEDM(RDF rdf, OutputStream out) throws IOException {
+        toEDM(rdf, out, true);
+    }
+
+    /**
+     * Converts the provided RDF data into the Europeana Data Model (EDM) format and writes it to the specified writer.
+     *
+     * @param rdf   The RDF instance containing the data to be converted.
+     * @param writer The Writer instance where the EDM formatted data will be written.
+     * @throws IOException If an I/O error occurs during the writing process.
+     */
+    public static void toEDM(RDF rdf, Writer writer) throws IOException {
+        toEDM(rdf, writer, true);
+    }
+
+
+    /**
+     * Marshals an RDF object into the Europeana Data Model (EDM) format and writes
+     * the output to the provided {@code OutputStream}.
+     *
+     * @param rdf       the RDF object to be marshaled into EDM format
+     * @param out       the {@code OutputStream} where the EDM data will be written
+     * @param docHeader if {@code true}, includes the XML document header in the output;
+     *                  otherwise, the header will be omitted
+     * @throws IOException if an error occurs during marshalling or while writing to the output
+     */
+    public static void toEDM(RDF rdf, OutputStream out, boolean docHeader)
+            throws IOException {
+        IMarshallingContext ctxt;
+        try {
+            ctxt = bfact.createMarshallingContext();
+            // need to shield close() method
+            ctxt.setOutput(StreamUtils.nonClosing(out)
+                    , "UTF-8", EuropeanaUTF8Escaper.s_instance);
+            if ( docHeader ) {
+                ctxt.marshalDocument(rdf, "UTF-8", true);
+            } else {
+                ctxt.marshalDocument(rdf);
+            }
+        }
+        catch (JiBXException e) {
+            LOG.error("Error marshalling RDF of record {}", getRecordId(rdf), e);
+            throw new IOException("Error marshalling RDF of record", e);
+        }
+    }
+
+    /**
+     * Converts an RDF object into an EDM (Europeana Data Model) XML representation
+     * and writes the result to the provided Writer.
+     *
+     * @param rdf        The RDF object to be converted into EDM format.
+     * @param writer     The Writer to which the EDM representation will be written.
+     * @param docHeader  A boolean indicating whether to include the XML document header
+     *                   in the output.
+     * @throws IOException If an I/O error occurs during the marshalling or writing process.
+     */
+    public static void toEDM(RDF rdf, Writer writer, boolean docHeader)
+            throws IOException {
+        IMarshallingContext ctxt;
+        try {
+            ctxt = bfact.createMarshallingContext();
+            // need to shield close() method
+            ctxt.setOutput(CloseShieldWriter.wrap(writer), EuropeanaUTF8Escaper.s_instance);
+            if ( docHeader ) {
+                ctxt.marshalDocument(rdf, "UTF-8", true);
+            } else {
+                ctxt.marshalDocument(rdf);
+            }
+        }
+        catch (JiBXException e) {
+            LOG.error("Error marshalling RDF of record {}", getRecordId(rdf), e);
+            throw new IOException("Error marshalling RDF of record", e);
+        }
+    }
+
+
+    /**
+     * Extracts the record ID from the provided RDF object.
+     *
+     * @param rdf the RDF object containing data for extracting the record ID.
+     *            If null or if the provided CHO list is empty, a default ID will be returned.
+     * @return the record ID as a string if available; otherwise, returns "?".
+     */
+    private static String getRecordId(RDF rdf) {
+        if (rdf != null && rdf.getProvidedCHOList() != null && !rdf.getProvidedCHOList().isEmpty()) {
+            return rdf.getProvidedCHOList().get(0).getAbout();
+        }
+        return "?";
+    }
+
+    /**
+     * Converts a FullBeanImpl object into an RDF object.
+     *
+     * @param fullBean the FullBeanImpl instance to be converted to RDF
+     * @return the resulting RDF object after the conversion
+     */
+    public static RDF toRDF(FullBeanImpl fullBean) {
       return toRDF(fullBean, false);
     }
 
+
     /**
-     * Convert a FullBean to an RDF object
-     * @param fullBean the fullbean to convert
-     * @param preserveIdentifiers if true does not change the identifiers of entities, if false it
+     * Converts the given FullBeanImpl object into an RDF representation.
      *
-     *  NOTE : for re-indexing the preserveIdentifiers is set to true. We dO NOT chnage the record value during re-indexing
+     * @param fullBean the FullBeanImpl object containing data to be converted into RDF.
+     * @param preserveIdentifiers a boolean flag indicating whether to preserve identifiers
+     *                             in the generated RDF or not.
+     *                            NOTE : for re-indexing the preserveIdentifiers is set to true.
+     *                            We do NOT chnage the record value during re-indexing
      *
-     * will add the {@link #BASE_URL} as prefix if it's not already an uri}.
-     * @return RDF object
+     * @return an RDF object representing the provided fullBean's data in RDF format.
      */
-    public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean preserveIdentifiers) {
+    public static RDF toRDF(FullBeanImpl fullBean, boolean preserveIdentifiers) {
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs(), preserveIdentifiers);

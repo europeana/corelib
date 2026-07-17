@@ -40,11 +40,15 @@
 			<artifactId>morphia-core</artifactId>
 			<version>${morphia.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-driver-core</artifactId>
-			<version>${mongoDriver.version}</version>
-		</dependency>
+<!--		Morphia 2.5.x requires MongoDB Java Driver 5.x. It is not compatible with driver 4.11.x.
+           Otherwise there will be version mismatch between MongoDB Java driver libraries.
+           You should not declare only mongodb-driver-core yourself when using Morphia.
+           Morphia expects the complete MongoDB Java driver stack.-->
+<!--		<dependency>-->
+<!--			<groupId>org.mongodb</groupId>-->
+<!--			<artifactId>mongodb-driver-core</artifactId>-->
+<!--			<version>${mongoDriver.version}</version>-->
+<!--		</dependency>-->
 		<!-- Compression for mongo driver -->
 		<dependency>
 			<groupId>org.xerial.snappy</groupId>

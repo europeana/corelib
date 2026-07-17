@@ -2,8 +2,6 @@ package eu.europeana.corelib.record.config;
 
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.config.initializers.MongoClientInitializer;
-import eu.europeana.corelib.record.config.initializers.RecordDaoInitializer;
-import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import eu.europeana.metis.mongo.dao.RecordDao;
 import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
