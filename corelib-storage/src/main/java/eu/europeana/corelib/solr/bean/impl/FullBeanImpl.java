@@ -94,6 +94,8 @@ public class FullBeanImpl implements FullBean {
 
     protected List<QualityAnnotationImpl> qualityAnnotations = new ArrayList<>();
 
+    private List<PersistentIdentifierImpl> persistentIdentifiers = new ArrayList<>();
+
     protected String[] country;
     protected String[] userTags;
     protected String[] europeanaCollectionName;
@@ -402,5 +404,13 @@ public class FullBeanImpl implements FullBean {
     public void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations) {
         this.qualityAnnotations = (List<QualityAnnotationImpl>) qualityAnnotations;
     }
+    @Override
+    public List<? extends PersistentIdentifier> getPersistentIdentifiers() {
+      return persistentIdentifiers;
+    }
 
+    @Override
+    public void setPersistentIdentifiers(List<? extends PersistentIdentifier> persistentIdentifiers) {
+      this.persistentIdentifiers = (List<PersistentIdentifierImpl>) persistentIdentifiers;
+    }
 }

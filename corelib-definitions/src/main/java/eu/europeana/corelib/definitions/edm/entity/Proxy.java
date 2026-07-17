@@ -74,4 +74,16 @@ public interface Proxy extends BasicProxy {
 	 * @param userTags
 	 */
 	void setUserTags(Map<String,List<String>> userTags);
+
+  /**
+   * Get the edm pids
+   * @return the edm pids
+   */
+  Map<String, List<String>> getPid();
+
+  /**
+   * Set the edm pids
+   * @param pid the edm pids
+   */
+  void setPid(Map<String, List<String>> pid);
 }

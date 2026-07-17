@@ -456,4 +456,18 @@ public interface WebResource extends AbstractEdmEntity {
    * @return the edm type
    */
   String getEdmType();
+
+  /**
+   * Get the edm pids
+   *
+   * @return the edm pids
+   */
+  Map<String, List<String>> getPid();
+
+  /**
+   * Set the edm pids
+   *
+   * @param pid the edm pids
+   */
+  void setPid(Map<String, List<String>> pid);
 }

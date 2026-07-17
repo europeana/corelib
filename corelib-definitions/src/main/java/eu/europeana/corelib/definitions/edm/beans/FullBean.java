@@ -1,6 +1,7 @@
 package eu.europeana.corelib.definitions.edm.beans;
 
 import eu.europeana.corelib.definitions.edm.entity.Organization;
+import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
 import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import java.util.Date;
 import java.util.List;
@@ -317,4 +318,15 @@ public interface FullBean extends IdBean {
 	 * @param qualityAnnotations
 	 */
 	void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations);
+
+  /**
+   * Get the associated list of PersistentIdentifier for the record
+   */
+  List<? extends PersistentIdentifier> getPersistentIdentifiers();
+
+  /**
+   * Set the list of PersistentIdentifier for the record
+   * @param persistentIdentifiers the list of persistent identifier
+   */
+  void setPersistentIdentifiers(List<? extends PersistentIdentifier> persistentIdentifiers);
 }

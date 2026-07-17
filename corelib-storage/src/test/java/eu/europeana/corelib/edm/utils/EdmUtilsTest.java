@@ -207,16 +207,14 @@ public class EdmUtilsTest {
     public void testPID() throws IOException {
         FullBeanImpl bean = getPIDBean();
         // check all three 3 pids reference/literals are loaded
-        assertEquals(bean.getProxies().get(0).getPID().size() , 3);
+        assertEquals(3, bean.getProxies().getFirst().getPID().size());
         RDF rdf = EdmUtils.toRDF(bean);
 
-        assertEquals(rdf.getProxyList().get(0).getPidList().size(), 3); // all three are added in proxies
-        assertEquals(rdf.getPersistentIdentifierList().size(), 2); // two PIDs (only reference ones are added)
-        assertEquals(rdf.getPersistentIdentifierList().get(0).getAbout(), "#pid_1");
-        assertEquals(rdf.getPersistentIdentifierList().get(1).getAbout(), "#pid_3");
-
+        assertEquals(3, rdf.getProxyList().getFirst().getPidList().size()); // all three are added in proxies
+        assertEquals(2, rdf.getPersistentIdentifierList().size()); // two PIDs (only reference ones are added)
+        assertEquals("#pid_1", rdf.getPersistentIdentifierList().get(0).getAbout());
+        assertEquals("#pid_3", rdf.getPersistentIdentifierList().get(1).getAbout());
     }
-
 
     private FullBeanImpl getPIDBean() throws IOException {
         FullBeanImpl bean = getMinimalFullBean();
