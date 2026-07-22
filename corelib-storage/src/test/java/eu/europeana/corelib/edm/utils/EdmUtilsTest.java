@@ -207,7 +207,7 @@ public class EdmUtilsTest {
     public void testPID() throws IOException {
         FullBeanImpl bean = getPIDBean();
         // check all three 3 pids reference/literals are loaded
-        assertEquals(3, bean.getProxies().getFirst().getPID().size());
+        assertEquals(3, bean.getProxies().getFirst().getPIDS().size());
         RDF rdf = EdmUtils.toRDF(bean);
 
         assertEquals(3, rdf.getProxyList().getFirst().getPidList().size()); // all three are added in proxies
@@ -227,7 +227,7 @@ public class EdmUtilsTest {
         ProxyImpl proxy = new ProxyImpl();
         proxy.setAbout("/proxy/provider" + bean.getAbout());
         proxy.setEuropeanaProxy(false);
-        proxy.setPID(pids);
+        proxy.setPIDS(pids);
         bean.setProxies(List.of(proxy));
         return bean;
     }

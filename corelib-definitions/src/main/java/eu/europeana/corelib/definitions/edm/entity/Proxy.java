@@ -16,13 +16,13 @@ public interface Proxy extends BasicProxy {
 	 * PIDs ( present in provider proxy )
 	 * @return list of the edm:PersistentIdentifier fields for a Proxy
 	 */
-	List<? extends PersistentIdentifier> getPID();
+	List<? extends PersistentIdentifier> getPIDS();
 
 	/**
 	 * Set the edm:PersistentIdentifier field for a Proxy
 	 * @param pid
 	 */
-	void setPID(List<? extends PersistentIdentifier> pid);
+	void setPIDS(List<? extends PersistentIdentifier> pid);
 
 	/**
 	 * Retrieve the edm:type fields for a Proxy
