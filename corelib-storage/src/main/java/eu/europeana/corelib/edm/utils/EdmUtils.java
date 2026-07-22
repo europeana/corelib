@@ -745,11 +745,11 @@ public final class EdmUtils {
      *
      */
     private static void appendPID(RDF rdf, ProxyImpl prx, ProxyType proxy) {
-        if (!prx.isEuropeanaProxy() && prx.getPID() != null ) {
-            List<Pid> pidList = new ArrayList<>(prx.getPID().size());
-            List<PersistentIdentifierType> persistentIdentifierTypeList = new ArrayList<>(prx.getPID().size());
+        if (!prx.isEuropeanaProxy() && prx.getPIDS() != null ) {
+            List<Pid> pidList = new ArrayList<>(prx.getPIDS().size());
+            List<PersistentIdentifierType> persistentIdentifierTypeList = new ArrayList<>(prx.getPIDS().size());
 
-            for (PersistentIdentifier pid : prx.getPID()) {
+            for (PersistentIdentifier pid : prx.getPIDS()) {
                 var p = new Pid();
                 // add pid as a resource
                 if (EuropeanaUriUtils.isUri(pid.getAbout())) {

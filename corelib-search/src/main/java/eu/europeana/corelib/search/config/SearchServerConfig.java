@@ -68,8 +68,9 @@ public class SearchServerConfig {
             } else {
                 CloudSolrClient zkClient = new CloudSolrClient.Builder(
                         Arrays.asList(instance.getZookeeperUrl().get().split(",")), Optional.empty())
-                        .withConnectionTimeout(zkConnectTimeout)
-                        .withSocketTimeout(solrSocketTimeout)
+                        // 2026 Jul: Not supported anymore :-(
+                        //.withConnectionTimeout(zkConnectTimeout)
+                        //.withSocketTimeout(solrSocketTimeout)
                         .build();
                 zkClient.setDefaultCollection(instance.getCoreCollection().get());
 

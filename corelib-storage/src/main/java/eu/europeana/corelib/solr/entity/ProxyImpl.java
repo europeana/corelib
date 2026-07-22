@@ -28,7 +28,7 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	@Property("persistentIdentifier")
 	private List<PersistentIdentifierImpl> pids;
 
-  private Map<String, List<String>> pid;
+    private Map<String, List<String>> pid;
 
 	private boolean europeanaProxy;
 
@@ -39,11 +39,11 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	}
 
 	@Override
-	public List<? extends PersistentIdentifier> getPID() {
+	public List<? extends PersistentIdentifier> getPIDS() {
 		return this.pids;
 	}
 
-	public void setPID(List<? extends PersistentIdentifier> pid) {
+	public void setPIDS(List<? extends PersistentIdentifier> pid) {
 		this.pids = (List<PersistentIdentifierImpl>) pid;
 	}
 
