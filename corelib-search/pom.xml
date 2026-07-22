@@ -17,6 +17,23 @@
     <organization><name>Europeana Foundation</name></organization>
 
     <dependencies>
+
+        <!-- Intercepts and blocks legacy Log4j 1.x calls during testing -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>2.0.16</version> <!-- Use a modern, stable version -->
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Directs those intercepted logs safely to Logback -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.6</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- CORELIB -->
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
