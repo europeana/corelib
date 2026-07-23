@@ -1,5 +1,7 @@
 package eu.europeana.corelib.definitions.edm.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ public interface Proxy extends BasicProxy {
 	 * PIDs ( present in provider proxy )
 	 * @return list of the edm:PersistentIdentifier fields for a Proxy
 	 */
+    @JsonProperty("pid")
 	List<? extends PersistentIdentifier> getPIDS();
 
 	/**

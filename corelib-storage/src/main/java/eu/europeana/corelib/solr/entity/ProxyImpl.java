@@ -2,6 +2,7 @@ package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Property;
 import eu.europeana.corelib.definitions.edm.entity.PersistentIdentifier;
@@ -24,11 +25,11 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
 	private Map<String,List<String>> userTags;
 
-  //todo: Remove the field after reindex August 2026
+    //todo: Remove the field after reindex August 2026
 	@Property("persistentIdentifier")
 	private List<PersistentIdentifierImpl> pids;
 
-  private Map<String, List<String>> pid;
+    private Map<String, List<String>> pid;
 
 	private boolean europeanaProxy;
 
@@ -39,6 +40,7 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	}
 
 	@Override
+    @JsonProperty("pid")
 	public List<? extends PersistentIdentifier> getPIDS() {
 		return this.pids;
 	}
@@ -82,13 +84,13 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 		this.userTags = userTags;
 	}
 
-  @Override
-  public Map<String, List<String>> getPid() {
+    @Override
+    public Map<String, List<String>> getPid() {
     return pid;
-  }
+    }
 
-  @Override
-  public void setPid(Map<String, List<String>> pid) {
+    @Override
+    public void setPid(Map<String, List<String>> pid) {
     this.pid = pid;
-  }
+    }
 }
