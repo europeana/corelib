@@ -82,6 +82,7 @@ public interface Proxy extends BasicProxy {
    * Get the edm pids
    * @return the edm pids
    */
+  @JsonProperty("pidList")
   Map<String, List<String>> getPid();
 
   /**

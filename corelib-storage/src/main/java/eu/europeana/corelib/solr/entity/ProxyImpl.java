@@ -85,6 +85,7 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	}
 
     @Override
+    @JsonProperty("pidList")
     public Map<String, List<String>> getPid() {
     return pid;
     }
