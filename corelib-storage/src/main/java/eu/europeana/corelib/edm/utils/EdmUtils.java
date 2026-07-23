@@ -37,6 +37,7 @@ import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.JiBXException;
 import org.springframework.util.StreamUtils;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Utility class for handling EDM (Europeana Data Model) related operations, including
@@ -262,10 +263,36 @@ public final class EdmUtils {
         appendTimespans(rdf, fullBean.getTimespans());
         appendLicenses(rdf, fullBean.getLicenses(), preserveIdentifiers);
         appendServices(rdf, fullBean.getServices());
+        //todo: Remove condition after reindex August 2026
+        if (CollectionUtils.isEmpty(rdf.getPersistentIdentifierList())) {
+          appendPersistentIdentifiers(rdf, fullBean.getPersistentIdentifiers());
+        }
         return rdf;
     }
 
-    private static void appendServices(RDF rdf, List<ServiceImpl> services) {
+  private static void appendPersistentIdentifiers(RDF rdf, List<? extends PersistentIdentifier> persistentIdentifiers) {
+    if (persistentIdentifiers != null) {
+      List<PersistentIdentifierType> persistentIdentifierTypeList = new ArrayList<>(persistentIdentifiers.size());
+
+      for (PersistentIdentifier persistentIdentifier : persistentIdentifiers) {
+        Pid pid = new Pid();
+        // add pid as a resource
+        if (EuropeanaUriUtils.isUri(persistentIdentifier.getAbout())) {
+          Resource resource = new Resource();
+          resource.setResource(persistentIdentifier.getAbout());
+          pid.setResource(resource);
+          pid.setString("");
+          // if pid is a reference then add PersistentIdentifierType object in the rdf
+          persistentIdentifierTypeList.add(createPersistentIdentifier(persistentIdentifier));
+        } else {
+          pid.setString(persistentIdentifier.getValue());
+        }
+      }
+      rdf.setPersistentIdentifierList(persistentIdentifierTypeList);
+    }
+  }
+
+  private static void appendServices(RDF rdf, List<ServiceImpl> services) {
         if (services != null) {
             List<Service> serviceList = new ArrayList<>();
             for (ServiceImpl serv : services) {
@@ -602,7 +629,7 @@ public final class EdmUtils {
 
             if (seqArray != null) {
                 nis = new ArrayList<>();
-    
+
                 for (String s : seqArray) {
                     IsNextInSequence item = new IsNextInSequence();
                     item.setResource(s);
@@ -645,7 +672,7 @@ public final class EdmUtils {
                 addAsList(proxy, Lineage.class, prx.getLineage(), null, true);
             }
 
-            // EA-4203 : add edm:pid and edm:PersistentIdentifier
+            //todo: Remove appendPID from proxy after reindex August 2026
             appendPID(rdf, prx, proxy);
             addAsList(proxy, HasMet.class, prx.getEdmHasMet());
             addAsList(proxy, HasType.class, prx.getEdmHasType());
@@ -658,6 +685,7 @@ public final class EdmUtils {
             addAsList(proxy, Realizes.class, prx.getEdmRealizes());
             addAsObject(proxy, ProxyFor.class, preserveIdentifiers?prx.getProxyFor():getBaseUrl(prx.getProxyFor()), preserveIdentifiers);
             addAsList(proxy, Year.class, prx.getYear());
+            addAsList(proxy, Pid.class, prx.getPid());
 
             List<EuropeanaType.Choice> dcChoices = new ArrayList<>();
             addEuropeanaTypeChoice(dcChoices, Contributor.class, prx.getDcContributor());
@@ -717,11 +745,11 @@ public final class EdmUtils {
      *
      */
     private static void appendPID(RDF rdf, ProxyImpl prx, ProxyType proxy) {
-        if (!prx.isEuropeanaProxy() && prx.getPID() != null ) {
-            List<Pid> pidList = new ArrayList<>(prx.getPID().size());
-            List<PersistentIdentifierType> persistentIdentifierTypeList = new ArrayList<>(prx.getPID().size());
+        if (!prx.isEuropeanaProxy() && prx.getPIDS() != null ) {
+            List<Pid> pidList = new ArrayList<>(prx.getPIDS().size());
+            List<PersistentIdentifierType> persistentIdentifierTypeList = new ArrayList<>(prx.getPIDS().size());
 
-            for (PersistentIdentifier pid : prx.getPID()) {
+            for (PersistentIdentifier pid : prx.getPIDS()) {
                 var p = new Pid();
                 // add pid as a resource
                 if (EuropeanaUriUtils.isUri(pid.getAbout())) {

@@ -13,9 +13,6 @@ import org.bson.types.ObjectId;
  * Contains Quality annotation tier information.
  * <p>This class does not extend from {@link AbstractEdmEntityImpl} but rather implements the
  * {@link AbstractEdmEntity} to avoid the about field being indexed.<p/>
- *
- * @author Simon Tzanakis (Simon.Tzanakis@europeana.eu)
- * @since 2019-06-13
  */
 @Embedded(useDiscriminator = false)
 @Indexes(@Index(fields = {@Field("about")}))

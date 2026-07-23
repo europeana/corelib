@@ -70,6 +70,7 @@ public class WebResourceImpl implements WebResource {
     private String[] rdfsSeeAlso;
     private String[] edmIsRepresentationOf;
     private String edmType;
+    private Map<String, List<String>> pid;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
@@ -781,5 +782,15 @@ public class WebResourceImpl implements WebResource {
     @Override
     public String getEdmType() {
       return this.edmType;
+    }
+
+    @Override
+    public Map<String, List<String>> getPid() {
+      return pid;
+    }
+
+    @Override
+    public void setPid(Map<String, List<String>> pid) {
+      this.pid = pid;
     }
 }

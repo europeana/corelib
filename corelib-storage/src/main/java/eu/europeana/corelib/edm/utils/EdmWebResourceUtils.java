@@ -57,6 +57,7 @@ public class EdmWebResourceUtils {
             EdmUtils.addAsList(wResource, Source.class, wr.getDcSource());
             EdmUtils.addAsList(wResource, SameAs.class, wr.getOwlSameAs());
             EdmUtils.addAsObject(wResource, Type1.class, wr.getRdfType(), preserveIdentifiers);
+            EdmUtils.addAsList(wResource, Pid.class, wr.getPid());
 
             setRdfType(wr, wResource);
             setCodecName(wr, wResource);
