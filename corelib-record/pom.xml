@@ -49,6 +49,11 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-autoconfigure</artifactId>
                 </exclusion>
+                <!-- Workaround for circular dependency -->
+                <exclusion>
+                    <groupId>eu.europeana.corelib</groupId>
+                    <artifactId>corelib-record</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
