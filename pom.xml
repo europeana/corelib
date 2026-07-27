@@ -42,9 +42,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- Old metis Mongo classes are moved to metis-common-->
-        <metis.common.version>20-SNAPSHOT</metis.common.version>
-        <metis.schema.version>15-SNAPSHOT</metis.schema.version>
+        <metis.common.version>19.1</metis.common.version>
+        <metis.schema.version>14.1</metis.schema.version>
 
         <apacheSolr.version>8.11.4</apacheSolr.version>
         <apacheLucene.version>8.11.4</apacheLucene.version>
