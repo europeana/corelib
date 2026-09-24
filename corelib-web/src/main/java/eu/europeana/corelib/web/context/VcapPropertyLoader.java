@@ -35,6 +35,7 @@ import java.util.Properties;
  *
  * @author Yorgos, Bram, Patrick
  */
+@Deprecated(since = "Sep 2026", forRemoval = true)
 public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor {
 
     private static final Logger LOG = LogManager.getLogger(VcapPropertyLoader.class.getName());
